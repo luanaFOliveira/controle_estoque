@@ -7,10 +7,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+use App\Models\Sector;
+use App\Models\Equipment;
+use App\Models\EquipmentRequest;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    protected $table = 'user';
+    protected $primaryKey = 'user_id';
+    use SoftDeletes;
+
 
     /**
      * The attributes that are mass assignable.
@@ -41,4 +51,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function sector(){
+        return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id');
+    }
+
+    public function equipment(){
+        return $this->belongsToMany(Equipment::class,'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id');
+    }
+
+    public function equipmentRequest(){
+        return $this->hasMany(EquipmentRequest::class, 'user_id', 'user_id');
+    }
 }
