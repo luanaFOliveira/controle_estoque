@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEquipamentTable extends Migration
+class CreateEquipmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -24,9 +24,9 @@ class CreateEquipamentTable extends Migration
             $table->text('name');
             $table->text('brand');
             $table->boolean('is_available');
-            $table->foreignId('type_id')->constrained('type_id', 'type');
-            $table->foreignId('sector_id')->constrained('sector_id', 'sector');
-            $table->foreignId('location_id')->constrained('location_id', 'location');
+            $table->foreignId('type_id')->constrained('type', 'type_id');
+            $table->foreignId('sector_id')->constrained('sector', 'sector_id');
+            $table->foreignId('location_id')->constrained('location', 'location_id');
             $table->timestamps();
             $table->softDeletes();
         });

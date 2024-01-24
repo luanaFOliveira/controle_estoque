@@ -15,7 +15,7 @@ class CreateTypeTable extends Migration
     {
         Schema::create('type', function (Blueprint $table) {
             $table->id('type_id');
-            $table->text('name');
+            $table->text('name')->unique();
             $table->softDeletes();
         });
     }

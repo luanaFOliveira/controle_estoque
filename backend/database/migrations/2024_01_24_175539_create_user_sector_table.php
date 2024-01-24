@@ -15,8 +15,8 @@ class CreateUserSectorTable extends Migration
     {
         Schema::create('user_sector', function (Blueprint $table) {
             $table->id('user_sector_id');
-            $table->foreignId('user_id')->constrained('user_id', 'user');
-            $table->foreignId('sector_id')->constrained('sector_id', 'sector');
+            $table->foreignId('user_id')->constrained('user', 'user_id');
+            $table->foreignId('sector_id')->constrained('sector', 'sector_id');
             $table->softDeletes();
         });
     }
