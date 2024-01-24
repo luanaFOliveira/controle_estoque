@@ -14,8 +14,12 @@ class CreateUserEquipamentTable extends Migration
     public function up()
     {
         Schema::create('user_equipament', function (Blueprint $table) {
-            $table->id();
+            $table->id('user_equipament_id');
+            $table->foreign('equipament_id')->constrained('equipament_id', 'equipament');
+            $table->foreign('user_id')->constrained('user_id', 'user');
             $table->timestamps();
+            $table->timestamp('returned_at');
+            $table->softDeletes();
         });
     }
 

@@ -14,8 +14,10 @@ class CreateUserSectorTable extends Migration
     public function up()
     {
         Schema::create('user_sector', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('user_sector_id');
+            $table->foreign('user_id')->constrained('user_id', 'user');
+            $table->foreign('sector_id')->constrained('sector_id', 'sector');
+            $table->softDeletes();
         });
     }
 
