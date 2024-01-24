@@ -19,14 +19,14 @@ class CreateEquipamentTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('equipament', function (Blueprint $table) {
-            $table->id('equipament_id');
+        Schema::create('equipment', function (Blueprint $table) {
+            $table->id('equipment_id');
             $table->text('name');
             $table->text('brand');
-            $table->boolean('is_avaliable');
-            $table->foreign('type_id');
-            $table->foreign('sector_id');
-            $table->foreign('location_id');
+            $table->boolean('is_available');
+            $table->foreignId('type_id')->constrained('type_id', 'type');
+            $table->foreignId('sector_id')->constrained('sector_id', 'sector');
+            $table->foreignId('location_id')->constrained('location_id', 'location');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -40,6 +40,6 @@ class CreateEquipamentTable extends Migration
     public function down()
     {
         Schema::dropIfExists('location');
-        Schema::dropIfExists('equipament');
+        Schema::dropIfExists('equipment');
     }
 }

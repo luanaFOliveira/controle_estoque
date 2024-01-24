@@ -13,10 +13,10 @@ class CreateUserEquipamentTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_equipament', function (Blueprint $table) {
-            $table->id('user_equipament_id');
-            $table->foreign('equipament_id')->constrained('equipament_id', 'equipament');
-            $table->foreign('user_id')->constrained('user_id', 'user');
+        Schema::create('user_equipment', function (Blueprint $table) {
+            $table->id('user_equipment_id');
+            $table->foreignId('equipment_id')->constrained('equipment_id', 'equipment');
+            $table->foreignId('user_id')->constrained('user_id', 'user')->nullable();
             $table->timestamps();
             $table->timestamp('returned_at');
             $table->softDeletes();
@@ -30,6 +30,6 @@ class CreateUserEquipamentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_equipament');
+        Schema::dropIfExists('user_equipment');
     }
 }

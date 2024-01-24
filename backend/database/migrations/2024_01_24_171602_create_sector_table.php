@@ -15,7 +15,7 @@ class CreateSectorTable extends Migration
     {
         Schema::create('sector', function (Blueprint $table) {
             $table->id('sector_id');
-            $table->text('name');
+            $table->text('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

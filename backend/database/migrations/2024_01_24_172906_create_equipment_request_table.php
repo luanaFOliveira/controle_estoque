@@ -19,11 +19,11 @@ class CreateEquipamentRequestTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('equipament_request', function (Blueprint $table) {
-            $table->id('equipament_request_id');
+        Schema::create('equipment_request', function (Blueprint $table) {
+            $table->id('equipment_request_id');
             $table->text('reason');
-            $table->foreign('status_id')->constrained('status', 'status_id');
-            $table->foreign('equipament_id')->constrained('equipament', 'equipament_id');
+            $table->foreignId('status_id')->constrained('status', 'status_id');
+            $table->foreignId('equipment_id')->constrained('equipment', 'equipment_id');
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ class CreateEquipamentRequestTable extends Migration
     public function down()
     {
         Schema::dropIfExists('status');
-        Schema::dropIfExists('equipament_request');
+        Schema::dropIfExists('equipment_request');
     }
 }
