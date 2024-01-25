@@ -23,19 +23,11 @@ class SectorService {
         });
     }
 
-    private function updateSectorRelations(StoreSectorRequest $request, Sector $sector): void
-    {
-        $data = $request->validated();
-
-    }
-
     private function createSector(StoreSectorRequest $request): SectorResource
     {
         $data = $request->validated();
 
         $sector = Sector::create($data);
-
-        $this->updateSectorRelations($request, $sector);
 
         return SectorResource::make($sector);
     }
@@ -45,8 +37,6 @@ class SectorService {
         $data = $request->validated();
 
         $sector->update($data);
-
-        $this->updateSectorRelations($request, $sector);
 
         return SectorResource::make($sector);
     }

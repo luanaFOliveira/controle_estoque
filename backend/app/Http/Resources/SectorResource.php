@@ -2,8 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Sector;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixin Sector
+ */
 class SectorResource extends JsonResource
 {
     /**
@@ -12,10 +16,12 @@ class SectorResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->sector_id,
+            'sector_id' => $this->sector_id,
             'name' => $this->name,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'users' => $this->user->count(),
+            'equipments_count' => $this->equipment->count(),
         ];
     }
+
+
 }

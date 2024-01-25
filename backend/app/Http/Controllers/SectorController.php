@@ -13,14 +13,10 @@ class SectorController extends Controller
 {
     private $sectorService;
 
-    // Constructor injection of SectorService
     public function __construct(SectorService $sectorService) {
         $this->sectorService = $sectorService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $query = Sector::query();
@@ -31,49 +27,27 @@ class SectorController extends Controller
             $query->where('name', 'ilike', "%$search%");
         }
 
-        $sectors = $query->paginate(10);
-
-        $formattedSectors = SectorResource::collection($sectors);
-
-        return response()->json([
-            'data' => $formattedSectors,
-            'current_page' => $sectors->currentPage(),
-            'last_page' => $sectors->lastPage(),
-            'total' => $sectors->total(),
-        ]);
+        return SectorResource::collection($query->paginate(10));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Sector $sector)
     {
-        $formattedSector = new SectorResource($sector);
-
-        return response()->json(['data' => $formattedSector]);
+        return response()->json(['data ' => new SectorResource($sector)]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreSectorRequest $request)
     {
         $sectorResource = $this->sectorService->upsertSector($request);
         return response()->json(['message' => 'Sector created successfully', 'data' => $sectorResource]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(StoreSectorRequest $request, Sector $sector)
     {
-        $sectorResource = $this->sectorService->upsertSector($request);
-        return response()->json(['message' => 'Sector updated successfully', 'data' => $sectorResource]);
+        $updatedSectorResource = $this->sectorService->upsertSector($request, $sector);
+        return response()->json(['message' => 'Sector updated successfully', 'data' => $updatedSectorResource]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Sector $sector)
     {
         $this->sectorService->deleteSector($sector);
