@@ -15,11 +15,11 @@ use App\Models\EquipmentRequest;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-    use SoftDeletes;
+    
 
 
     /**

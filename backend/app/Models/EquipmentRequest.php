@@ -12,15 +12,14 @@ use App\Models\User;
 
 class EquipmentRequest extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory,SoftDeletes;
 
     protected $table = 'equipment_request';
     protected $primaryKey = 'equipment_request_id';
 
     protected $fillable = [
         'reason',
-        'status_id',
+        'request_status_id',
         'equipment_id',
         'user_id',
     ];
@@ -32,7 +31,7 @@ class EquipmentRequest extends Model
 
     public function status(){
             
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(RequestStatus::class, 'request_status_id');
     }
 
     public function user(){

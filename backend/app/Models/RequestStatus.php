@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Status extends Model
+class RequestStatus extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'status';
-    protected $primaryKey = 'status_id';
+    protected $table = 'request_status';
+    protected $primaryKey = 'request_status_id';
 
     protected $fillable = ['name'];
 

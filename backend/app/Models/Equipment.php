@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
-use App\Models\Type;
 use App\Models\Sector;
-use App\Models\Location;
 use App\Models\EquipmentRequest;
 
 class Equipment extends Model
@@ -20,16 +18,16 @@ class Equipment extends Model
 
     protected $fillable = [
         'name',
-        'brand',
+        'equipment_brand_id',
         'is_available',
-        'type_id',
+        'equipment_type_id',
         'sector_id',
-        'location_id',
+        'is_at_office',
     ];
 
     public function type()
     {
-        return $this->belongsTo(Type::class, 'type_id');
+        return $this->belongsTo(EquipmentType::class, 'equipment_type_id');
     }
 
     public function sector()
@@ -37,9 +35,10 @@ class Equipment extends Model
         return $this->belongsTo(Sector::class, 'sector_id');
     }
 
-    public function location()
+
+    public function brand()
     {
-        return $this->belongsTo(Location::class, 'location_id');
+        return $this->belongsTo(EquipmentBrand::class, 'equipment_brand_id');
     }
 
     public function user()
