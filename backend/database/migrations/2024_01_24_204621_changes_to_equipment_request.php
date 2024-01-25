@@ -14,7 +14,6 @@ class ChangesToEquipmentRequest extends Migration
     public function up()
     {
         Schema::table('equipment_request', function (Blueprint $table) {
-            $table->dropColumn('status_id');
             $table->foreignId('request_status_id')->constrained('request_status', 'request_status_id');
             $table->softDeletes();
         });
@@ -28,7 +27,6 @@ class ChangesToEquipmentRequest extends Migration
     public function down()
     {
         Schema::table('equipment_request', function (Blueprint $table) {
-            $table->foreignId('status_id')->constrained('status', 'status_id');
             $table->dropSoftDeletes();
             $table->dropColumn('request_status_id');
         });

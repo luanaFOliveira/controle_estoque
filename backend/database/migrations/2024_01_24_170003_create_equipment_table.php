@@ -22,7 +22,7 @@ class CreateEquipmentTable extends Migration
         Schema::create('equipment', function (Blueprint $table) {
             $table->id('equipment_id');
             $table->text('name');
-            $table->text('brand'); //criar a tabela e deletar ela e criar uma nova
+            $table->text('brand'); 
             $table->boolean('is_available');
             $table->foreignId('type_id')->constrained('type', 'type_id');
             $table->foreignId('sector_id')->constrained('sector', 'sector_id');
