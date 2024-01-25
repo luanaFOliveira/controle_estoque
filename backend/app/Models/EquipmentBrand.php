@@ -12,6 +12,7 @@ class EquipmentBrand extends Model
 
     protected $table = 'equipment_brand';
     protected $primaryKey = 'equipment_brand_id';
+    public $timestamps = false;
 
     protected $fillable = ['name'];
 }

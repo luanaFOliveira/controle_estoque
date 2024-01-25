@@ -12,6 +12,7 @@ class EquipmentType extends Model
 
     protected $table = 'equipment_type';
     protected $primaryKey = 'equipment_type_id';
+    public $timestamps = false;
 
     protected $fillable = ['name'];
 }
