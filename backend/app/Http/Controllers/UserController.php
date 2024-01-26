@@ -18,6 +18,7 @@ class UserController extends Controller
     
     public function index(Request $request)
     {
+        
         $query = User::query();
 
         if ($request->has('search')) {
@@ -27,6 +28,7 @@ class UserController extends Controller
         }
 
         return UserResource::collection($query->orderBy('user_id')->paginate(10));
+        
     }
 
     

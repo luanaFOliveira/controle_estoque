@@ -11,23 +11,24 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     public function login(LoginUserRequest $request){
+        
+        $credencials = $request->only('email', 'password');
 
-        $credencials = $request->validated();
+        if(Auth::attempt($credencials)){
+            $user = Auth::user();
+            $token = $user->createToken('ApiToken')->plainTextToken;
 
-        if(!Auth::attempt($credencials)){
             return response()->json([
-                'message' => 'Invalid credentials'
-            ], 401);
+                'message' => 'Successfully logged in',
+                'user' => $user,
+                'token' => $token
+            ], 200);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('main')->plainTextToken;
-
         return response()->json([
-            'message' => 'Successfully logged in',
-            'user' => $user,
-            'token' => $token
-        ], 200);
+            'message' => 'Invalid credentials',
+            'credencials' => $credencials,
+        ], 401);
 
     }   
 
@@ -42,7 +43,7 @@ class AuthController extends Controller
             'is_admin' => $data['is_admin']
         ]);
 
-        $token = $user->createToken('main')->plainTextToken;
+        $token = $user->createToken('ApiToken')->plainTextToken;
 
         return response()->json([
             'message' => 'Successfully registered',
@@ -53,10 +54,9 @@ class AuthController extends Controller
 
     public function logout(Request $request){
 
-        Auth::logout();
-
         $user = $request->user();
-        $user->currentAccessToken()->delete();
+
+        $user->tokens()->delete();
 
         return response()->json([
             'message' => 'Successfully logged out'
