@@ -32,9 +32,24 @@ class UserController extends Controller
     }
 
     
-    public function store(Request $request)
-    {
-        //esta no AuthController na funcao register
+    public function store(StoreUserRequest $request){
+
+        $data = $request->validated();
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => \Hash::make($data['password']),
+            'is_admin' => $data['is_admin']
+        ]);
+
+        $token = $user->createToken('ApiToken')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Successfully registered',
+            'user' => $user,
+            'token' => $token
+        ], 200);
     }
 
     
