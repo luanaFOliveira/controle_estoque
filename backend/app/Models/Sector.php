@@ -27,8 +27,9 @@ class Sector extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class)->using(UserSector::class)->withPivot('user_sector_id');
-    }
+        return $this->belongsToMany(User::class,'user_sector', 'sector_id', 'user_id', 'sector_id', 'user_id')->using(UserSector::class);
+    } 
+
 
 
     public function equipment()

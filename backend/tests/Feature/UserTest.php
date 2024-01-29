@@ -14,6 +14,7 @@ beforeEach(function () {
     
 });
 
+uses()->group('user');
 
 it('can register a new user', function () {
    
@@ -124,6 +125,22 @@ it('should delete a user', function () {
 
     $this->assertSoftDeleted('user', [
         'user_id' => $user->user_id,
+    ]);
+
+});
+
+
+it('should detach a specific user sector relation', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->deleteJson('/api/users/1' );
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'User deleted successfully',
+        ]);
+
+    $this->assertSoftDeleted('user_sector', [
+        'user_id' => 1,
     ]);
 
 });

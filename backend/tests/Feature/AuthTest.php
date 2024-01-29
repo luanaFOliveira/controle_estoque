@@ -16,6 +16,9 @@ beforeEach(function () {
    
 });
 
+uses()->group('auth');
+
+
 it('can register a new user', function () {
    
     $data = [

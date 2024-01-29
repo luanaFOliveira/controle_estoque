@@ -36,20 +36,9 @@ class UserService {
         }
     }
 
-    public function updateEquipmentStatus(User $user):void
-    {
-        $user->load('equipment'); 
-
-        foreach ($user->equipment as $equipment) {
-            $equipment->update(['is_available' => true]);
-        }
-    }
-
+    
     public function deleteUser(User $user): void
-    {
-        //$this->updateEquipmentStatus($user);
-        //$user->equipment()->delete();
-        $user->sector()->delete();
+    { 
         $user->delete();
     }
 

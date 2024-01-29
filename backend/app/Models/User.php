@@ -53,11 +53,11 @@ class User extends Authenticatable
     ];
 
     public function sector(){
-        return $this->belongsToMany(Sector::class)->using(UserSector::class)->withPivot('user_sector_id');
+        return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id')->using(UserSector::class);
     }
 
     public function equipment(){
-        return $this->belongsToMany(Equipment::class,'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id');
+        return $this->belongsToMany(Equipment::class,'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id')->using(UserEquipment::class);
     }
 
     public function equipmentRequest(){
