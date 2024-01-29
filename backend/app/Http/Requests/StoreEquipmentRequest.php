@@ -27,7 +27,9 @@ class StoreEquipmentRequest extends FormRequest
             'name' => 'required|string',
             'equipment_type' => 'required|string',
             'equipment_brand' => 'required|string',
-            'sector_id' => 'required|int|exists:sector,sector_id',
+            'sector' => 'required|string',
+            'is_available' => 'required|bool',
+            'is_at_office' => 'bool',
         ];
     }
 }

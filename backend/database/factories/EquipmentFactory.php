@@ -22,6 +22,7 @@ class EquipmentFactory extends Factory
             'name' => $name,
             'equipment_brand_id' => EquipmentBrand::all()->random()->equipment_brand_id,
             'is_available' => true,
+            'is_at_office' => true,
             'equipment_type_id' => EquipmentType::all()->random()->equipment_type_id,
             'sector_id' => Sector::all()->random()->sector_id,
         ];

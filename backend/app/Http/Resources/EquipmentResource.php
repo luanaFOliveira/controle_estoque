@@ -21,9 +21,9 @@ class EquipmentResource extends JsonResource
         return [
             'equipment_id' => $this->equipment_id,
             'name' => $this->name,
-            'type' => $this->type()->pluck('name'),
-            'brand' => $this->brand()->pluck('name'),
-            'sector' => $this->sector()->pluck('name'),
+            'type' => $this->type()->value('name'),
+            'brand' => $this->brand()->value('name'),
+            'sector' => $this->sector()->value('name'),
             'is_available' => $this->is_available,
             'is_at_office' => $this->is_at_office,
         ];
