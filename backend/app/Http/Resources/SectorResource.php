@@ -13,7 +13,7 @@ class SectorResource extends JsonResource
     /**
      * Transform the resource into an array.
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'sector_id' => $this->sector_id,

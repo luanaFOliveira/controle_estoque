@@ -1,11 +1,8 @@
 <?php
 
-use App\Http\Requests\StoreSectorRequest;
-/* @var Sector $sector */
 use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
-use Tests\TestCase;
 
 beforeEach(function (){
     Artisan::call('migrate:fresh');

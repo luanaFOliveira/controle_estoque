@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -25,21 +27,17 @@ class Sector extends Model
     protected $primaryKey = 'sector_id';
     protected $fillable = ['name'];
 
-    public function user()
+    public function user(): BelongsToMany
     {
-        return $this->belongsToMany(
-            User::class,
-            'user_sector',
-            'sector_id',
-            'user_id'
-        );
+        return $this->belongsToMany(User::class, 'user_sector', 'sector_id', 'user_id');
     }
 
-    public function sector(){
+    public function sector(): BelongsToMany
+    {
         return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id');
     }
 
-    public function equipment()
+    public function equipment(): HasMany
     {
         return $this->hasMany(Equipment::class, 'sector_id', 'sector_id');
     }

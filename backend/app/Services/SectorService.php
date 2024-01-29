@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Resources\SectorResource;
 use App\Models\Sector;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 
 class SectorService {

@@ -35,7 +35,7 @@ class UserService {
         }
     }
 
-    private function deleteUser(User $user): void
+    public function deleteUser(User $user): void
     {
         $user->equipment()->detach();
         $user->sector()->detach();
