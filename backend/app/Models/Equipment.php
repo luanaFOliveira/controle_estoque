@@ -5,7 +5,10 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * \App\Models\Pet
@@ -37,28 +40,27 @@ class Equipment extends Model
         'is_at_office',
     ];
 
-    public function type()
+    public function type(): BelongsTo
     {
         return $this->belongsTo(EquipmentType::class, 'equipment_type_id');
     }
 
-    public function sector()
+    public function sector(): belongsTo
     {
         return $this->belongsTo(Sector::class, 'sector_id');
     }
 
-
-    public function brand()
+    public function brand(): BelongsTo
     {
         return $this->belongsTo(EquipmentBrand::class, 'equipment_brand_id');
     }
 
-    public function user()
+    public function user(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_equipment', 'equipment_id', 'user_id');
+        return $this->belongsToMany(User::class)->using(UserEquipment::class);
     }
 
-    public function request()
+    public function request(): HasMany
     {
         return $this->hasMany(EquipmentRequest::class, 'equipment_id', 'equipment_id');
     }
