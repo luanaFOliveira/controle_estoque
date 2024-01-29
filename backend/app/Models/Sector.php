@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,10 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $sector_id
  * @property string $name
+ * @property User|Collection $user
+ * @property Equipment|Collection $equipment
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
- * @
  */
 class Sector extends Model
 {
@@ -25,7 +27,16 @@ class Sector extends Model
 
     public function user()
     {
-        return $this->belongsToMany(User::class, 'user_sector', 'sector_id','user_id');
+        return $this->belongsToMany(
+            User::class,
+            'user_sector',
+            'sector_id',
+            'user_id'
+        );
+    }
+
+    public function sector(){
+        return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id');
     }
 
     public function equipment()

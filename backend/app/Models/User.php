@@ -19,7 +19,7 @@ class User extends Authenticatable
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-    
+
 
 
     /**
@@ -53,7 +53,7 @@ class User extends Authenticatable
     ];
 
     public function sector(){
-        return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id');
+        return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id')->withPivot('user_sector_id');
     }
 
     public function equipment(){

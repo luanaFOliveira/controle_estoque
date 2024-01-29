@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class SectorService {
 
-    public function upsertSector(StoreSectorRequest $request, ?Sector $sector = null): Sector
+    public function upsertSector(StoreSectorRequest $request, ?Sector $sector = null): SectorResource
     {
         return DB::transaction(function () use ($request, $sector) {
             if ($sector === null) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SectorController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('equipments', \App\Http\Controllers\EquipmentController::class);
+    Route::apiResource('sectors',SectorController::class);
 });
+
