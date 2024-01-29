@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Artisan;
 beforeEach(function () {
     Artisan::call('migrate:refresh');
     Artisan::call('db:seed');
-    //$user = User::factory()->create();
-    //$this->actingAs($user,'sanctum');
+    
 });
 
 
@@ -41,10 +40,13 @@ it('can register a new user', function () {
 
 
 it('should return a list of users', function () {
-    $response = $this->getJson('/api/users');
+    $user = User::factory()->create();
+    $this->actingAs($user,'sanctum');
+    $response = $this->actingAs($user)->getJson('/api/users');
 
     $response->assertStatus(200);
 });
+
 
 
 
@@ -84,7 +86,6 @@ it('should update a user', function () {
 
     $response = $this->actingAs($user)
         ->putJson('/api/users/' . $user->user_id, $updateData);
-    //dd($response->json());
 
 
     $response->assertStatus(200)
