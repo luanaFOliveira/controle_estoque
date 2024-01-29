@@ -5,6 +5,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Request;
+use SebastianBergmann\Type\VoidType;
 
 
 class UserService {
@@ -35,10 +36,20 @@ class UserService {
         }
     }
 
-    private function deleteUser(User $user): void
+    public function updateEquipmentStatus(User $user):void
     {
-        $user->equipment()->detach();
-        $user->sector()->detach();
+        $user->load('equipment'); 
+
+        foreach ($user->equipment as $equipment) {
+            $equipment->update(['is_available' => true]);
+        }
+    }
+
+    public function deleteUser(User $user): void
+    {
+        //$this->updateEquipmentStatus($user);
+        //$user->equipment()->delete();
+        $user->sector()->delete();
         $user->delete();
     }
 
