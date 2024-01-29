@@ -29,11 +29,10 @@ class ChangesToEquipment extends Migration
     public function down()
     {
         Schema::table('equipment', function (Blueprint $table) {
-            $table->string('brand');
-            $table->dropColumn('equipment_brand_id');
+            $table->text('brand');
+            $table->dropConstrainedForeignId('equipment_brand_id');
+            $table->dropConstrainedForeignId('equipment_type_id');
             $table->dropColumn('is_at_office');
-            $table->dropColumn('equipment_type_id');
         });
-        
     }
 }

@@ -26,7 +26,9 @@ class ChangeColumnNameToLocation extends Migration
     public function down()
     {
         Schema::table('location', function (Blueprint $table) {
-            $table->renameColumn('name', 'location');
+            if (Schema::hasColumn('location', 'name')) {
+                $table->renameColumn('name', 'location');
+            }
         });
     }
 }

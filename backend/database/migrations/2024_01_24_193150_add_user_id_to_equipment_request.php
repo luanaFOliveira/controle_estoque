@@ -26,7 +26,7 @@ class AddUserIdToEquipmentRequest extends Migration
     public function down()
     {
         Schema::table('equipment_request', function (Blueprint $table) {
-            $table->dropColumn('user_id');
+            $table->dropConstrainedForeignId('user_id');
         });
     }
 }

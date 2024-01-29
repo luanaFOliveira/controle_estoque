@@ -28,5 +28,8 @@ class RenameTypeTable extends Migration
     public function down()
     {
         Schema::rename('equipment_type', 'type');
+        Schema::table('type', function (Blueprint $table) {
+            $table->renameColumn('equipment_type_id', 'type_id');
+        });
     }
 }

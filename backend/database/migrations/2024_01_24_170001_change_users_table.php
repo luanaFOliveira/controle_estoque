@@ -28,10 +28,11 @@ class ChangeUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('user', function (Blueprint $table) {
             $table->renameColumn('user_id', 'id');
             $table->dropColumn('is_admin');
-            $table->softDeletes();
         });
+
+        Schema::rename('user', 'users');
     }
 }

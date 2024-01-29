@@ -22,7 +22,7 @@ class CreateEquipmentTable extends Migration
         Schema::create('equipment', function (Blueprint $table) {
             $table->id('equipment_id');
             $table->text('name');
-            $table->text('brand'); 
+            $table->text('brand');
             $table->boolean('is_available');
             $table->foreignId('type_id')->constrained('type', 'type_id');
             $table->foreignId('sector_id')->constrained('sector', 'sector_id');
@@ -39,7 +39,7 @@ class CreateEquipmentTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('location');
         Schema::dropIfExists('equipment');
+        Schema::dropIfExists('location');
     }
 }

@@ -28,7 +28,7 @@ class ChangesToEquipmentRequest extends Migration
     {
         Schema::table('equipment_request', function (Blueprint $table) {
             $table->dropSoftDeletes();
-            $table->dropColumn('request_status_id');
+            $table->dropConstrainedForeignId('request_status_id');
         });
     }
 }

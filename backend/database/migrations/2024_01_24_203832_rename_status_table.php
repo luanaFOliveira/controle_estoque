@@ -27,5 +27,8 @@ class RenameStatusTable extends Migration
     public function down()
     {
         Schema::rename('request_status', 'status');
+        Schema::table('status', function (Blueprint $table) {
+            $table->renameColumn('request_status_id', 'status_id');
+        });
     }
 }
