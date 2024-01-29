@@ -3,15 +3,13 @@
 namespace App\Services;
 
 use App\Http\Requests\StoreEquipRequestRequest;
-use App\Http\Requests\StoreSectorRequest;
-use App\Http\Resources\SectorResource;
+use App\Http\Resources\EquipRequestResource;
 use App\Models\EquipmentRequest;
-use App\Models\Sector;
 use Illuminate\Support\Facades\DB;
 
 class EquipRequestService {
 
-    public function upsertEquipmentRequest(StoreEquipRequestRequest $request, ?EquipmentRequest $equipmentRequest = null): EquipmentRequest
+    public function upsertEquipmentRequest(StoreEquipRequestRequest $request, ?EquipmentRequest $equipmentRequest = null): EquipRequestResource
     {
         return DB::transaction(function () use ($request, $equipmentRequest) {
             if ($equipmentRequest === null) {
@@ -24,21 +22,21 @@ class EquipRequestService {
         });
     }
 
-    private function createEquipmentRequest(StoreEquipRequestRequest $request): EquipmentRequest
+    private function createEquipmentRequest(StoreEquipRequestRequest $request): EquipRequestResource
     {
         $data = $request->validated();
 
-        $sector = EquipmentRequest::create($data);
+        $equipmentRequest = EquipmentRequest::create($data);
 
-        return $sector;
+        return EquipRequestResource::make($equipmentRequest);
     }
-    private function updateEquipmentRequest(StoreEquipRequestRequest $request): EquipmentRequest
+    private function updateEquipmentRequest(StoreEquipRequestRequest $request, EquipmentRequest $equipmentRequest): EquipRequestResource
     {
         $data = $request->validated();
 
-        $sector = EquipmentRequest::create($data);
+        $equipmentRequest->update($data);
 
-        return $sector;
+        return EquipRequestResource::make($equipmentRequest);
     }
 
     public function deleteEquipmentRequest(EquipmentRequest $equipmentRequest):void

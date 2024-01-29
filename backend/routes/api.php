@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\EquipRequestController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('equipments', EquipmentController::class);
     Route::apiResource('sectors',SectorController::class);
+    Route::apiResource('equipment-requests', EquipRequestController::class);
     Route::apiResource('users',UserController::class);
     Route::post('/logout',[AuthController::class, 'logout']);
 });

@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use App\Models\Sector;
-use App\Models\Equipment;
-use App\Models\EquipmentRequest;
 
 class User extends Authenticatable
 {
@@ -19,7 +16,6 @@ class User extends Authenticatable
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-
 
     /**
      * The attributes that are mass assignable.
@@ -52,15 +48,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function sector(){
+    public function sector(): BelongsToMany
+    {
         return $this->belongsToMany(Sector::class, 'user_sector', 'user_id', 'sector_id', 'user_id', 'sector_id')->using(UserSector::class);
     }
 
-    public function equipment(){
+    public function equipment(): BelongsToMany
+    {
         return $this->belongsToMany(Equipment::class,'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id')->using(UserEquipment::class);
     }
 
-    public function equipmentRequest(){
+    public function equipmentRequest(): HasMany
+    {
         return $this->hasMany(EquipmentRequest::class, 'user_id', 'user_id');
     }
 }

@@ -4,7 +4,6 @@ namespace App\Services;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Support\Facades\Request;
 use SebastianBergmann\Type\VoidType;
 
 
@@ -36,9 +35,9 @@ class UserService {
         }
     }
 
-    
+
     public function deleteUser(User $user): void
-    { 
+    {
         $user->delete();
     }
 

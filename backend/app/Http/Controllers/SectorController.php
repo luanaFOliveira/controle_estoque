@@ -20,7 +20,7 @@ class SectorController extends Controller
         $this->sectorService = $sectorService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = Sector::query();
 
