@@ -6,13 +6,16 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
-    $this->RefreshDatabase();
-    $this->seed();
+    Artisan::call('migrate:refresh');
+    Artisan::call('db:seed');
+    //$user = User::factory()->create();
+    //$this->actingAs($user,'sanctum');
 });
 
-/*
+
 it('can register a new user', function () {
    
     $data = [
@@ -33,9 +36,8 @@ it('can register a new user', function () {
                 'email' => 'test@example.com',
             ],
         ]);
-
 });
-*/
+
 
 
 it('should return a list of users', function () {
@@ -46,7 +48,6 @@ it('should return a list of users', function () {
 
 
 
-
 it('should return a user', function () {
     $user = User::factory()->create();
 
@@ -54,7 +55,7 @@ it('should return a user', function () {
     $response->assertStatus(200)
         ->assertJson([
             'data' => [
-                'id' => $user->user_id,
+                'user_id' => $user->user_id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'is_admin' => $user->is_admin,
@@ -65,5 +66,63 @@ it('should return a user', function () {
             ],
         ]);
     
+});
+
+it('should update a user', function () {
+    $user = User::factory()->create();
+
+
+    $updateData = [
+        'name' => 'Updated Name',
+        'email' => 'updated@example.com',
+        'is_admin' => $user->is_admin,
+        'password' => $user->password,
+        'password_confirmation' => $user->password,
+        'sectors' => [4],
+    ];
+
+
+    $response = $this->actingAs($user)
+        ->putJson('/api/users/' . $user->user_id, $updateData);
+    //dd($response->json());
+
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'User updated successfully',
+            'data' => [
+                'user_id' => $user->user_id,
+                'name' => $updateData['name'],
+                'email' => $updateData['email'],
+            ],
+        ]);
+
+    $this->assertDatabaseHas('user', [
+        'user_id' => $user->user_id,
+        'name' => $updateData['name'],
+        'email' => $updateData['email'],
+    ]);
+    
+
+    $this->assertDatabaseHas('user_sector', [
+        'user_id' => $user->user_id,
+        'sector_id' => 4,
+    ]);
+    
+});
+
+it('should delete a user', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->deleteJson('/api/users/' . $user->user_id);
+
+    $response->assertStatus(200)
+        ->assertJson([
+            'message' => 'User deleted successfully',
+        ]);
+
+    $this->assertSoftDeleted('user', [
+        'user_id' => $user->user_id,
+    ]);
 
 });

@@ -7,8 +7,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
+use Illuminate\Support\Facades\Artisan;
 
-/*
+
+beforeEach(function () {
+    Artisan::call('migrate:refresh');
+    Artisan::call('db:seed');
+   
+});
+
 it('can register a new user', function () {
    
     $data = [
@@ -87,4 +94,3 @@ it('can log out a user', function () {
             'message' => 'Successfully logged out',
         ]);
 });
-*/
