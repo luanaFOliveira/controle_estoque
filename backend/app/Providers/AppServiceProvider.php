@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(EquipmentService::class, function ($app) {
-            return new EquipRequestService();
+            return new EquipmentService();
         });
 
         $this->app->bind(UserService::class, function ($app) {
