@@ -27,6 +27,10 @@ class EquipRequestService {
     private function createEquipmentRequest(StoreEquipRequestRequest $request): EquipRequestResource
     {
         $data = $request->validated();
+        $status = RequestStatus::where('status', 'Pendente')->first();
+        $statusId = $status->request_status_id;
+
+        $data['request_status_id'] = $statusId;
 
         $equipmentRequest = EquipmentRequest::create($data);
 

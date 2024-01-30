@@ -20,10 +20,10 @@ class StoreEquipRequestRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reason' => 'string',
-            'equipment_id' => 'required|int',
-            'user_id' => 'required|int',
-            'request_status_id' => 'required|int',
+            'reason'=>'string',
+            'equipment_id'=>'required|int',
+            'user_id'=>'required|int',
+            'request_status_id'=>'int',
             'returned_at' => 'date'
         ];
     }

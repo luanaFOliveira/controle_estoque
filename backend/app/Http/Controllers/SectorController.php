@@ -51,6 +51,10 @@ class SectorController extends Controller
 
     public function destroy(Sector $sector):JsonResponse
     {
+        if ($sector->equipment()->count() > 0) {
+            $message = 'Cannot delete sector. Delete all equipments in the sector first.';
+            return response()->json(['message' => $message], 400);
+        }
         $this->sectorService->deleteSector($sector);
         return response()->json(['message' => 'Sector deleted successfully']);
     }
