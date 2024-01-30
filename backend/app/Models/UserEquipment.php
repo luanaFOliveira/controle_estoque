@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,13 +36,14 @@ class UserEquipment extends Pivot
         'returned_at' => 'datetime',
     ];
 
-    public function user(): BelongsTo
+    public function user(): HasMany
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasMany(User::class, 'user_id', 'user_id');
     }
 
-    public function equipment(): BelongsTo
+    public function equipment(): HasMany
     {
-        return $this->belongsTo(Equipment::class, 'equipment_id');
+        return $this->hasMany(Equipment::class, 'equipment_id', 'equipment_id');
     }
+    
 }

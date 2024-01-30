@@ -18,12 +18,7 @@ class UserObserver
      */
     public function created(User $user,$options=[])
     {
-
-        if(isset($options['sectors'])){
-            $sectors = $options['sectors'];
-            $sectorIds = Sector::whereIn('name', $sectors)->pluck('id')->toArray();
-            $user->sector()->attach($sectorIds);
-        }
+        //
     }
 
     /**
@@ -34,28 +29,8 @@ class UserObserver
      */
     public function updated(User $user,$options=[])
     {
-        if(isset($options['equipments'])){
-            $equipments = $options['equipments'];
-            if (is_array($equipments) && count($equipments) > 0) {
-                $equipmentsIds = Equipment::whereIn('name', $equipments)->pluck('id')->toArray();
-                $user->equipment()->sync($equipmentsIds);
-    
-            }else{
-                UserEquipment::where('user_id', $user->user_id)->delete();
-            }
-        }
+        //
        
-        if(isset($options['sectors'])){
-            $sectors = $options['sectors'];
-            if (is_array($sectors) && count($sectors) > 0) {
-                $sectorIds = Sector::whereIn('name', $sectors)->pluck('id')->toArray();
-                $user->sector()->sync($sectorIds);
-
-            }else{
-                UserSector::where('user_id', $user->user_id)->delete();
-            }
-        }
-        
     }
 
     /**

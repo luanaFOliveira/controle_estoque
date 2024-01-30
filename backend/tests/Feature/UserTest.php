@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Equipment;
+use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 
@@ -64,14 +66,24 @@ it('can register a new user', function () {
 it('should update a user', function () {
     $user = User::factory()->create();
 
+    $sector1 = Sector::factory()->create();
+    $user->sector()->attach($sector1->getKey());
+
+    $equipment1 = Equipment::factory()->create();
+    $user->equipment()->attach($equipment1->getKey());
+
+    $sector2 = Sector::factory()->create();
+    $equipment2 = Equipment::factory()->create();
+
+
     $updateData = [
         'name' => 'Updated Name',
         'email' => 'updated@example.com',
         'is_admin' => $user->is_admin,
         'password' => $user->password,
         'password_confirmation' => $user->password,
-        'sectors' => [4],
-        'equipments' => [1],
+        'sectors' => [$sector1->getKey(),$sector2->getKey()],
+        'equipments' => [$equipment1->getKey(),$equipment2->getKey()],
     ];
 
     $response = $this->actingAs($user)->putJson('/api/users/' . $user->user_id, $updateData);
@@ -93,8 +105,24 @@ it('should update a user', function () {
 
     $this->assertDatabaseHas('user_sector', [
         'user_id' => $user->user_id,
-        'sector_id' => 4,
+        'sector_id' => $sector1->getKey(),
     ]);
+
+    $this->assertDatabaseHas('user_equipment', [
+        'user_id' => $user->user_id,
+        'equipment_id' => $equipment1->getKey(),
+    ]);
+
+    $this->assertDatabaseHas('user_sector', [
+        'user_id' => $user->user_id,
+        'sector_id' => $sector2->getKey(),
+    ]);
+
+    $this->assertDatabaseHas('user_equipment', [
+        'user_id' => $user->user_id,
+        'equipment_id' => $equipment2->getKey(),
+    ]);
+
 });
 
 it('should delete a user', function () {

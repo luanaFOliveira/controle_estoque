@@ -40,14 +40,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $data = $request->validated();
-
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'is_admin' => $data['is_admin']
-        ],['sectors'=>$data['sectors']]);
+        $user = $this->userService->createUser($request);
 
         $token = $user->createToken('ApiToken')->plainTextToken;
 
