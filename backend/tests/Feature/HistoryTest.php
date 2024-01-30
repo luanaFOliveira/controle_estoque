@@ -55,3 +55,17 @@ it('can return a paginated list detailing the history of a specified piece of us
         ]);
     }
 });
+
+it('cannot access non-existent equipment history', function () {
+    $nonExistentId = 12345;
+
+    $response = $this->getJson("/api/history/equipments/{$nonExistentId}");
+    $response->assertStatus(404);
+});
+
+it('cannot access non-existent user history', function () {
+    $nonExistentId = 12345;
+
+    $response = $this->getJson("/api/history/users/{$nonExistentId}");
+    $response->assertStatus(404);
+});
