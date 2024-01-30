@@ -47,7 +47,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'is_admin' => $data['is_admin']
-        ]);
+        ],['sectors'=>$data['sectors']]);
 
         $token = $user->createToken('ApiToken')->plainTextToken;
 

@@ -71,6 +71,7 @@ it('should update a user', function () {
         'password' => $user->password,
         'password_confirmation' => $user->password,
         'sectors' => [4],
+        'equipments' => [1],
     ];
 
     $response = $this->actingAs($user)->putJson('/api/users/' . $user->user_id, $updateData);
