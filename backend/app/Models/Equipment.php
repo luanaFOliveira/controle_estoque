@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * \App\Models\Pet
+ * \App\Models\Equipment
  *
  * @property int $equipment_id
  * @property string $name
@@ -57,7 +57,7 @@ class Equipment extends Model
 
     public function user(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(UserEquipment::class);
+        return $this->belongsToMany(User::class, 'user_equipment', 'equipment_id', 'user_id', 'equipment_id', 'user_id')->using(UserEquipment::class);
     }
 
     public function request(): HasMany
