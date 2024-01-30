@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEquipRequestRequest;
 use App\Http\Resources\EquipRequestResource;
-use App\Http\Resources\SectorResource;
 use App\Models\EquipmentRequest;
-use App\Models\Sector;
 use App\Services\EquipRequestService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

@@ -11,61 +11,14 @@ beforeEach(function (){
     $this->actingAs($user, 'sanctum');
 });
 
-it('can create a sector', function () {
-    // Arrange
-    $data = [
-        'name' => 'Test Sector',
-    ];
-
-    // Act
-    $response = $this->postJson('/api/sectors', $data);
-
-    // Assert
-    $response->assertCreated();
-    expect(Sector::where($data)->exists())->toBeTrue();
-});
-
-it('can update a sector', function () {
-    // Arrange
-    /* @var Sector $sector */
-    $sector = Sector::factory()->create([
-        'name' => 'Old Sector Name',
-    ]);
-
-    $data = [
-        'name' => 'Updated Sector Name',
-    ];
-
-    // Act
-    $response = $this->putJson("/api/sectors/{$sector->sector_id}", $data);
-
-    // Assert
-    $response->assertOk();
-    expect(Sector::where($data)->exists())->toBeTrue();
-});
-
-it('can delete a sector', function () {
-    // Arrange
-    /* @var Sector $sector */
-    $sector = Sector::factory()->create();
-
-    // Act
-    $response = $this->deleteJson("/api/sectors/{$sector->sector_id}");
-
-    // Assert
-    $response->assertOk();
-    expect(Sector::find($sector->sector_id))->toBeNull();
-});
+uses()->group('sector');
 
 it('can retrieve a list of sectors', function () {
-    // Arrange
-    $sectors = Sector::factory()->count(5)->create();
+    Sector::factory()->count(5)->create();
 
-    // Act
     $response = $this->getJson('/api/sectors');
     $paginatedResponse = $response->json();
 
-    // Assert
     $response->assertOk();
     expect($paginatedResponse)->toBePaginated();
     foreach ($paginatedResponse['data'] as $sector){
@@ -79,14 +32,12 @@ it('can retrieve a list of sectors', function () {
 });
 
 it('can retrieve a specific sector using the show method', function () {
-    // Arrange
-    /* @var Sector $sector */
+    /* @var Sector $sector
+     */
+
     $sector = Sector::factory()->create();
 
-    // Act
     $response = $this->getJson("/api/sectors/{$sector->sector_id}");
-
-    // Assert
     $response->assertOk();
     $response->assertJson([
         'data' => [
@@ -96,4 +47,43 @@ it('can retrieve a specific sector using the show method', function () {
             'equipments_count' => $sector->equipment->count(),
         ]
     ]);
+});
+
+it('can create a sector', function () {
+    $data = [
+        'name' => 'Test Sector',
+    ];
+
+    $response = $this->postJson('/api/sectors', $data);
+
+    $response->assertCreated();
+    expect(Sector::where($data)->exists())->toBeTrue();
+});
+
+it('can update a sector', function () {
+    /* @var Sector $sector
+     */
+
+    $sector = Sector::factory()->create([
+        'name' => 'Old Sector Name',
+    ]);
+
+    $data = [
+        'name' => 'Updated Sector Name',
+    ];
+
+    $response = $this->putJson("/api/sectors/{$sector->sector_id}", $data);
+    $response->assertOk();
+    expect(Sector::where($data)->exists())->toBeTrue();
+});
+
+it('can delete a sector', function () {
+    /* @var Sector $sector
+     */
+
+    $sector = Sector::factory()->create();
+
+    $response = $this->deleteJson("/api/sectors/{$sector->sector_id}");
+    $response->assertOk();
+    expect(Sector::find($sector->sector_id))->toBeNull();
 });

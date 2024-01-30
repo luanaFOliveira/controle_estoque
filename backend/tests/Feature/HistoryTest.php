@@ -37,6 +37,13 @@ it('can return a paginated list detailing the history of a specified piece of eq
     }
 });
 
+it('cannot access non-existent equipment history', function () {
+    $nonExistentId = 12345;
+
+    $response = $this->getJson("/api/history/equipments/{$nonExistentId}");
+    $response->assertStatus(404);
+});
+
 it('can return a paginated list detailing the history of a specified piece of user', function () {
     $response = $this->getJson("/api/history/users?user_id={$this->user->user_id}");
 
@@ -54,13 +61,6 @@ it('can return a paginated list detailing the history of a specified piece of us
             'deleted_at'
         ]);
     }
-});
-
-it('cannot access non-existent equipment history', function () {
-    $nonExistentId = 12345;
-
-    $response = $this->getJson("/api/history/equipments/{$nonExistentId}");
-    $response->assertStatus(404);
 });
 
 it('cannot access non-existent user history', function () {

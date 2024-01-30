@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\HistoryResource;
 use App\Models\Equipment;
+use App\Models\User;
 use App\Models\UserEquipment;
 use Illuminate\Http\Request;
 
