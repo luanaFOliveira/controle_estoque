@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(LoginUserRequest $request){
-        
+    public function login(LoginUserRequest $request): JsonResponse
+    {
         $credencials = $request->only('email', 'password');
 
         if(Auth::attempt($credencials)){
@@ -29,11 +30,10 @@ class AuthController extends Controller
             'message' => 'Invalid credentials',
             'credencials' => $credencials,
         ], 401);
+    }
 
-    }   
-
-    public function register(StoreUserRequest $request){
-
+    public function register(StoreUserRequest $request): JsonResponse
+    {
         $data = $request->validated();
 
         $user = User::create([
@@ -52,8 +52,8 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function logout(Request $request){
-
+    public function logout(Request $request): JsonResponse
+    {
         $user = $request->user();
 
         $user->tokens()->delete();
@@ -61,8 +61,5 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Successfully logged out'
         ], 200);
-
     }
-
-    
 }

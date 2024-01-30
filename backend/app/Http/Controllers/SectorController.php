@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Resources\SectorResource;
-use App\Models\Equipment;
 use App\Models\Sector;
 use App\Services\SectorService;
 use Illuminate\Http\JsonResponse;

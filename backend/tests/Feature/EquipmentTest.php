@@ -15,6 +15,45 @@ beforeEach(function (){
 
 uses()->group('equipment');
 
+it('should return a paginated list of equipments', function () {
+    $response = $this->getJson('/api/equipments');
+    $paginatedResponse = $response->json();
+
+    expect($paginatedResponse)->toBePaginated();
+
+    foreach ($paginatedResponse['data'] as $equipment) {
+        expect($equipment)->toHaveKeys([
+            'equipment_id',
+            'name',
+            'type',
+            'brand',
+            'sector',
+            'is_available',
+            'is_at_office'
+        ]);
+    }
+});
+
+it('should show a detailed equipment', function () {
+    /* @var Equipment $equipment
+     * */
+    $equipment = Equipment::factory()->create();
+    $equipment_id = $equipment->equipment_id;
+    $response = $this->getJson("/api/equipments/{$equipment_id}");
+
+    $response->assertJson([
+        'data' => [
+            'equipment_id' => $equipment->equipment_id,
+            'name' => $equipment->name,
+            'type' => $equipment->type()->value('name'),
+            'brand' => $equipment->brand()->value('name'),
+            'sector' => $equipment->sector()->value('name'),
+            'is_available' => $equipment->is_available,
+            'is_at_office' => $equipment->is_at_office
+        ]
+    ]);
+});
+
 it('can create a equipment', function () {
     $data = [
         'name' => 'test name',
@@ -104,44 +143,7 @@ it('can delete a equipment', function () {
     $this->assertSoftDeleted('equipment', ['equipment_id' => $equipment->equipment_id]);
 });
 
-it('should return a paginated list of equipments', function () {
-    $response = $this->getJson('/api/equipments');
-    $paginatedResponse = $response->json();
 
-    expect($paginatedResponse)->toBePaginated();
-
-    foreach ($paginatedResponse['data'] as $equipment) {
-        expect($equipment)->toHaveKeys([
-            'equipment_id',
-            'name',
-            'type',
-            'brand',
-            'sector',
-            'is_available',
-            'is_at_office'
-        ]);
-    }
-});
-
-it('should show a detailed equipment', function () {
-    /* @var Equipment $equipment
-     * */
-    $equipment = Equipment::factory()->create();
-    $equipment_id = $equipment->equipment_id;
-    $response = $this->getJson("/api/equipments/{$equipment_id}");
-
-    $response->assertJson([
-        'data' => [
-            'equipment_id' => $equipment->equipment_id,
-            'name' => $equipment->name,
-            'type' => $equipment->type()->value('name'),
-            'brand' => $equipment->brand()->value('name'),
-            'sector' => $equipment->sector()->value('name'),
-            'is_available' => $equipment->is_available,
-            'is_at_office' => $equipment->is_at_office
-        ]
-    ]);
-});
 
 it('cannot access non-existent equipment', function () {
     $nonExistentId = 12345;
