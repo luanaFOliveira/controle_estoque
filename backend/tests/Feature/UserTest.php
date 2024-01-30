@@ -82,6 +82,7 @@ it('should update a user', function () {
         'password' => $user->password,
         'password_confirmation' => $user->password,
         'sectors' => [4],
+        'equipments' => [1],
     ];
 
 
