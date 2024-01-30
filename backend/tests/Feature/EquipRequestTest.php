@@ -64,7 +64,6 @@ it('can create an equipment request', function () {
 
     $data = [
         'reason' => 'Test Reason',
-        'request_status_id' => 3,
         'user_id' => $user->user_id,
         'equipment_id' => $equipment->equipment_id,
     ];

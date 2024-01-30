@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Requests\StoreEquipRequestRequest;
 use App\Http\Resources\EquipRequestResource;
 use App\Models\EquipmentRequest;
+use App\Models\RequestStatus;
 use Illuminate\Support\Facades\DB;
 
 class EquipRequestService {
@@ -25,6 +26,10 @@ class EquipRequestService {
     private function createEquipmentRequest(StoreEquipRequestRequest $request): EquipRequestResource
     {
         $data = $request->validated();
+        $status = RequestStatus::where('status', 'Pendente')->first();
+        $statusId = $status->request_status_id;
+
+        $data['request_status_id'] = $statusId;
 
         $equipmentRequest = EquipmentRequest::create($data);
 
