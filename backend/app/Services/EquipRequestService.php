@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Http\Requests\StoreEquipRequestRequest;
 use App\Http\Resources\EquipRequestResource;
 use App\Models\EquipmentRequest;
+use App\Models\RequestStatus;
+use App\Models\UserEquipment;
 use Illuminate\Support\Facades\DB;
 
 class EquipRequestService {
@@ -30,11 +32,23 @@ class EquipRequestService {
 
         return EquipRequestResource::make($equipmentRequest);
     }
+
     private function updateEquipmentRequest(StoreEquipRequestRequest $request, EquipmentRequest $equipmentRequest): EquipRequestResource
     {
         $data = $request->validated();
 
         $equipmentRequest->update($data);
+
+        $acceptStatus = RequestStatus::where('status', 'Aprovado')->first();
+        $acceptId = $acceptStatus->request_status_id;
+
+        if($data['request_status_id'] == $acceptId)
+        {
+            UserEquipment::create([
+                'user_id' => $data['user_id'],
+                'equipment_id' => $data['equipment_id'],
+            ]);
+        }
 
         return EquipRequestResource::make($equipmentRequest);
     }

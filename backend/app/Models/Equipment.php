@@ -23,6 +23,7 @@ use \Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
+ * @property Carbon|null $returned_at
  */
 class Equipment extends Model
 {

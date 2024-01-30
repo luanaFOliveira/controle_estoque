@@ -8,6 +8,7 @@ use App\Models\Equipment;
 use App\Models\EquipmentBrand;
 use App\Models\EquipmentType;
 use App\Models\Sector;
+use App\Models\UserEquipment;
 use Illuminate\Support\Facades\DB;
 
 class EquipmentService
@@ -49,6 +50,15 @@ class EquipmentService
         $equipment = Equipment::create($data);
 
         return EquipmentResource::make($equipment);
+    }
+
+    public function returnEquipment(Equipment $equipment): EquipmentResource
+    {
+        $userEquipment = UserEquipment::find($equipment->equipment_id);
+        $userEquipment->returned_at = now();
+        $userEquipment->save();
+
+        return EquipmentResource::make($userEquipment);
     }
 
     private function updateEquipment(StoreEquipmentRequest $request, Equipment $equipment): EquipmentResource

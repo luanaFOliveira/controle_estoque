@@ -30,10 +30,7 @@ class UserEquipment extends Pivot
     protected $fillable = [
         'equipment_id',
         'user_id',
-    ];
-
-    protected $casts = [
-        'returned_at' => 'datetime',
+        'returned_at'
     ];
 
     public function user(): HasMany

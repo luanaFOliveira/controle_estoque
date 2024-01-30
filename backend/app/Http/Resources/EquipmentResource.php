@@ -26,6 +26,7 @@ class EquipmentResource extends JsonResource
             'sector' => $this->sector()->value('name'),
             'is_available' => $this->is_available,
             'is_at_office' => $this->is_at_office,
+            'returned_at' => $this->returned_at,
         ];
     }
 }
