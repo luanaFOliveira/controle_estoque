@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function (){
-    Artisan::call('migrate:fresh');
+    Artisan::call('migrate:refresh');
     Artisan::call('db:seed');
     $user = User::factory()->create();
     $this->actingAs($user, 'sanctum');

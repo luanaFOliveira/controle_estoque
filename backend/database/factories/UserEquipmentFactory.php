@@ -21,16 +21,19 @@ class UserEquipmentFactory extends Factory
             $equipmentIds = Equipment::all()->pluck('equipment_id')->toArray();
         }
 
-        $randomIndex = array_rand($equipmentIds);
+        if (empty($equipmentIds)) {
+            return [];
+        } else {
+            $randomIndex = array_rand($equipmentIds);
+            $equipmentId = $equipmentIds[$randomIndex];
+            unset($equipmentIds[$randomIndex]);
 
-        $equipmentId = $equipmentIds[$randomIndex];
-        unset($equipmentIds[$randomIndex]);
+            Equipment::find($equipmentId)->update(['is_available' => false]);
 
-        Equipment::find($equipmentId)->update(['is_available' => false]);
-
-        return [
-            'user_id' => User::all()->random()->user_id,
-            'equipment_id' => $equipmentId,
-        ];
+            return [
+                'user_id' => User::all()->random()->user_id,
+                'equipment_id' => $equipmentId,
+            ];
+        }
     }
 }
