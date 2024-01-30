@@ -15,7 +15,7 @@ beforeEach(function (){
 
 uses()->group('equipment');
 
-test('can create a equipment', function () {
+it('can create a equipment', function () {
     $data = [
         'name' => 'test name',
         'equipment_type' => 'test type',
@@ -33,7 +33,7 @@ test('can create a equipment', function () {
     expect($equipment)->not()->toBeNull();
 });
 
-test('cannot create a equipment with invalid data', function () {
+it('cannot create a equipment with invalid data', function () {
     $data = [
         'name' => '',
     ];
@@ -43,7 +43,7 @@ test('cannot create a equipment with invalid data', function () {
     $response->assertJsonValidationErrors('name');
 });
 
-test('can update a equipment', function () {
+it('can update a equipment', function () {
     /* @var Equipment $equipment
      * */
     $equipment = Equipment::factory()->create();
@@ -73,7 +73,7 @@ test('can update a equipment', function () {
     ]);
 });
 
-test('cannot update a equipment with invalid data', function () {
+it('cannot update a equipment with invalid data', function () {
     /* @var Equipment $equipment
      * */
     $equipment = Equipment::factory()->create();
@@ -91,7 +91,7 @@ test('cannot update a equipment with invalid data', function () {
     $response->assertStatus(422);
 });
 
-test('can delete a equipment', function () {
+it('can delete a equipment', function () {
     /* @var Equipment $equipment
      * */
     $equipment = Equipment::factory()->create();
@@ -104,7 +104,7 @@ test('can delete a equipment', function () {
     $this->assertSoftDeleted('equipment', ['equipment_id' => $equipment->equipment_id]);
 });
 
-test('should return a paginated list of equipments', function () {
+it('should return a paginated list of equipments', function () {
     $response = $this->getJson('/api/equipments');
     $paginatedResponse = $response->json();
 
@@ -123,7 +123,7 @@ test('should return a paginated list of equipments', function () {
     }
 });
 
-test('should show a detailed equipment', function () {
+it('should show a detailed equipment', function () {
     /* @var Equipment $equipment
      * */
     $equipment = Equipment::factory()->create();
@@ -143,7 +143,7 @@ test('should show a detailed equipment', function () {
     ]);
 });
 
-test('cannot access non-existent equipment', function () {
+it('cannot access non-existent equipment', function () {
     $nonExistentId = 12345;
 
     $response = $this->getJson("/api/equipments/{$nonExistentId}");

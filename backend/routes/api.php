@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\SectorController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +28,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('sectors',SectorController::class);
     Route::apiResource('users',UserController::class);
     Route::post('/logout',[AuthController::class, 'logout']);
+    Route::group(['prefix' => 'history'], function () {
+        Route::get('/users', [HistoryController::class, 'indexUser']);
+        Route::get('/equipments', [HistoryController::class, 'indexEquipment']);
+    });
 });
 
 Route::post('/register',[AuthController::class, 'register']);

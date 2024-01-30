@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Equipment;
 use App\Models\EquipmentRequest;
+use App\Models\UserEquipment;
 use Illuminate\Database\Seeder;
 use \App\Models\User;
 
@@ -33,5 +34,6 @@ class DatabaseSeeder extends Seeder
         User::factory(40)->create();
         Equipment::factory(40)->create();
         EquipmentRequest::factory(20)->create();
+        UserEquipment::factory(20)->create();
     }
 }
