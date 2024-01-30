@@ -31,12 +31,12 @@ class DropIdsColumns extends Migration
     public function down()
     {
         Schema::table('equipment', function (Blueprint $table) {
-            $table->foreignId('type_id')->constrained('type', 'type_id');
-            $table->foreignId('location_id')->constrained('location', 'location_id');
+            $table->foreignId('type_id')->nullable()->constrained('type', 'type_id');
+            $table->foreignId('location_id')->nullable()->constrained('location', 'location_id');
         });
 
         Schema::table('equipment_request', function (Blueprint $table) {
-            $table->foreignId('status_id')->constrained('status', 'status_id');
+            $table->foreignId('status_id')->nullable()->constrained('status', 'status_id');
         });
 
     }
