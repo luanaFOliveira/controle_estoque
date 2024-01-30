@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('equipments', EquipmentController::class);
+    Route::post('equipment/return/{equipment_id}', [EquipmentController::class, 'returnEquipment']);
     Route::apiResource('sectors',SectorController::class);
     Route::apiResource('equipment-requests', EquipRequestController::class);
     Route::apiResource('users',UserController::class);
