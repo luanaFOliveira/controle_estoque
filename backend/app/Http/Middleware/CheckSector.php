@@ -16,7 +16,7 @@ class CheckSector
      */
     public function handle(Request $request, Closure $next)
     {
-        $sectorId = $request->route('setor_id');
+        $sectorId = $request->route('sector_id');
         $userSectors = $request->user()->sectors()->pluck('sector_id')->toArray();
         if(!in_array($sectorId,$userSectors)){
             return response()->json(['message' => 'Unauthorized'], 403);
