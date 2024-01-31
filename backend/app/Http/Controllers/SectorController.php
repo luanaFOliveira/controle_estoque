@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSectorRequest;
+use App\Http\Resources\SectorDetailResource;
 use App\Http\Resources\SectorResource;
 use App\Models\Sector;
+use App\Models\UserSector;
 use App\Services\SectorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -32,9 +34,25 @@ class SectorController extends Controller
         return SectorResource::collection($query->orderBy('sector_id')->paginate(10));
     }
 
+    public function indexByUser(Request $request): AnonymousResourceCollection
+    {
+        if($request->has('user_id')){
+
+            $userId = $request->input('user_id');
+            $sectorsId = UserSector::where('user_id',$userId)->pluck('sector_id');
+
+            $sectors = Sector::whereIn('sector_id', $sectorsId)->orderBy('sector_id')->paginate(10);
+        }else{
+
+            $sectors = Sector::orderBy('sector_id')->paginate(10);
+        }
+
+        return SectorResource::collection($sectors);
+    }
+
     public function show(Sector $sector):JsonResource
     {
-        return new SectorResource($sector);
+        return new SectorDetailResource($sector);
     }
 
     public function store(StoreSectorRequest $request):JsonResponse
