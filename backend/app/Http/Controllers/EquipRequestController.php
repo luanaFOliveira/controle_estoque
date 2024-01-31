@@ -25,6 +25,13 @@ class EquipRequestController extends Controller
         return EquipRequestResource::collection($query->orderBy('equipment_request_id','desc')->paginate(10));
     }
 
+    public function indexByUser(Request $request, int $user_id): AnonymousResourceCollection
+    {
+        $query = EquipmentRequest::query();
+        $query->where('user_id', $user_id);
+        return EquipRequestResource::collection($query->orderBy('equipment_request_id','desc')->paginate(10));
+    }
+
     public function show(EquipmentRequest $equipmentRequest):JsonResource
     {
         return new EquipRequestResource($equipmentRequest);

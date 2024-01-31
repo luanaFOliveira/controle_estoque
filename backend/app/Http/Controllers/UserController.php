@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Resources\EquipmentResource;
+use App\Http\Resources\SectorResource;
+use App\Http\Resources\UserDetailedResource;
 use App\Http\Resources\UserResource;
+use App\Models\Equipment;
+use App\Models\Sector;
 use App\Models\User;
+use App\Models\UserSector;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,9 +39,10 @@ class UserController extends Controller
 
     }
 
+    
     public function show(User $user): JsonResponse
     {
-        return response()->json(['data' => new UserResource($user)]);
+        return response()->json(['data' => new UserDetailedResource($user)]);
     }
 
     public function store(StoreUserRequest $request): JsonResponse
