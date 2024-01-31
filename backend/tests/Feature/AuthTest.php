@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function () {
@@ -12,20 +13,13 @@ beforeEach(function () {
 uses()->group('auth');
 
 it('can login a user', function () {
-    $data = [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password123',
-        "password_confirmation"=> "password123",
-        'is_admin' => false,
-    ];
-
-    $response = $this->postJson('/api/register', $data);
-
-    $user = $response->json()['user'];
+    User::factory()->create([
+        'email' => 'test@test.com',
+        'password' => bcrypt('password123'),
+    ]);
 
     $data = [
-        'email' => $user['email'],
+        'email' => 'test@test.com',
         'password' => 'password123',
     ];
 
@@ -34,7 +28,22 @@ it('can login a user', function () {
     $response->assertStatus(200);
 });
 
+it('will fail when someone try login with invalid credentials', function (){
+    $data = [
+        'email' => 'test',
+        'password' => 'test',
+    ];
+
+    $response = $this->postJson('/api/login', $data);
+    $response->assertStatus(401);
+});
+
 it('can register a new user', function () {
+    $admin = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    $this->actingAs($admin, 'sanctum');
+
     $data = [
         'name' => 'Test User',
         'email' => 'test@example.com',
@@ -55,25 +64,26 @@ it('can register a new user', function () {
         ]);
 });
 
-it('can logout a user', function () {
+it('will fail when admin try register with invalid credentials', function (){
+    $admin = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    $this->actingAs($admin, 'sanctum');
+
     $data = [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password123',
-        "password_confirmation"=> "password123",
-        'is_admin' => false,
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        "password_confirmation"=> '',
     ];
 
     $response = $this->postJson('/api/register', $data);
+    $response->assertStatus(422);
+});
 
-    $user = $response->json()['user'];
-
-    $data = [
-        'email' => $user['email'],
-        'password' => 'password123',
-    ];
-
-    $this->postJson('/api/login', $data);
+it('can logout a user', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user, 'sanctum');
 
     $response = $this->postJson('/api/logout');
 

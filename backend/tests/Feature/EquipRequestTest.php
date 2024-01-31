@@ -3,13 +3,12 @@
 use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\User;
+use App\Models\Sector;
 use Illuminate\Support\Facades\Artisan;
 
 beforeEach(function (){
     Artisan::call('migrate:refresh');
     Artisan::call('db:seed');
-    $user = User::factory()->create();
-    $this->actingAs($user, 'sanctum');
 });
 
 uses()->group('equipment_request');
@@ -60,7 +59,13 @@ it('can create an equipment request', function () {
      */
 
     $user = User::factory()->create();
-    $equipment = Equipment::factory()->create();
+    $sector = Sector::factory()->create();
+    $user->sector()->attach($sector);
+    $equipment = Equipment::factory()->create([
+        'sector_id' => $sector->sector_id,
+    ]);
+
+    $this->actingAs($user, 'sanctum');
 
     $data = [
         'reason' => 'Test Reason',

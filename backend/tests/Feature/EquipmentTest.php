@@ -17,10 +17,10 @@ uses()->group('equipment');
 
 it('should return a paginated list of equipments', function () {
     $response = $this->getJson('/api/equipments');
+    $response->assertOk();
     $paginatedResponse = $response->json();
 
     expect($paginatedResponse)->toBePaginated();
-
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
             'equipment_id',
@@ -40,6 +40,7 @@ it('should show a detailed equipment', function () {
     $equipment = Equipment::factory()->create();
     $equipment_id = $equipment->equipment_id;
     $response = $this->getJson("/api/equipments/{$equipment_id}");
+    $response->assertOk();
 
     $response->assertJson([
         'data' => [
@@ -142,8 +143,6 @@ it('can delete a equipment', function () {
 
     $this->assertSoftDeleted('equipment', ['equipment_id' => $equipment->equipment_id]);
 });
-
-
 
 it('cannot access non-existent equipment', function () {
     $nonExistentId = 12345;
