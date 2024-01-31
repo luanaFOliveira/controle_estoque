@@ -25,8 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-   
     Route::group(['middleware' => 'admin'], function () {
+        Route::post('/register',[AuthController::class, 'register']);
         Route::apiResource('equipments', EquipmentController::class);
         Route::apiResource('sectors',SectorController::class);
         Route::apiResource('equipment-requests', EquipRequestController::class);
@@ -37,24 +37,18 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::group(['middleware' => 'checkSector'], function () {
-        Route::apiResource('sectors',SectorController::class)->only(['show']);
-        Route::get('sectors/users/{user_id}',[SectorController::class, 'indexByUser']);
-        Route::apiResource('equipments', EquipmentController::class)->only(['show']);
-        Route::apiResource('users',UserController::class)->only(['show']);
-        Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store']);
-        Route::get('equipment-requests/users/{user_id}',[EquipRequestController::class, 'indexByUser']);
-        Route::post('equipment/return/{equipment_id}', [EquipmentController::class, 'returnEquipment']);
-        Route::group(['prefix' => 'history'], function () {
-            Route::get('/users', [HistoryController::class, 'indexUser']);
-        });
+    Route::apiResource('sectors',SectorController::class)->only(['show']);
+    Route::get('sectors/users/{user_id}',[SectorController::class, 'indexByUser']);
+    Route::apiResource('equipments', EquipmentController::class)->only(['show']);
+    Route::apiResource('users',UserController::class)->only(['show']);
+    Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store']);
+    Route::get('equipment-requests/users/{user_id}',[EquipRequestController::class, 'indexByUser']);
+    Route::post('equipment/return/{equipment_id}', [EquipmentController::class, 'returnEquipment']);
+    Route::group(['prefix' => 'history'], function () {
+        Route::get('/users', [HistoryController::class, 'indexUser']);
     });
 
     Route::post('/logout',[AuthController::class, 'logout']);
-
 });
 
-Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
-
-
