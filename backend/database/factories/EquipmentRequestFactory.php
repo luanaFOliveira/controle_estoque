@@ -20,8 +20,8 @@ class EquipmentRequestFactory extends Factory
         return [
             'reason' => $this->faker->text(100),
             'request_status_id' => $request_status_id,
-            'user_id' => User::all()->random()->user_id,
-            'equipment_id' => Equipment::all()->random()->equipment_id,
+            'user_id' => User::factory(),
+            'equipment_id' => Equipment::factory(),
         ];
     }
 }

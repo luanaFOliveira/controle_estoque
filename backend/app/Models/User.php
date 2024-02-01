@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /**
@@ -31,12 +33,22 @@ class User extends Authenticatable
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-
     protected static function boot()
     {
         parent::boot();
 
-        static::addGlobalScope(new SectorScope);
+        static::addGlobalScope('sectorScope', function (Builder $builder) {
+            if(Auth::check()){
+                $user = Auth::user();
+            
+                if (!$user->is_admin) {
+                    $builder->join('user_sector','user_sector.user_id','=','user.user_id')
+                            ->where('user_sector.user_id', $user->user_id)
+                            ->select('sector_id');
+                }
+            }
+            
+        });
     }
 
     protected $fillable = [
