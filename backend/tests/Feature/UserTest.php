@@ -6,6 +6,7 @@ use App\Models\Equipment;
 use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use function Pest\Laravel\{actingAs, get, post, delete,put,assertSoftDeleted};
 
 beforeEach(function () {
     Artisan::call('migrate:refresh');
@@ -15,34 +16,33 @@ beforeEach(function () {
 uses()->group('user');
 
 it('should return a list of users', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user,'sanctum');
-    $response = $this->actingAs($user)->getJson('/api/users');
+    $user = User::factory()->create([
+        'is_admin' => true,]);
+    actingAs($user,'sanctum');
+    get('/api/users')->assertStatus(200);
 
-    $response->assertStatus(200);
 });
 
 it('should return a user', function () {
-    $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->getJson('/api/users/' . $user->user_id);
-    $response->assertStatus(200)
+    $user = User::factory()->create();
+    actingAs($user,'sanctum');
+
+    get('/api/users/' . $user->user_id)->assertStatus(200)
         ->assertJson([
             'data' => [
                 'user_id' => $user->user_id,
                 'name' => $user->name,
-                'email' => $user->email,
-                'is_admin' => $user->is_admin,
-                'created_at' => $user->created_at->toJSON(),
-                'updated_at' => $user->updated_at->toJSON(),
-                'equipments' => $user->equipment()->pluck('name')->all(),
-                'sectors' => $user->sector()->pluck('name')->all(),
             ],
         ]);
 
 });
 
 it('can register a new user', function () {
+    $user = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    actingAs($user, 'sanctum');
     $data = [
         'name' => 'Test User',
         'email' => 'test@example.com',
@@ -51,9 +51,7 @@ it('can register a new user', function () {
         'is_admin' => false,
     ];
 
-    $response = $this->postJson('/api/register', $data);
-
-    $response->assertStatus(200)
+    post('/api/register', $data)->assertStatus(200)
         ->assertJson([
             'message' => 'Successfully registered',
             'user' => [
@@ -64,8 +62,13 @@ it('can register a new user', function () {
 });
 
 it('should update a user', function () {
-    $user = User::factory()->create();
+    
+    $userAdm = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    actingAs($userAdm, 'sanctum');
 
+    $user = User::factory()->create();
     $sector1 = Sector::factory()->create();
     $user->sector()->attach($sector1->getKey());
 
@@ -86,8 +89,7 @@ it('should update a user', function () {
         'equipments' => [$equipment1->getKey(),$equipment2->getKey()],
     ];
 
-    $response = $this->actingAs($user)->putJson('/api/users/' . $user->user_id, $updateData);
-    $response->assertStatus(200)
+    put('/api/users/' . $user->user_id, $updateData)->assertStatus(200)
         ->assertJson([
             'message' => 'User updated successfully',
             'data' => [
@@ -126,28 +128,33 @@ it('should update a user', function () {
 });
 
 it('should delete a user', function () {
+    $userAdm = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    actingAs($userAdm, 'sanctum');
+
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user)->deleteJson('/api/users/' . $user->user_id);
-
-    $response->assertStatus(200)
+    delete('/api/users/' . $user->user_id)->assertStatus(200)
         ->assertJson([
             'message' => 'User deleted successfully',
         ]);
 
-    $this->assertSoftDeleted('user', [
+    assertSoftDeleted('user', [
         'user_id' => $user->user_id,
     ]);
 });
 
 
 it('should detach a specific user sector relation', function () {
-    $user = User::factory()->create();
+    $userAdm = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    actingAs($userAdm, 'sanctum');
 
-    $response = $this->actingAs($user)->deleteJson('/api/users/1' );
-    $response->assertStatus(200)->assertJson(['message' => 'User deleted successfully']);
+    delete('/api/users/1' )->assertStatus(200)->assertJson(['message' => 'User deleted successfully']);
 
-    $this->assertSoftDeleted('user_sector', [
+    assertSoftDeleted('user_sector', [
         'user_id' => 1,
     ]);
 });

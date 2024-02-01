@@ -28,5 +28,6 @@ class SectorScope implements Scope
                 $builder->whereIn('sector_id', $userSectorIds);
             }
         }
+           
     }
 }
