@@ -46,7 +46,7 @@ class EquipRequestController extends Controller
     public function update(StoreEquipRequestRequest $request, EquipmentRequest $equipmentRequest):JsonResponse
     {
         $updatedEquipmentRequest = $this->equipmentRequestService->upsertEquipmentRequest($request, $equipmentRequest);
-        return response()->json(['message' => 'Equipment request created successfully', 'data' => $updatedEquipmentRequest]);
+        return response()->json(['message' => 'Equipment request updated successfully', 'data' => $updatedEquipmentRequest]);
     }
 
     public function destroy(EquipmentRequest $equipmentRequest):JsonResponse

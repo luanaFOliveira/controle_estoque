@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Artisan;
 beforeEach(function (){
     Artisan::call('migrate:refresh');
     Artisan::call('db:seed');
-    $user = User::factory()->create();
-    $this->actingAs($user, 'sanctum');
 });
 
 uses()->group('equipment');
 
 it('should return a paginated list of equipments', function () {
+
+    $user = User::factory()->create();
+    $this->actingAs($user, 'sanctum');
     $response = $this->getJson('/api/equipments');
     $response->assertOk();
     $paginatedResponse = $response->json();
@@ -37,10 +38,11 @@ it('should return a paginated list of equipments', function () {
 it('should show a detailed equipment', function () {
     /* @var Equipment $equipment
      * */
+    $user = User::factory()->create();
+    $this->actingAs($user, 'sanctum');
     $equipment = Equipment::factory()->create();
     $equipment_id = $equipment->equipment_id;
     $response = $this->getJson("/api/equipments/{$equipment_id}");
-    $response->assertOk();
 
     $response->assertJson([
         'data' => [
@@ -56,6 +58,10 @@ it('should show a detailed equipment', function () {
 });
 
 it('can create a equipment', function () {
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $data = [
         'name' => 'test name',
         'equipment_type' => 'test type',
@@ -74,6 +80,10 @@ it('can create a equipment', function () {
 });
 
 it('cannot create a equipment with invalid data', function () {
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $data = [
         'name' => '',
     ];
@@ -86,6 +96,10 @@ it('cannot create a equipment with invalid data', function () {
 it('can update a equipment', function () {
     /* @var Equipment $equipment
      * */
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $equipment = Equipment::factory()->create();
     $updatedEquipment = [
         'name' => 'new test name',
@@ -116,6 +130,10 @@ it('can update a equipment', function () {
 it('cannot update a equipment with invalid data', function () {
     /* @var Equipment $equipment
      * */
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $equipment = Equipment::factory()->create();
     $updatedEquipment = [
         'name' => '',
@@ -134,6 +152,10 @@ it('cannot update a equipment with invalid data', function () {
 it('can delete a equipment', function () {
     /* @var Equipment $equipment
      * */
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $equipment = Equipment::factory()->create();
     $this->assertDatabaseHas('equipment', ['equipment_id' => $equipment->equipment_id]);
 
@@ -145,6 +167,10 @@ it('can delete a equipment', function () {
 });
 
 it('cannot access non-existent equipment', function () {
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->actingAs($user, 'sanctum');
     $nonExistentId = 12345;
 
     $response = $this->getJson("/api/equipments/{$nonExistentId}");

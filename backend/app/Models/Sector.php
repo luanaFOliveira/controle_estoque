@@ -32,7 +32,7 @@ class Sector extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new SectorScope);
+        static::addGlobalScope(new SectorScope());
     }
 
     public function user(): BelongsToMany

@@ -37,7 +37,7 @@ class Equipment extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new SectorScope);
+        static::addGlobalScope(new SectorScope());
     }
 
     protected $fillable = [
