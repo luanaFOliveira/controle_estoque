@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +32,13 @@ class Equipment extends Model
 
     protected $primaryKey = 'equipment_id';
     protected $table = 'equipment';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new SectorScope);
+    }
 
     protected $fillable = [
         'name',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,11 +32,13 @@ class User extends Authenticatable
     protected $table = 'user';
     protected $primaryKey = 'user_id';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new SectorScope);
+    }
+
     protected $fillable = [
         'name',
         'email',

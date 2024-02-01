@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,6 +27,13 @@ class Sector extends Model
     protected $table = 'sector';
     protected $primaryKey = 'sector_id';
     protected $fillable = ['name'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new SectorScope);
+    }
 
     public function user(): BelongsToMany
     {
