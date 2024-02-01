@@ -3,6 +3,7 @@
 namespace App\Models\Scopes;
 
 use App\Models\User;
+use App\Models\UserSector;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -17,12 +18,15 @@ class SectorScope implements Scope
     {
         /* @var User $user
          */
+        if(Auth::check()){
+            $user = Auth::user();
 
-        $user = Auth::user();
-
-        if (!$user->is_admin) {
-            $userSectorIds = $user->sector->pluck('sector_id')->toArray();
-            $builder->whereIn('user_sector.sector_id', $userSectorIds);
+            if (!$user->is_admin) {
+                $userSectorIds = UserSector::where('user_id', $user->user_id)->pluck('sector_id');
+                
+                UserSector::whereIn('sector_id', $userSectorIds);
+            }
         }
+           
     }
 }

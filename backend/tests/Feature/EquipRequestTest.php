@@ -14,6 +14,11 @@ beforeEach(function (){
 uses()->group('equipment_request');
 
 it('can retrieve a list of equipment requests', function () {
+    $user = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    $this->actingAs($user, 'sanctum');
+
     EquipmentRequest::factory()->count(5)->create();
 
     $response = $this->getJson('/api/equipment-requests');
@@ -36,10 +41,14 @@ it('can retrieve a list of equipment requests', function () {
 it('can retrieve a specific equipment request using the show method', function () {
     /* @var EquipmentRequest $equipmentRequest
      */
-
+    $user = User::factory()->create();
+    $this->actingAs($user, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
 
     $response = $this->getJson("/api/equipment-requests/{$equipmentRequest->equipment_request_id}");
+    $user->sector->dd();
+    dd($response->json());
+    
 
     $response->assertOk();
     $response->assertJson([
@@ -58,7 +67,7 @@ it('can create an equipment request', function () {
      * @var Equipment $equipment
      */
 
-    $user = User::factory()->create();
+    $user = User::factory()->create();   
     $sector = Sector::factory()->create();
     $user->sector()->attach($sector);
     $equipment = Equipment::factory()->create([
@@ -84,6 +93,11 @@ it('can update an equipment request', function () {
     /* @var EquipmentRequest $equipmentRequest
      */
 
+    $user = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    $this->actingAs($user, 'sanctum');
+
     $equipmentRequest = EquipmentRequest::factory()->create([
         'reason' => 'Old Reason',
     ]);
@@ -104,7 +118,10 @@ it('can update an equipment request', function () {
 it('can delete an equipment request', function () {
     /* @var EquipmentRequest $equipmentRequest
      */
-
+    $user = User::factory()->create([
+        'is_admin' => true,
+    ]);
+    $this->actingAs($user, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
 
     $response = $this->deleteJson("/api/equipment-requests/{$equipmentRequest->equipment_request_id}");

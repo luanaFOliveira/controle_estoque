@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::group(['middleware' => 'admin'], function () {
         Route::post('/register',[AuthController::class, 'register']);
         Route::apiResource('equipments', EquipmentController::class);
