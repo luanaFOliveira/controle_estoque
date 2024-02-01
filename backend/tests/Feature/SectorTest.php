@@ -1,22 +1,26 @@
 <?php
 
+use App\Http\Resources\SectorDetailResource;
 use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use function Pest\Laravel\{actingAs, get, post, delete,put};
 
 beforeEach(function (){
     Artisan::call('migrate:refresh');
     Artisan::call('db:seed');
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'is_admin' => true
+    ]);
+    $this->sector = Sector::factory()->create();
+    $user->sector()->sync($this->sector);
     $this->actingAs($user, 'sanctum');
 });
 
 uses()->group('sector');
 
 it('can retrieve a list of sectors', function () {
-    Sector::factory()->count(5)->create();
-
-    $response = $this->getJson('/api/sectors');
+    $response = get('/api/sectors');
     $paginatedResponse = $response->json();
 
     $response->assertOk();
@@ -35,18 +39,13 @@ it('can retrieve a specific sector using the show method', function () {
     /* @var Sector $sector
      */
 
-    $sector = Sector::factory()->create();
+    $sector = $this->sector;
 
-    $response = $this->getJson("/api/sectors/{$sector->sector_id}");
+    $response = $this->get("/api/sectors/{$sector->sector_id}");
+    $expectedJson = (new SectorDetailResource($sector))->response()->getData(true);
+
     $response->assertOk();
-    $response->assertJson([
-        'data' => [
-            'sector_id' => $sector->sector_id,
-            'name' => $sector->name,
-            'users' => $sector->user->count(),
-            'equipments_count' => $sector->equipment->count(),
-        ]
-    ]);
+    $response->assertJson($expectedJson);
 });
 
 it('can create a sector', function () {
