@@ -42,9 +42,8 @@ class User extends Authenticatable
                 $user = Auth::user();
             
                 if (!$user->is_admin) {
-                    $builder->join('user_sector','user_sector.user_id','=','user.user_id')
-                            ->where('user_sector.user_id', $user->user_id)
-                            ->select('sector_id');
+                    $builder->join('user_sector', 'user_sector.user_id', '=', 'user.user_id')
+                    ->where('user_sector.user_id', '=', $user->user_id);
                 }
             }
             
