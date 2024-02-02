@@ -13,8 +13,7 @@ class HistoryController extends Controller
     public function indexUser(Request $request)
     {
         $user_id = $request->input('user_id');
-
-        $user = User::find($user_id);
+        $user = User::withoutGlobalScope('sectorScope')->auth()->find($user_id);
 
         if ($user === null) {
             return response()->json(['error' => 'User not found'], 404);
