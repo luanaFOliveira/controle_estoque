@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::group(['middleware' => 'admin'], function () {
-        Route::post('/register',[AuthController::class, 'register']);
+        Route::post('register', [AuthController::class, 'register']);
         Route::apiResource('equipments', EquipmentController::class);
         Route::apiResource('sectors',SectorController::class);
         Route::apiResource('equipment-requests', EquipRequestController::class);
@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::apiResource('sectors',SectorController::class)->only(['show', 'index']);
-    Route::apiResource('equipments', EquipmentController::class)->only(['show']);
+    Route::apiResource('equipments', EquipmentController::class)->only(['show', 'index']);
     Route::apiResource('users',UserController::class)->only(['show']);
     Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store']);
     Route::get('equipment-requests/users/{user_id}',[EquipRequestController::class, 'indexByUser']);

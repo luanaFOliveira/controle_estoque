@@ -4,28 +4,28 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
-
-beforeEach(function () {
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
-});
+use function Pest\Laravel\{actingAs, post};
 
 uses()->group('auth');
 
-it('can login a user', function () {
-    User::factory()->create([
-        'email' => 'test@test.com',
-        'password' => bcrypt('password123'),
-    ]);
+beforeEach(function () {
+    if (!isset($this->admin)) {
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+    }
+    Artisan::call('migrate');
+});
 
+it('can login a user', function () {
     $data = [
-        'email' => 'test@test.com',
-        'password' => 'password123',
+        'email' => $this->admin->email,
+        'password' => 'password',
     ];
 
-    $response = $this->postJson('/api/login', $data);
-
-    $response->assertStatus(200);
+    post('/api/login', $data)->assertStatus(200);
 });
 
 it('will fail when someone try login with invalid credentials', function (){
@@ -34,15 +34,20 @@ it('will fail when someone try login with invalid credentials', function (){
         'password' => 'test',
     ];
 
-    $response = $this->postJson('/api/login', $data);
-    $response->assertStatus(401);
+    post('/api/login', $data)->assertStatus(401);
+});
+
+it('will fail when someone try login with null fields', function (){
+    $data = [
+        'email' => '',
+        'password' => '',
+    ];
+
+    post('/api/login', $data)->assertStatus(302);
 });
 
 it('can register a new user', function () {
-    $admin = User::factory()->create([
-        'is_admin' => true,
-    ]);
-    $this->actingAs($admin, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $data = [
         'name' => 'Test User',
@@ -52,23 +57,19 @@ it('can register a new user', function () {
         'is_admin' => false,
     ];
 
-    $response = $this->postJson('/api/register', $data);
-
-    $response->assertStatus(200)
+    post('/api/register', $data)
+        ->assertStatus(200)
         ->assertJson([
             'message' => 'Successfully registered',
             'user' => [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
+                'name' => $data['name'],
+                'email' => $data['email'],
             ],
         ]);
 });
 
 it('will fail when admin try register with invalid credentials', function (){
-    $admin = User::factory()->create([
-        'is_admin' => true,
-    ]);
-    $this->actingAs($admin, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $data = [
         'name' => '',
@@ -82,12 +83,9 @@ it('will fail when admin try register with invalid credentials', function (){
 });
 
 it('can logout a user', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
-    $response = $this->postJson('/api/logout');
-
-    $response->assertStatus(200)
+    post('/api/logout')->assertStatus(200)
         ->assertJson([
             'message' => 'Successfully logged out',
         ]);

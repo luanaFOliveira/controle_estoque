@@ -5,16 +5,15 @@ namespace Tests\Feature;
 use App\Models\Equipment;
 use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
-
-beforeEach(function (){
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
-});
+use function Pest\Laravel\{actingAs, post};
 
 uses()->group('equipment');
 
-it('should return a paginated list of equipments', function () {
+beforeEach(function (){
+    Artisan::call('migrate');
+});
 
+it('should return a paginated list of equipments', function () {
     $user = User::factory()->create();
     $this->actingAs($user, 'sanctum');
     $response = $this->getJson('/api/equipments');
