@@ -7,19 +7,28 @@ use Illuminate\Support\Facades\Artisan;
 use function Pest\Laravel\{actingAs, get, post, delete,put};
 
 beforeEach(function (){
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
+    if (!isset($this->admin)) {
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+    }
+    if (!isset($this->user)) {
+        $this->user = User::factory()->create([
+            'email' => 'user@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false
+        ]);
+    }
     $this->sector = Sector::factory()->create();
-    $user->sector()->sync($this->sector);
-    $this->actingAs($user, 'sanctum');
+    $this->user->sector()->sync($this->sector);
 });
 
 uses()->group('sector');
 
 it('can retrieve a list of sectors', function () {
+    actingAs($this->user, 'sanctum');
     $response = get('/api/sectors');
     $paginatedResponse = $response->json();
 
@@ -36,9 +45,9 @@ it('can retrieve a list of sectors', function () {
 });
 
 it('can retrieve a specific sector using the show method', function () {
+    actingAs($this->user, 'sanctum');
     /* @var Sector $sector
      */
-
     $sector = $this->sector;
 
     $response = $this->get("/api/sectors/{$sector->sector_id}");
@@ -49,6 +58,7 @@ it('can retrieve a specific sector using the show method', function () {
 });
 
 it('can create a sector', function () {
+    actingAs($this->admin, 'sanctum');
     $data = [
         'name' => 'Test Sector',
     ];
@@ -60,9 +70,9 @@ it('can create a sector', function () {
 });
 
 it('can update a sector', function () {
+    actingAs($this->admin, 'sanctum');
     /* @var Sector $sector
      */
-
     $sector = Sector::factory()->create([
         'name' => 'Old Sector Name',
     ]);
@@ -77,9 +87,9 @@ it('can update a sector', function () {
 });
 
 it('can delete a sector', function () {
+    actingAs($this->admin, 'sanctum');
     /* @var Sector $sector
      */
-
     $sector = Sector::factory()->create();
 
     $response = $this->deleteJson("/api/sectors/{$sector->sector_id}");

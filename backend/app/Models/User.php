@@ -38,12 +38,17 @@ class User extends Authenticatable
         parent::boot();
 
         static::addGlobalScope('sectorScope', function (Builder $builder) {
-            if(Auth::check()){
+            if (Auth::check()) {
                 $user = Auth::user();
 
                 if (!$user->is_admin) {
-                    $builder->join('user_sector', 'user_sector.user_id', '=', 'user.user_id')
-                    ->where('user_sector.user_id', '=', $user->user_id);
+                    $hasUserSectorJoin = collect($builder->getQuery()->joins)->first(function ($join) {
+                        return $join->table === 'user_sector';
+                    });
+
+                    if (!$hasUserSectorJoin) {
+                        $builder->join('user_sector', 'user_sector.user_id', '=', 'user.user_id');
+                    }
                 }
             }
         });

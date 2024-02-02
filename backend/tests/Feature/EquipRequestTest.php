@@ -8,17 +8,28 @@ use Illuminate\Support\Facades\Artisan;
 use function Pest\Laravel\{actingAs, get, post, delete,put,assertSoftDeleted};
 
 beforeEach(function (){
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
+    if (!isset($this->admin)) {
+        /* @var User $user */
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+    }
+    if (!isset($this->user)) {
+        /* @var User $user */
+        $this->user = User::factory()->create([
+            'email' => 'user@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false
+        ]);
+    }
 });
 
 uses()->group('equipment_request');
 
 it('can retrieve a list of equipment requests', function () {
-    $user = User::factory()->create([
-        'is_admin' => true,
-    ]);
-    actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     EquipmentRequest::factory()->count(5)->create();
 
@@ -41,18 +52,12 @@ it('can retrieve a list of equipment requests', function () {
 
 
 it('can retrieve a list of the users equipment requests', function () {
-    $user = User::factory()->create();
-    actingAs($user, 'sanctum');
-
-    $requestUser = EquipmentRequest::factory()->create([
-        'user_id' => $user->user_id,
-    ]);
+    actingAs($this->user, 'sanctum');
 
     EquipmentRequest::factory()->count(4)->create();
 
-    $response = get("/api/equipment-requests/users/{$user->user_id}");
+    $response = get("/api/equipment-requests/users/{$this->user->user_id}");
     $paginatedResponse = $response->json();
-    
 
     $response->assertOk();
     expect($paginatedResponse)->toBePaginated();
@@ -69,10 +74,8 @@ it('can retrieve a list of the users equipment requests', function () {
 });
 
 it('can retrieve a specific equipment request using the show method', function () {
-    /* @var EquipmentRequest $equipmentRequest
-     */
-    $user = User::factory()->create();
-    actingAs($user, 'sanctum');
+    /* @var EquipmentRequest $equipmentRequest */
+    actingAs($this->user, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
 
     get("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk()->assertJson([
@@ -84,26 +87,21 @@ it('can retrieve a specific equipment request using the show method', function (
             'equipment_id' => $equipmentRequest->equipment_id,
         ]
     ]);
-    
+
 });
 
 it('can create an equipment request', function () {
-    /* @var User $user
-     * @var Equipment $equipment
-     */
 
-    $user = User::factory()->create();   
+    actingAs($this->user, 'sanctum');
     $sector = Sector::factory()->create();
-    $user->sector()->attach($sector);
+    $this->user->sector()->attach($sector);
+    /* @var Equipment $equipment */
     $equipment = Equipment::factory()->create([
         'sector_id' => $sector->sector_id,
     ]);
-
-    actingAs($user, 'sanctum');
-
     $data = [
         'reason' => 'Test Reason',
-        'user_id' => $user->user_id,
+        'user_id' => $this->user->user_id,
         'equipment_id' => $equipment->equipment_id,
     ];
 
@@ -117,11 +115,7 @@ it('can create an equipment request', function () {
 it('can update an equipment request', function () {
     /* @var EquipmentRequest $equipmentRequest
      */
-
-    $user = User::factory()->create([
-        'is_admin' => true,
-    ]);
-    actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $equipmentRequest = EquipmentRequest::factory()->create([
         'reason' => 'Old Reason',
@@ -129,9 +123,9 @@ it('can update an equipment request', function () {
 
     $data = [
         'reason' => 'Updated Reason',
-        'request_status_id' => 2,
-        'user_id' => 2,
-        'equipment_id' => 2,
+        'request_status_id' => $equipmentRequest->request_status_id,
+        'user_id' => $this->admin->user_id,
+        'equipment_id' => $equipmentRequest->equipment_id,
     ];
 
     put("/api/equipment-requests/{$equipmentRequest->equipment_request_id}", $data)->assertOk();
@@ -145,13 +139,13 @@ it('can delete an equipment request', function () {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
-    actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
 
     delete("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk();
 
-    
-    
+
+
     expect(EquipmentRequest::find($equipmentRequest->equipment_request_id))->toBeNull();
 });
 

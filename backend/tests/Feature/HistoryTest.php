@@ -15,8 +15,8 @@ beforeEach(function (){
         ]);
     }
     if (!isset($this->equipment)) {
-    $this->equipment = Equipment::factory()->create();
-    $this->userTest->equipment()->attach($this->equipment->equipment_id);
+        $this->equipment = Equipment::factory()->create();
+        $this->userTest->equipment()->attach($this->equipment->equipment_id);
     }
 });
 

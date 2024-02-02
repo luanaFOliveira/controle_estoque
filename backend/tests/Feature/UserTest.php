@@ -9,8 +9,13 @@ use Illuminate\Support\Facades\Artisan;
 use function Pest\Laravel\{actingAs, get, post, delete,put,assertSoftDeleted};
 
 beforeEach(function () {
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
+    if (!isset($this->admin)) {
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+    }
 });
 
 uses()->group('user');
@@ -18,7 +23,7 @@ uses()->group('user');
 it('should return a list of users', function () {
     $user = User::factory()->create([
         'is_admin' => true,]);
-    actingAs($user,'sanctum');
+    actingAs($this->admin,'sanctum');
     get('/api/users')->assertStatus(200);
 
 });
@@ -26,7 +31,7 @@ it('should return a list of users', function () {
 it('should return a user', function () {
 
     $user = User::factory()->create();
-    actingAs($user,'sanctum');
+    actingAs($this->admin,'sanctum');
 
     get('/api/users/' . $user->user_id)->assertStatus(200)
         ->assertJson([
@@ -42,7 +47,7 @@ it('can register a new user', function () {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
-    actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
     $data = [
         'name' => 'Test User',
         'email' => 'test@example.com',
@@ -62,11 +67,11 @@ it('can register a new user', function () {
 });
 
 it('should update a user', function () {
-    
+
     $userAdm = User::factory()->create([
         'is_admin' => true,
     ]);
-    actingAs($userAdm, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $user = User::factory()->create();
     $sector1 = Sector::factory()->create();
@@ -131,7 +136,7 @@ it('should delete a user', function () {
     $userAdm = User::factory()->create([
         'is_admin' => true,
     ]);
-    actingAs($userAdm, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $user = User::factory()->create();
 
@@ -147,10 +152,7 @@ it('should delete a user', function () {
 
 
 it('should detach a specific user sector relation', function () {
-    $userAdm = User::factory()->create([
-        'is_admin' => true,
-    ]);
-    actingAs($userAdm, 'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     delete('/api/users/1' )->assertStatus(200)->assertJson(['message' => 'User deleted successfully']);
 

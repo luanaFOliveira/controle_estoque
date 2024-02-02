@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckAdmin
 {
-    public function handle(Request $request, Closure $next): JsonResponse
+    public function handle(Request $request, Closure $next)
     {
         if(Auth::user() && Auth::user()->is_admin == 1){
             return $next($request);
