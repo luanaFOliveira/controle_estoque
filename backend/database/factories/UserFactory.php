@@ -43,7 +43,8 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-            $sectors = Sector::factory()->count(rand(2, 3))->create();
+            $sectors = Sector::all()->random(rand(2, 3));
+            //$sectors = Sector::factory()->count(rand(2, 3))->create();
             $user->sector()->attach($sectors);
         });
     }
