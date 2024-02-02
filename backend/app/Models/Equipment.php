@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * \App\Models\Equipment
@@ -39,6 +41,15 @@ class Equipment extends Model
 
         static::addGlobalScope(new SectorScope());
     }
+
+    public function scopeAuth(Builder $query): void
+    {
+        if(!Auth::user()->is_admin){
+            $query->join('user_equipment', 'equipment.equipment_id', '=', 'user_equipment.equipment_id')
+                ->where('user_equipment.user_id', '=', Auth::user()->user_id);
+        }
+    }
+
 
     protected $fillable = [
         'name',

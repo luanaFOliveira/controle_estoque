@@ -4,8 +4,7 @@ use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\User;
 use App\Models\Sector;
-use Illuminate\Support\Facades\Artisan;
-use function Pest\Laravel\{actingAs, get, post, delete,put,assertSoftDeleted};
+use function Pest\Laravel\{actingAs, get, post, delete,put};
 
 beforeEach(function (){
     if (!isset($this->admin)) {
@@ -50,16 +49,18 @@ it('can retrieve a list of equipment requests', function () {
     }
 });
 
-
-it('can retrieve a list of the users equipment requests', function () {
+it('can retrieve a list of the user equipment requests', function () {
     actingAs($this->user, 'sanctum');
 
-    EquipmentRequest::factory()->count(4)->create();
+    EquipmentRequest::factory()->create([
+        'user_id' => $this->user->user_id,
+    ]);
 
-    $response = get("/api/equipment-requests/users/{$this->user->user_id}");
+    $response = $this->getJson("/api/equipment-requests")
+        ->assertOk();
+
     $paginatedResponse = $response->json();
 
-    $response->assertOk();
     expect($paginatedResponse)->toBePaginated();
 
     foreach ($paginatedResponse['data'] as $equipmentRequest) {
@@ -91,6 +92,9 @@ it('can retrieve a specific equipment request using the show method', function (
 });
 
 it('can create an equipment request', function () {
+    /* @var User $user
+     * @var Equipment $equipment
+     */
 
     actingAs($this->user, 'sanctum');
     $sector = Sector::factory()->create();
@@ -99,6 +103,7 @@ it('can create an equipment request', function () {
     $equipment = Equipment::factory()->create([
         'sector_id' => $sector->sector_id,
     ]);
+
     $data = [
         'reason' => 'Test Reason',
         'user_id' => $this->user->user_id,
@@ -136,15 +141,10 @@ it('can update an equipment request', function () {
 it('can delete an equipment request', function () {
     /* @var EquipmentRequest $equipmentRequest
      */
-    $user = User::factory()->create([
-        'is_admin' => true,
-    ]);
     actingAs($this->admin, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
 
     delete("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk();
-
-
 
     expect(EquipmentRequest::find($equipmentRequest->equipment_request_id))->toBeNull();
 });

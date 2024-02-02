@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Equipment;
 use App\Models\User;
-use function Pest\Laravel\{actingAs, delete, post, get, put};
+use function Pest\Laravel\{actingAs, get};
 
 beforeEach(function (){
     if (!isset($this->userTest)) {

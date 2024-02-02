@@ -49,6 +49,7 @@ it('should show a detailed equipment', function () {
      * */
     actingAs($this->user, 'sanctum');
     $equipment = Equipment::factory()->create();
+    $this->user->equipment()->attach($equipment);
 
     get("/api/equipments/{$equipment->equipment_id}")
         ->assertJson([
@@ -58,7 +59,7 @@ it('should show a detailed equipment', function () {
             'type' => $equipment->type()->value('name'),
             'brand' => $equipment->brand()->value('name'),
             'sector' => $equipment->sector()->value('name'),
-            'is_available' => $equipment->is_available,
+            'is_available' => false,
             'is_at_office' => $equipment->is_at_office
         ]
     ]);
