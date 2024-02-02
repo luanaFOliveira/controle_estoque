@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
 use function Pest\Laravel\{actingAs, post};
 
 uses()->group('auth');
@@ -16,7 +15,6 @@ beforeEach(function () {
             'is_admin' => true
         ]);
     }
-    Artisan::call('migrate');
 });
 
 it('can login a user', function () {
@@ -78,8 +76,7 @@ it('will fail when admin try register with invalid credentials', function (){
         "password_confirmation"=> '',
     ];
 
-    $response = $this->postJson('/api/register', $data);
-    $response->assertStatus(422);
+    post('/api/register', $data, ['Accept' => 'application/json'])->assertStatus(422);
 });
 
 it('can logout a user', function () {
