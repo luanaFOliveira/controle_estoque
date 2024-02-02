@@ -4,22 +4,33 @@ namespace Tests\Feature;
 
 use App\Models\Equipment;
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
+use function Pest\Laravel\{actingAs, delete, post, get, put};
 
 beforeEach(function (){
-    Artisan::call('migrate:refresh');
-    Artisan::call('db:seed');
-    $this->user = User::factory()->create();
-    $this->actingAs($this->user, 'sanctum');
-
+    if (!isset($this->userTest)) {
+        $this->userTest = User::factory()->create([
+            'email' => 'user@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false
+        ]);
+    }
+    if (!isset($this->equipment)) {
     $this->equipment = Equipment::factory()->create();
-    $this->user->equipment()->attach($this->equipment->equipment_id);
+    $this->userTest->equipment()->attach($this->equipment->equipment_id);
+    }
 });
 
 uses()->group('history');
 
 it('can return a paginated list detailing the history of a specified piece of equipment', function () {
-    $response = $this->getJson("/api/history/equipments?equipment_id={$this->equipment->equipment_id}");
+    $admin = User::factory()->create([
+        'email' => 'admin@test.com',
+        'password' => bcrypt('password'),
+        'is_admin' => true
+    ]);
+    actingAs($admin, 'sanctum');
+
+    $response = $this->getJson("/api/history/equipments?equipment_id={$this->equipment->equipment_id}")->assertOk();
 
     $paginatedResponse = $response->json();
     expect($paginatedResponse)->toBePaginated();
@@ -38,14 +49,16 @@ it('can return a paginated list detailing the history of a specified piece of eq
 });
 
 it('cannot access non-existent equipment history', function () {
+    actingAs($this->userTest, 'sanctum');
     $nonExistentId = 12345;
 
-    $response = $this->getJson("/api/history/equipments/{$nonExistentId}");
-    $response->assertStatus(404);
+    get("/api/history/equipments/{$nonExistentId}")
+        ->assertStatus(404);
 });
 
 it('can return a paginated list detailing the history of a specified piece of user', function () {
-    $response = $this->getJson("/api/history/users?user_id={$this->user->user_id}");
+    actingAs($this->userTest, 'sanctum');
+    $response = $this->getJson("/api/history/users?user_id={$this->userTest->user_id}")->assertOk();
 
     $paginatedResponse = $response->json();
     expect($paginatedResponse)->toBePaginated();
@@ -64,8 +77,9 @@ it('can return a paginated list detailing the history of a specified piece of us
 });
 
 it('cannot access non-existent user history', function () {
+    actingAs($this->userTest, 'sanctum');
     $nonExistentId = 12345;
 
-    $response = $this->getJson("/api/history/users/{$nonExistentId}");
-    $response->assertStatus(404);
+    get("/api/history/users/{$nonExistentId}")
+        ->assertStatus(404);
 });

@@ -4,20 +4,30 @@ namespace Tests\Feature;
 
 use App\Models\Equipment;
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
-use function Pest\Laravel\{actingAs, post};
+use function Pest\Laravel\{actingAs, delete, post, get, put};
 
 uses()->group('equipment');
 
-beforeEach(function (){
-    Artisan::call('migrate');
+beforeEach(function () {
+    if (!isset($this->admin)) {
+        $this->admin = User::factory()->create([
+            'email' => 'admin@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true
+        ]);
+    }
+    if (!isset($this->user)) {
+        $this->user = User::factory()->create([
+            'email' => 'user@test.com',
+            'password' => bcrypt('password'),
+            'is_admin' => false
+        ]);
+    }
 });
 
 it('should return a paginated list of equipments', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user, 'sanctum');
-    $response = $this->getJson('/api/equipments');
-    $response->assertOk();
+    actingAs($this->user, 'sanctum');
+    $response = $this->getJson('/api/equipments')->assertOk();
     $paginatedResponse = $response->json();
 
     expect($paginatedResponse)->toBePaginated();
@@ -37,13 +47,11 @@ it('should return a paginated list of equipments', function () {
 it('should show a detailed equipment', function () {
     /* @var Equipment $equipment
      * */
-    $user = User::factory()->create();
-    $this->actingAs($user, 'sanctum');
+    actingAs($this->user, 'sanctum');
     $equipment = Equipment::factory()->create();
-    $equipment_id = $equipment->equipment_id;
-    $response = $this->getJson("/api/equipments/{$equipment_id}");
 
-    $response->assertJson([
+    get("/api/equipments/{$equipment->equipment_id}")
+        ->assertJson([
         'data' => [
             'equipment_id' => $equipment->equipment_id,
             'name' => $equipment->name,
@@ -57,10 +65,7 @@ it('should show a detailed equipment', function () {
 });
 
 it('can create a equipment', function () {
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
     $data = [
         'name' => 'test name',
         'equipment_type' => 'test type',
@@ -70,8 +75,7 @@ it('can create a equipment', function () {
         'is_at_office' => true,
     ];
 
-    $response = $this->postJson('/api/equipments', $data);
-    $response->assertCreated();
+    $response = post('/api/equipments', $data)->assertCreated();
     $equipmentId = $response->json('data.equipment_id');
     $equipment = Equipment::find($equipmentId);
 
@@ -79,26 +83,22 @@ it('can create a equipment', function () {
 });
 
 it('cannot create a equipment with invalid data', function () {
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+    actingAs($this->admin, 'sanctum');
     $data = [
         'name' => '',
     ];
 
-    $response = $this->postJson('/api/equipments', $data);
-    $response->assertStatus(422);
-    $response->assertJsonValidationErrors('name');
+    $this->postJson('/api/equipments', $data)
+        ->assertStatus(422)
+        ->assertJsonValidationErrors('name');
 });
 
 it('can update a equipment', function () {
     /* @var Equipment $equipment
      * */
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+
+    actingAs($this->admin, 'sanctum');
+
     $equipment = Equipment::factory()->create();
     $updatedEquipment = [
         'name' => 'new test name',
@@ -109,13 +109,11 @@ it('can update a equipment', function () {
         'is_at_office' => false,
     ];
 
-    $equipment_id = $equipment->equipment_id;
-    $response = $this->putJson("/api/equipments/{$equipment_id}", $updatedEquipment);
-    $response->assertStatus(200);
-
-    $response->assertJson([
+    put("/api/equipments/{$equipment->equipment_id}", $updatedEquipment)
+        ->assertStatus(200)
+        ->assertJson([
         'data' => [
-            'equipment_id' => $equipment_id,
+            'equipment_id' => $equipment->equipment_id,
             'name' => $updatedEquipment['name'],
             'type' => $updatedEquipment['equipment_type'],
             'brand' => $updatedEquipment['equipment_brand'],
@@ -129,10 +127,9 @@ it('can update a equipment', function () {
 it('cannot update a equipment with invalid data', function () {
     /* @var Equipment $equipment
      * */
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+
+    actingAs($this->admin, 'sanctum');
+
     $equipment = Equipment::factory()->create();
     $updatedEquipment = [
         'name' => '',
@@ -143,35 +140,28 @@ it('cannot update a equipment with invalid data', function () {
         'is_at_office' => null,
     ];
 
-    $equipment_id = $equipment->equipment_id;
-    $response = $this->putJson("/api/equipments/{$equipment_id}", $updatedEquipment);
-    $response->assertStatus(422);
+    $this->putJson("/api/equipments/{$equipment->equipment_id}", $updatedEquipment)
+        ->assertStatus(422);
 });
 
 it('can delete a equipment', function () {
     /* @var Equipment $equipment
      * */
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+
+    actingAs($this->admin, 'sanctum');
+
     $equipment = Equipment::factory()->create();
     $this->assertDatabaseHas('equipment', ['equipment_id' => $equipment->equipment_id]);
 
-    $equipment_id = $equipment->equipment_id;
-    $response = $this->deleteJson("/api/equipments/{$equipment_id}");
-    $response->assertStatus(200);
+    delete("/api/equipments/{$equipment->equipment_id}")->assertStatus(200);
 
     $this->assertSoftDeleted('equipment', ['equipment_id' => $equipment->equipment_id]);
 });
 
 it('cannot access non-existent equipment', function () {
-    $user = User::factory()->create([
-        'is_admin' => true
-    ]);
-    $this->actingAs($user, 'sanctum');
+    $this->actingAs($this->admin, 'sanctum');
     $nonExistentId = 12345;
 
-    $response = $this->getJson("/api/equipments/{$nonExistentId}");
-    $response->assertStatus(404);
+    get("/api/equipments/{$nonExistentId}")
+        ->assertStatus(404);
 });

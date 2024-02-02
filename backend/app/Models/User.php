@@ -40,14 +40,20 @@ class User extends Authenticatable
         static::addGlobalScope('sectorScope', function (Builder $builder) {
             if(Auth::check()){
                 $user = Auth::user();
-            
+
                 if (!$user->is_admin) {
                     $builder->join('user_sector', 'user_sector.user_id', '=', 'user.user_id')
                     ->where('user_sector.user_id', '=', $user->user_id);
                 }
             }
-            
         });
+    }
+
+    public function scopeAuth(Builder $query): void
+    {
+        if(!Auth::user()->is_admin){
+            $query->where('user_id', '=', Auth::user()->user_id);
+        }
     }
 
     protected $fillable = [
