@@ -9,10 +9,13 @@ import { AuthProvider } from './context/AuthProvider';
 import Routes from './routes/Routes';
 import Login from './views/auth/Login';
 import Home from './views/Home';
+import BaseTable from './components/BaseTable';
+import EquipmentRequestPage from './views/EquipmentRequestPage';
 
 const router = createBrowserRouter([
   {path: '/', element: <Home/>},
   {path: '/login', element: <Login/>},
+  {path: '/table', element: <EquipmentRequestPage/>},
 ]);
 
 
