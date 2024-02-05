@@ -1,23 +1,18 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
-    Button, CssBaseline, TextField, Link, Box, Typography, Container, IconButton, InputAdornment, Snackbar, Divider
+    Button, CssBaseline, TextField, Box, Typography, Container, IconButton, InputAdornment, Snackbar, Divider
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-
-function Copyright(props) {
-    return (<Typography variant="body2" color="text.secondary" align="center" {...props}>
-        {'© '}
-        {new Date().getFullYear()}{' '}
-        <Link color="inherit" href="" underline="none">
-            Jetimob
-        </Link>
-        {' - Todos os direitos reservados.'}
-    </Typography>);
-}
+import Copyright from "../../components/Copyright";
+import axiosClient from "../../axios-client";
+import {useStateContext} from "../../context/GlobalContext";
 
 export default function Login() {
+    const {setUser, setToken} = useStateContext();
+    const emailRef = useRef();
+    const passwordRef = useRef();
     const [showPassword, setShowPassword] = useState(false)
     const [openSnack, setOpenSnack] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -28,25 +23,28 @@ export default function Login() {
             setErrorMessage('O email fornecido não é válido!');
             return false;
         }
-        if (password.length < 6) {
-            setErrorMessage('A senha deve ter pelo menos 6 caracteres!');
+        if (password.length < 5) {
+            setErrorMessage('A senha deve ter pelo menos 5 caracteres!');
             return false;
         }
         return true;
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        if (validateForm({email: data.get('email'), password: data.get('password')})) {
+        const payload = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        };
+        if (validateForm({email: payload.email, password: payload.password})) {
             try {
-                console.log({
-                    email: data.get('email'), password: data.get('password'),
-                });
+                const response= await axiosClient.post('/login', payload);
+                const {user, token} = response.data;
+                setUser(user);
+                setToken(token);
             } catch (error) {
                 setErrorMessage('Credencias inválidas!');
                 setOpenSnack(true);
-                console.log(error);
             }
         } else {
             setOpenSnack(true);
@@ -101,6 +99,7 @@ export default function Login() {
                     id="email"
                     label="Email"
                     name="email"
+                    inputRef={emailRef}
                     autoFocus
                 />
                 <TextField
@@ -109,6 +108,7 @@ export default function Login() {
                     id="password"
                     label="Senha"
                     name="password"
+                    inputRef={passwordRef}
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
                         endAdornment: (<InputAdornment position="end">
