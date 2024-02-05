@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{signed:Boolean(user),user,Login,Logout}}>
+        <AuthContext.Provider value={{signed:Boolean(user),user,Login, setUser}}>
             {children}
         </AuthContext.Provider>
     );
