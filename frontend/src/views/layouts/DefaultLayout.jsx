@@ -12,7 +12,13 @@ import CustomAppBar from "../../components/AppToolbar";
 import {useStateContext} from "../../context/GlobalContext";
 import {useTheme} from "../../context/ThemeProvider";
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+    palette: {
+        primary: {
+            main: '#284670',
+        },
+    },
+});
 
 export default function DefaultLayout() {
     const { token } = useStateContext();
