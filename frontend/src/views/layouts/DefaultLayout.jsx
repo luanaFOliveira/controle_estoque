@@ -11,6 +11,8 @@ import CustomDrawer from "../../components/Drawer";
 import CustomAppBar from "../../components/AppToolbar";
 import {useStateContext} from "../../context/GlobalContext";
 import {useTheme} from "../../context/ThemeProvider";
+import {useEffect} from "react";
+import axiosClient from "../../axios-client";
 
 const defaultTheme = createTheme({
     palette: {
@@ -21,15 +23,15 @@ const defaultTheme = createTheme({
 });
 
 export default function DefaultLayout() {
-    const { token } = useStateContext();
+    const { token, user, setUser} = useStateContext();
     const { themeMode } = useTheme();
     const [open, setOpen] = React.useState(true);
 
-    /*useEffect(() => {
-        axiosClient.get("/user").then(({ data }) => {
-            setUser(data);
+    useEffect(() => {
+        axiosClient.get(`/user/`).then(({ data }) => {
+            setUser(data)
         });
-    }, []);*/
+    }, []);
 
     if (!token) {
         return <Navigate to="/login" />;
