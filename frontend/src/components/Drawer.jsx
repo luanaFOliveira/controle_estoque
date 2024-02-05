@@ -7,11 +7,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import Toolbar from "@mui/material/Toolbar";
-import {userListItems, adminListItems} from "./listItems";
-import Typography from "@mui/material/Typography";
-import {GlobalContext, useStateContext} from "../context/GlobalContext";
-import {Box} from "@mui/material";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import {adminListItems} from "./listItems";
+import {useStateContext} from "../context/GlobalContext";
+import LogoJetimob from "./LogoJetimob";
 
 const drawerWidth = 240;
 
@@ -47,29 +45,8 @@ const CustomDrawer = ({open, toggleDrawer}) => {
     return (
         <Drawer variant="permanent" open={open}>
             <Toolbar sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                <Box sx={{display: 'flex', alignItems: 'center'}}>
-                    <Box sx={{
-                        width: 38,
-                        height: 38,
-                        backgroundColor: '#284670',
-                        borderRadius: '50%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}>
-                        <HomeRoundedIcon sx={{color: 'white'}}/>
-                    </Box>
-                    <Typography
-                        component="h1"
-                        variant="h5"
-                        sx={{
-                            ml: 2, fontWeight: 'bold', color: '#284670', userSelect: 'none'
-                        }}
-                    >
-                        Jetimob
-                    </Typography>
-                </Box>
-                <IconButton onClick={toggleDrawer}>
+                <LogoJetimob logoWidth="40px" logoHeight="40px" fontSize="30px"/>
+                <IconButton onClick={toggleDrawer} sx={{ml:1}}>
                     <ChevronLeftIcon/>
                 </IconButton>
             </Toolbar>

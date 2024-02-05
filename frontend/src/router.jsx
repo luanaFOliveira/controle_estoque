@@ -2,7 +2,7 @@ import {createBrowserRouter, Navigate} from "react-router-dom";
 import DefaultLayout from "./views/layouts/DefaultLayout.jsx";
 import GuestLayout from "./views/layouts/GuestLayout.jsx";
 import Login from "./views/auth/Login";
-import NotFound from "./views/shared/NotFound";
+import NotFound from "./views/shared/NotFound.jsx";
 
 const router = createBrowserRouter([
     {
