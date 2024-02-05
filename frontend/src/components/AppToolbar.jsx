@@ -12,6 +12,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import {useTheme} from "../context/ThemeProvider";
 import axiosClient from "../axios-client";
 import {useStateContext} from "../context/GlobalContext";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
 
