@@ -30,6 +30,8 @@ export default function DefaultLayout() {
     useEffect(() => {
         axiosClient.get(`/user/`).then(({ data }) => {
             setUser(data)
+        }).catch((error) => {
+            alert("Usuário não autorizado, realize o login para continuar.")
         });
     }, []);
 

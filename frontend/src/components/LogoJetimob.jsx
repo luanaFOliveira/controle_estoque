@@ -1,14 +1,15 @@
+// LogoJetimob.js
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import Typography from "@mui/material/Typography";
-import {Box} from "@mui/material";
 
-const LogoJetimob = ({ logoWidth, logoHeight, fontSize }) => {
-    return (
+const LogoJetimob = ({ logoWidth, logoHeight, fontSize, disableLink }) => {
+    const content = (
         <Box align='center' sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{
-                width: logoWidth,
-                height: logoHeight,
+                width: logoWidth || '60px',
+                height: logoHeight || '60px',
                 backgroundColor: '#284670',
                 borderRadius: '50%',
                 display: 'flex',
@@ -21,12 +22,20 @@ const LogoJetimob = ({ logoWidth, logoHeight, fontSize }) => {
                 component="h1"
                 variant="h2"
                 sx={{
-                    ml: 1, fontWeight: 'bold', color: '#284670', fontSize: fontSize || 'inherit', userSelect: 'none'
+                    ml: 2, fontWeight: 'bold', color: '#284670', fontSize: fontSize || 'inherit', userSelect: 'none'
                 }}
             >
                 Jetimob
             </Typography>
         </Box>
+    );
+
+    return disableLink ? (
+        content
+    ) : (
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            {content}
+        </Link>
     );
 };
 

@@ -4,10 +4,10 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import Copyright from "../../components/Copyright";
 import axiosClient from "../../axios-client";
 import {useStateContext} from "../../context/GlobalContext";
+import LogoJetimob from "../../components/LogoJetimob";
 
 export default function Login() {
     const {setUser, setToken} = useStateContext();
@@ -55,27 +55,8 @@ export default function Login() {
         display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', height: '100vh'
     }}
     >
-        <Box sx={{display: 'flex', alignItems: 'center', marginTop: 8}}>
-            <Box sx={{
-                width: 38,
-                height: 38,
-                backgroundColor: '#284670',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <HomeRoundedIcon sx={{color: 'white'}}/>
-            </Box>
-            <Typography
-                component="h1"
-                variant="h5"
-                sx={{
-                    ml: 2, fontWeight: 'bold', color: '#284670', userSelect: 'none'
-                }}
-            >
-                Jetimob
-            </Typography>
+        <Box sx={{marginTop: 8}}>
+            <LogoJetimob disableLink={true} logoWidth="40px" logoHeight="40px" fontSize="30px"/>
         </Box>
         <CssBaseline/>
         <Box
