@@ -1,19 +1,18 @@
 // Drawer.jsx
 import React from 'react';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import Toolbar from "@mui/material/Toolbar";
-import {mainListItems, secondaryListItems} from "./listItems";
-
+import {userListItems, adminListItems} from "./listItems";
 
 const drawerWidth = 240;
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -38,18 +37,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     })
 );
 
-const CustomDrawer = ({ open, toggleDrawer }) => {
+const CustomDrawer = ({open, toggleDrawer}) => {
     return (
         <Drawer variant="permanent" open={open}>
-            <Toolbar sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: [1] }}>
+            <Toolbar sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end', px: [1]}}>
                 <IconButton onClick={toggleDrawer}>
-                    <ChevronLeftIcon />
+                    <ChevronLeftIcon/>
                 </IconButton>
             </Toolbar>
-            <Divider />
-            <List component="nav">{mainListItems}</List>
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            <Divider/>
+            <List component="nav" >{adminListItems}</List>
         </Drawer>
     );
 };

@@ -1,22 +1,21 @@
 // AppToolbar.js
 import React from 'react';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import {useTheme} from "../context/ThemeProvider";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const drawerWidth = 240;
 
 const AppToolbar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+})(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -32,12 +31,12 @@ const AppToolbar = styled(MuiAppBar, {
     }),
 }));
 
-const CustomAppBar = ({ open, toggleDrawer }) => {
-    const { themeMode, toggleTheme } = useTheme();
+const CustomAppBar = ({open, toggleDrawer}) => {
+    const {themeMode, toggleTheme} = useTheme();
 
     return (
         <AppToolbar position="absolute" open={open}>
-            <Toolbar sx={{ pr: '24px' }}>
+            <Toolbar sx={{pr: '24px'}}>
                 <IconButton
                     edge="start"
                     color="inherit"
@@ -45,21 +44,19 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
                     onClick={toggleDrawer}
                     sx={{
                         marginRight: '36px',
-                        ...(open && { display: 'none' }),
+                        ...(open && {display: 'none'}),
                     }}
                 >
-                    <MenuIcon />
+                    <MenuIcon/>
                 </IconButton>
-                <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
+                <Typography component="h1" variant="h6" color="inherit" noWrap sx={{flexGrow: 1}}>
                     Dashboard
                 </Typography>
-                <IconButton color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
+                <IconButton color="inherit" onClick={toggleTheme}>
+                    {themeMode === 'light' ? <Brightness4Icon/> : <Brightness7Icon/>}
                 </IconButton>
                 <IconButton color="inherit" onClick={toggleTheme}>
-                    {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+                        <LogoutIcon />
                 </IconButton>
             </Toolbar>
         </AppToolbar>
