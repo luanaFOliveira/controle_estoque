@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import {RouterProvider} from "react-router-dom";
 import router from "./router.jsx";
-import {ContextProvider} from "./context/GlobalContext";
+import {GlobalContext} from "./context/GlobalContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <ContextProvider>
+        <GlobalContext>
             <RouterProvider router={router} />
-        </ContextProvider>
+        </GlobalContext>
     </React.StrictMode>
 );

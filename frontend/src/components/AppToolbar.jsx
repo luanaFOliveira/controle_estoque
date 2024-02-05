@@ -6,11 +6,12 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import {useTheme} from "../context/ThemeProvider";
+import axiosClient from "../axios-client";
+import {useStateContext} from "../context/GlobalContext";
 
 const drawerWidth = 240;
 
@@ -34,6 +35,16 @@ const AppToolbar = styled(MuiAppBar, {
 
 const CustomAppBar = ({ open, toggleDrawer }) => {
     const { themeMode, toggleTheme } = useTheme();
+    const { setToken, setUser } = useStateContext();
+
+    const onLogout = (ev) => {
+        ev.preventDefault();
+
+        axiosClient.post("/logout").then(() => {
+            setUser({});
+            setToken(null);
+        });
+    };
 
     return (
         <AppToolbar position="absolute" open={open}>
@@ -53,10 +64,8 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
                 <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
                     Dashboard
                 </Typography>
-                <IconButton color="inherit">
-                    <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon />
-                    </Badge>
+                <IconButton color="inherit" onClick={onLogout}>
+                    <ExitToAppIcon />
                 </IconButton>
                 <IconButton color="inherit" onClick={toggleTheme}>
                     {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}

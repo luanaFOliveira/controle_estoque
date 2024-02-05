@@ -2,28 +2,12 @@ import {createContext, useContext, useState} from "react";
 import {ThemeProvider} from "./ThemeProvider";
 
 const StateContext = createContext({
-    user: null,
-    token: null,
-    notification: null,
-    setUser: () => {
-    },
-    setToken: () => {
-    },
-    setNotification: () => {
-    }
+
 })
 
-export const ContextProvider = ({children}) => {
-    const [user, setUser] = useState({});
-    const [notification, _setNotification] = useState('');
+export const GlobalContext = ({children}) => {
+    const [user, _setUser] = useState({});
     const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
-
-    const setNotification = (message) => {
-        _setNotification(message);
-        setTimeout(() => {
-            _setNotification('');
-        }, 5000)
-    }
 
     const setToken = (token) => {
         _setToken(token);
@@ -34,6 +18,16 @@ export const ContextProvider = ({children}) => {
         }
     }
 
+    const setUser = (user) => {
+      _setUser(user);
+      if(user){
+          localStorage.setItem('user', JSON.stringify(user));
+      } else {
+          localStorage.removeItem('user');
+      }
+    };
+
+
     return (
         <ThemeProvider>
             <StateContext.Provider value={{
@@ -41,8 +35,6 @@ export const ContextProvider = ({children}) => {
                 token,
                 setUser,
                 setToken,
-                notification,
-                setNotification,
             }}>
                 {children}
             </StateContext.Provider>
