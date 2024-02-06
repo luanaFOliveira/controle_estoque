@@ -37,6 +37,7 @@ const CustomAppBar = ({open, toggleDrawer}) => {
     const location = useLocation();
     const pathNames = {
         '/home': 'Início',
+        '/equipments': 'Equipamentos',
     };
     let dashboardName = pathNames[location.pathname] || '';
 

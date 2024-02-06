@@ -1,20 +1,24 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import {DataGrid} from '@mui/x-data-grid';
 
-export default function BaseTable({rows, columns, checkBox,pageSize,pageSizeOption}) {
-
-  return (
-    <DataGrid
-    rows={rows}
-    columns={columns}
-    initialState={{
-        pagination: {
-        paginationModel: { page: 0, pageSize: pageSize },
-        },
-    }}
-    pageSizeOptions={pageSizeOption}
-    {...(checkBox ? { checkboxSelection: true } : {})}  
-      
-    />
-  );
+export default function BaseTable({
+                                      rows,
+                                      columns,
+                                      checkBox,
+                                      rowCount,
+                                      paginationModel,
+                                      setPaginationModel,
+                                      isLoading
+                                  }) {
+    return (<DataGrid
+        rows={rows}
+        columns={columns}
+        loading={isLoading}
+        rowCount={rowCount}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        {...(checkBox ? {checkboxSelection: true} : {})}
+        sx={{boxShadow: 2}}
+    />);
 }

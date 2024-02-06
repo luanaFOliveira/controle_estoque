@@ -3,6 +3,7 @@ import DefaultLayout from "./views/layouts/DefaultLayout.jsx";
 import GuestLayout from "./views/layouts/GuestLayout.jsx";
 import Login from "./views/auth/Login";
 import NotFound from "./views/shared/NotFound.jsx";
+import EquipmentList from "./views/Equipment/EquipmentList";
 
 const router = createBrowserRouter([
     {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
             },
             {
                 path: '/home',
+            },
+            {
+                path: '/equipments',
+                element: <EquipmentList/>
             },
         ]
     },
