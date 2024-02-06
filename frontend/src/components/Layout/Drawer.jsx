@@ -42,7 +42,7 @@ const CustomDrawer = ({open, toggleDrawer, is_admin, loading}) => {
             </IconButton>
         </Toolbar>
         <Divider/>
-        {loading ? <LinearProgress/> : <List component="nav">{is_admin ? adminListItems : userListItems}</List>}
+        {is_admin === undefined ? <LinearProgress/> : <List component="nav">{is_admin ? adminListItems : userListItems}</List>}
     </Drawer>);
 };
 

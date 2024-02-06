@@ -81,7 +81,7 @@ const CustomAppBar = ({open, toggleDrawer}) => {
                     input={<OutlinedInput label="Setor"/>}
                     sx={{color: 'white', height: '48px', minWidth: 150}}
                 >
-                    {sectors.map((sector) => (<MenuItem value={sector.sector_id}>{sector.name}</MenuItem>))}
+                    {sectors.map((sector, index) => (<MenuItem key={index} value={sector.sector_id}>{sector.name}</MenuItem>))}
                 </Select>
             </FormControl>
             <IconButton color="inherit" onClick={toggleTheme} sx={{m: 2}}>

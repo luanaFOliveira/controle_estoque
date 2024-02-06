@@ -49,7 +49,7 @@ export default function Login() {
             <Copyright sx={{mt: 8, mb: 4}}/>
         </Box>
         <Snackbar
-            anchorOrigin={{vertical: "top", horizontal: "left"}}
+            anchorOrigin={{vertical: "bottom", horizontal: "center"}}
             open={openSnack}
             onClose={() => setOpenSnack(false)}
             autoHideDuration={5000}
