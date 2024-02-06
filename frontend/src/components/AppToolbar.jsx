@@ -32,7 +32,7 @@ const AppToolbar = styled(MuiAppBar, {
 const CustomAppBar = ({open, toggleDrawer}) => {
     const {themeMode, toggleTheme} = useTheme();
     const {setToken, setUser} = useStateContext();
-    const [sector, setSector] = useState();
+    const [sector, setSector] = useState('');
     const [sectors, setSectors] = useState([]);
     const location = useLocation();
     const pathNames = {
@@ -81,7 +81,7 @@ const CustomAppBar = ({open, toggleDrawer}) => {
                     input={<OutlinedInput label="Setor"/>}
                     sx={{color: 'white', height: '48px', minWidth: 150}}
                 >
-                    {sectors.map((sector) => (<MenuItem value={sector.sector_id}>{sector.name}</MenuItem>))}
+                    {sectors.map((sector) => (<MenuItem key={sector.sector_id} value={sector.sector_id}>{sector.name}</MenuItem>))}
                 </Select>
             </FormControl>
             <IconButton color="inherit" onClick={toggleTheme} sx={{m: 2}}>

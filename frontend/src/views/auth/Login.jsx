@@ -38,8 +38,10 @@ export default function Login() {
         };
         if (validateForm({email: payload.email, password: payload.password})) {
             try {
+                console.log(payload);
                 const response= await axiosClient.post('/login', payload);
                 const {user, token} = response.data;
+                console.log(response.data);
                 setUser(user);
                 setToken(token);
             } catch (error) {

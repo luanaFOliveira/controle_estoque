@@ -1,4 +1,4 @@
-import React ,{ useState }from 'react';
+import React ,{ useState,useEffect }from 'react';
 import BaseTable from '../components/BaseTable';
 import { StatusField,RequestEquipButtonCell } from '../components/CustomColumns';
 import Box from '@mui/material/Box';
@@ -6,12 +6,11 @@ import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import RequestPopOver from '../components/RequestPopOver';
+import axiosClient from "../axios-client";
 
 
 export default function EquipmentRequestPage() {
     
-
     const columnsEquip = [
         { field: 'id', headerName: 'Codigo', width: 70,},
         { field: 'name', headerName: 'Nome', width: 170,sortable: false,},
@@ -29,13 +28,13 @@ export default function EquipmentRequestPage() {
             align: 'center',
         },
     ];
-      
     const rowsEquip = [
         { id: 1, name: 'Ideapad gaming 3i', brand: 'Lenovo', type: 'Notebook',location:'Escritorio' },
         { id: 2, name: 'Nitro 5', brand: 'Acer', type: 'Notebook',location:'Escritorio' },
         { id: 3, name: 'Inspiron 15', brand: 'Dell', type: 'Notebook',location:'Home Office' },
         { id: 4, name: 'Galaxy Book 2', brand: 'Samsung', type: 'Notebook',location:'Home Office' },
     ];
+
     
     const columnsHistory = [
         { field: 'id', headerName: 'Codigo', width: 70,},
@@ -82,13 +81,17 @@ export default function EquipmentRequestPage() {
 
     return(<>
         <div style={{display:'flex',flexDirection:'column'} }>
-            <h1>Equipamentos Disponiveis</h1>
-            <div style={{ height: 350, width: '40%' }}>
-                <BaseTable rows={rowsEquip} columns={columnsEquip} checkBox={false} pageSize={5} pageSizeOption={[5, 10, 20]} />
+            <div>
+                <h1>Equipamentos Disponiveis</h1>
+                <div style={{ height: 350, width: '100%'}}>
+                    <BaseTable rows={rowsEquip} columns={columnsEquip} checkBox={false} pageSize={5} pageSizeOption={[5,10,15]}  />
+                </div>
             </div>
-            <h1>Historico de solicitacao</h1>
-            <div style={{ height: 350, width: '30%' }}>
-                <BaseTable rows={rowsHistory} columns={columnsHistory} checkBox={false} pageSize={5} pageSizeOption={[5, 10, 20]} />
+            <div>
+                <h1>Historico de solicitacao</h1>
+                <div style={{ height: 350, width: '100%' }}>
+                    <BaseTable rows={rowsHistory} columns={columnsHistory} checkBox={false} pageSize={5} pageSizeOption={[5,10,15]}  />
+                </div>
             </div>
             <Popover
                 id={id}

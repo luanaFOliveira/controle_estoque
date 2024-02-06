@@ -30,7 +30,6 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const CustomDrawer = ({open, toggleDrawer, is_admin}) => {
     const {user} = useStateContext();
-
     return (<Drawer variant="permanent" open={open}>
         <Toolbar sx={{
             '&.MuiToolbar-root': {
@@ -43,7 +42,7 @@ const CustomDrawer = ({open, toggleDrawer, is_admin}) => {
             </IconButton>
         </Toolbar>
         <Divider/>
-        {is_admin ? <List component="nav">{is_admin ? adminListItems : userListItems}</List> : <LinearProgress/>}
+        {is_admin ? <List component="nav">{adminListItems}</List> :<List component="nav">{userListItems}</List>}
     </Drawer>);
 };
 
