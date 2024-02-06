@@ -1,69 +1,19 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
-    CssBaseline, Box, Typography, Container, Snackbar, SnackbarContent
+    CssBaseline, Box, Container, Snackbar, SnackbarContent
 } from '@mui/material';
 import Copyright from "../../components/Copyright";
-import axiosClient from "../../axios-client";
-import {useStateContext} from "../../context/GlobalContext";
 import LogoJetimob from "../../components/LogoJetimob";
 import {LoginForm} from "../../components/LoginForm";
+import {SendEmailForm} from "../../components/SendEmailForm";
 
 export default function Login() {
-    const {setUser, setToken} = useStateContext();
-    const emailRef = useRef();
-    const passwordRef = useRef();
-    const [showPassword, setShowPassword] = useState(false)
+    const [showLogin, setShowLogin] = useState(false);
     const [openSnack, setOpenSnack] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
 
-    const validateForm = ({password, email}) => {
-        if (!emailRegex.test(email)) {
-            setErrorMessage('O email fornecido não é válido!');
-            return false;
-        }
-        if (password.length < 5) {
-            setErrorMessage('A senha deve ter pelo menos 5 caracteres!');
-            return false;
-        }
-        return true;
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        const payload = {
-            email: emailRef.current.value, password: passwordRef.current.value,
-        };
-        if (validateForm({email: payload.email, password: payload.password})) {
-            try {
-                const response = await axiosClient.post('/login', payload);
-                const {user, token} = response.data;
-                setUser(user);
-                setToken(token);
-            } catch (error) {
-                setErrorMessage('Credencias inválidas!');
-                setOpenSnack(true);
-            }
-        } else {
-            setOpenSnack(true);
-        }
-    };
-
-    const handleLoginGoogle = async (googleResponse) => {
-        try {
-            const googleToken = googleResponse.credential;
-            const response = await axiosClient.post('/login-google', {googleToken});
-            const {user, token} = response.data;
-            setUser(user);
-            setToken(token);
-        } catch (error) {
-            if (error.response.status == 404) {
-                setErrorMessage('Email não cadastrado.');
-            } else {
-                setErrorMessage('Login com Google falhou!');
-            }
-            setOpenSnack(true);
-        }
+    const handleShowLogin = () => {
+        setShowLogin(!showLogin);
     };
 
     return (<Container component="main" maxWidth="xs" sx={{
@@ -74,10 +24,23 @@ export default function Login() {
             <LogoJetimob disableLink={true} logoWidth="40px" logoHeight="40px" fontSize="30px"/>
         </Box>
         <CssBaseline/>
-        <LoginForm handleSubmit={handleSubmit} emailRef={emailRef} passwordRef={passwordRef}
-                   showPassword={showPassword} setShowPassword={setShowPassword}
-                   handleLoginGoogle={handleLoginGoogle}
-        />
+        <Box
+            sx={{
+                marginTop: 5,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                boxShadow: 3,
+                borderRadius: '15px',
+                padding: '20px'
+            }}
+        >
+            {showLogin ? <SendEmailForm handleShowLogin={handleShowLogin} setErrorMessage={setErrorMessage}
+                                        setOpenSnack={setOpenSnack}/> : <LoginForm setErrorMessage={setErrorMessage}
+                                                                                   setOpenSnack={setOpenSnack}
+                                                                                   handleShowLogin={handleShowLogin}
+            />}
+        </Box>
         <Box
             sx={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 'auto',
