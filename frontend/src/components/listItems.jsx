@@ -6,7 +6,6 @@ import DevicesIcon from '@mui/icons-material/Devices';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import BusinessIcon from '@mui/icons-material/Business';
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
-import Divider from "@mui/material/Divider";
 
 export const userListItems = (
     <React.Fragment>

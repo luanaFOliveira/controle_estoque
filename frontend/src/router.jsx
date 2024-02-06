@@ -6,9 +6,9 @@ import NotFound from "./views/shared/NotFound.jsx";
 
 const router = createBrowserRouter([
     {
-        path:'/',
-        element:<DefaultLayout/>,
-        children:[
+        path: '/',
+        element: <DefaultLayout/>,
+        children: [
             {
                 path: '/',
                 element: <Navigate to='/home'/>
@@ -19,18 +19,18 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path:'/',
-        element:<GuestLayout/>,
+        path: '/',
+        element: <GuestLayout/>,
         children: [
             {
-                path:'/login',
-                element:<Login/>
+                path: '/login',
+                element: <Login/>
             },
         ]
     },
     {
-        path:'*',
-        element:<NotFound/>
+        path: '*',
+        element: <NotFound/>
     },
 ])
 
