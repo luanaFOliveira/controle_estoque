@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {
     CssBaseline, Box, Container, Snackbar, SnackbarContent
 } from '@mui/material';
-import Copyright from "../../components/Copyright";
-import LogoJetimob from "../../components/LogoJetimob";
-import {LoginForm} from "../../components/LoginForm";
-import {SendEmailForm} from "../../components/SendEmailForm";
+import Copyright from "../../components/shared/Copyright";
+import LogoJetimob from "../../components/shared/LogoJetimob";
+import {LoginForm} from "../../components/auth/LoginForm";
+import {SendEmailForm} from "../../components/auth/SendEmailForm";
 
 export default function Login() {
     const [showLogin, setShowLogin] = useState(false);

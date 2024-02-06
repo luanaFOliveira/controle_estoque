@@ -8,8 +8,8 @@ import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import Toolbar from "@mui/material/Toolbar";
 import {adminListItems, userListItems} from "./listItems";
-import {useStateContext} from "../context/GlobalContext";
-import LogoJetimob from "./LogoJetimob";
+import {useStateContext} from "../../context/GlobalContext";
+import LogoJetimob from "../shared/LogoJetimob";
 import {LinearProgress} from "@mui/material";
 
 const drawerWidth = 240;
@@ -28,8 +28,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     },
 }));
 
-const CustomDrawer = ({open, toggleDrawer, is_admin}) => {
-    const {user} = useStateContext();
+const CustomDrawer = ({open, toggleDrawer, is_admin, loading}) => {
 
     return (<Drawer variant="permanent" open={open}>
         <Toolbar sx={{
@@ -43,7 +42,7 @@ const CustomDrawer = ({open, toggleDrawer, is_admin}) => {
             </IconButton>
         </Toolbar>
         <Divider/>
-        {is_admin ? <List component="nav">{is_admin ? adminListItems : userListItems}</List> : <LinearProgress/>}
+        {loading ? <LinearProgress/> : <List component="nav">{is_admin ? adminListItems : userListItems}</List>}
     </Drawer>);
 };
 

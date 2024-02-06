@@ -8,9 +8,9 @@ import {
 import {
     Menu as MenuIcon, Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon, Logout as LogoutIcon
 } from '@mui/icons-material';
-import {useTheme} from "../context/ThemeProvider";
-import axiosClient from "../axios-client";
-import {useStateContext} from "../context/GlobalContext";
+import {useTheme} from "../../context/ThemeProvider";
+import axiosClient from "../../axios-client";
+import {useStateContext} from "../../context/GlobalContext";
 import {useLocation} from "react-router-dom";
 
 const drawerWidth = 240;

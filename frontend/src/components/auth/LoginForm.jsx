@@ -4,8 +4,8 @@ import {
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {LoginGoogle} from "./LoginGoogle";
 import React, {useRef, useState} from "react";
-import axiosClient from "../axios-client";
-import {useStateContext} from "../context/GlobalContext";
+import axiosClient from "../../axios-client";
+import {useStateContext} from "../../context/GlobalContext";
 
 export const LoginForm = ({handleShowLogin, setErrorMessage, setOpenSnack}) => {
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;

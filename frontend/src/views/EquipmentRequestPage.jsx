@@ -1,5 +1,5 @@
 import React ,{ useState }from 'react';
-import BaseTable from '../components/BaseTable';
+import BaseTable from '../components/shared/BaseTable';
 import { StatusField,RequestEquipButtonCell } from '../components/CustomColumns';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';

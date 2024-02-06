@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navigate, Outlet} from "react-router-dom";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,9 +6,9 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Copyright from "../../components/Copyright";
-import CustomDrawer from "../../components/Drawer";
-import CustomAppBar from "../../components/AppToolbar";
+import Copyright from "../../components/shared/Copyright";
+import CustomDrawer from "../../components/Layout/Drawer";
+import CustomAppBar from "../../components/Layout/AppToolbar";
 import {useStateContext} from "../../context/GlobalContext";
 import {useTheme} from "../../context/ThemeProvider";
 import axiosClient from "../../axios-client";
@@ -45,12 +45,15 @@ export default function DefaultLayout() {
     const {token, user, setUser} = useStateContext();
     const {themeMode} = useTheme();
     const [open, setOpen] = React.useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axiosClient.get(`/user/`).then(({data}) => {
             setUser(data)
+            setLoading(false);
         }).catch((error) => {
             alert("Usuário não autorizado, realize o login para continuar.")
+            setLoading(false);
         });
     }, []);
 
@@ -71,7 +74,7 @@ export default function DefaultLayout() {
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <CustomAppBar open={open} toggleDrawer={toggleDrawer}/>
-            <CustomDrawer open={open} toggleDrawer={toggleDrawer} is_admin={user.is_admin}/>
+            <CustomDrawer open={open} toggleDrawer={toggleDrawer} is_admin={user.is_admin} loading={loading}/>
             <Box
                 component="main"
                 sx={{

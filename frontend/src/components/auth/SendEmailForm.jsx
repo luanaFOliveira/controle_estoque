@@ -2,7 +2,7 @@ import {
     Box, Button, TextField, Typography, Container, Grid, Link
 } from "@mui/material";
 import React, {useEffect, useRef, useState} from "react";
-import axiosClient from "../axios-client";
+import axiosClient from "../../axios-client";
 
 export const SendEmailForm = ({ handleShowLogin, setErrorMessage, setOpenSnack }) => {
     const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
