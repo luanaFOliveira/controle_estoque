@@ -27,9 +27,11 @@ beforeEach(function () {
 
 it('should return a paginated list of equipments', function () {
     actingAs($this->user, 'sanctum');
-    $response = $this->getJson('/api/equipments')->assertOk();
+    $response = get('/api/equipments')->assertOk();
     $paginatedResponse = $response->json();
+    dd($response->json());
 
+    
     expect($paginatedResponse)->toBePaginated();
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([

@@ -10,9 +10,37 @@ import axiosClient from "../axios-client";
 
 
 export default function EquipmentRequestPage() {
-    
+
+    const [equipments,setEquipments] = useState([]);
+    const [currentPageEqui, setCurrentPageEqui] = useState(1);
+    const [lastPageEqui, setLastPageEqui] = useState(1);
+
+    useEffect(() => {
+        getEquipments();
+    }, [currentPageEqui]);
+
+    const getEquipments = async(page) => {
+        axiosClient.get("/equipments", {
+            params: {
+                page: page,
+            },
+        })
+        .then(({ data }) => {
+                setEquipments(data.data);
+                setLastPageEqui(data.meta.last_page);
+                setCurrentPageEqui(data.meta.current_page);
+        })
+        .catch(() => {
+        });
+    };
+
+
+    const handlePageChangeEqui = (page) => {
+        getEquipments(page);
+    };
+
     const columnsEquip = [
-        { field: 'id', headerName: 'Codigo', width: 70,},
+        { field: 'id', headerName: 'Codigo', width: 100 },
         { field: 'name', headerName: 'Nome', width: 170,sortable: false,},
         { field: 'brand', headerName: 'Marca', width: 130,sortable: false,},
         { field: 'type', headerName: 'Tipo', width: 130,sortable: false,},
@@ -28,16 +56,21 @@ export default function EquipmentRequestPage() {
             align: 'center',
         },
     ];
-    const rowsEquip = [
-        { id: 1, name: 'Ideapad gaming 3i', brand: 'Lenovo', type: 'Notebook',location:'Escritorio' },
-        { id: 2, name: 'Nitro 5', brand: 'Acer', type: 'Notebook',location:'Escritorio' },
-        { id: 3, name: 'Inspiron 15', brand: 'Dell', type: 'Notebook',location:'Home Office' },
-        { id: 4, name: 'Galaxy Book 2', brand: 'Samsung', type: 'Notebook',location:'Home Office' },
-    ];
+
+    const rowsEquip = equipments.map((equip) => {
+        const office = equip.is_at_office ? 'Escritorio' : 'Home Office'; 
+        return {
+            id: equip.equipment_id,
+            name: equip.name,
+            brand: equip.brand,
+            type: equip.type,
+            location: office,
+        };
+    });
 
     
     const columnsHistory = [
-        { field: 'id', headerName: 'Codigo', width: 70,},
+        { field: 'id', headerName: 'Codigo', width: 100,},
         { field: 'name', headerName: 'Nome', width: 170,sortable: false,},
         { 
             field: 'status',
@@ -83,8 +116,8 @@ export default function EquipmentRequestPage() {
         <div style={{display:'flex',flexDirection:'column'} }>
             <div>
                 <h1>Equipamentos Disponiveis</h1>
-                <div style={{ height: 350, width: '100%'}}>
-                    <BaseTable rows={rowsEquip} columns={columnsEquip} checkBox={false} pageSize={5} pageSizeOption={[5,10,15]}  />
+                <div style={{ height: 400, width: '100%'}}>
+                    <BaseTable rows={rowsEquip} columns={columnsEquip} checkBox={false} pageSize={5} currentPage={currentPageEqui} handlePageChange={handlePageChangeEqui} lastPage={lastPageEqui}  />
                 </div>
             </div>
             <div>

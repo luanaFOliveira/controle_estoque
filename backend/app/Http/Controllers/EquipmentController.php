@@ -19,7 +19,7 @@ class EquipmentController extends Controller
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $query = Equipment::auth();
+        $query = Equipment::query();
 
         if ($request->has('search')) {
             $search = $request->input('search');
@@ -28,7 +28,7 @@ class EquipmentController extends Controller
         }
         //implementar filtros
 
-        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
+        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
     }
 
     public function show(Request $request): JsonResponse
