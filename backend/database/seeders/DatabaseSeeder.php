@@ -38,6 +38,13 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
+        User::factory()->create([
+            'name' => 'Otavio',
+            'email' => 'otavio18gl@gmail.com',
+            'password' => bcrypt('password'),
+            'is_admin' => true,
+        ]);
+
         User::factory(40)->create();
         Equipment::factory(40)->create();
         EquipmentRequest::factory(20)->create();

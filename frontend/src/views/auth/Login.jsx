@@ -1,13 +1,12 @@
 import React, {useRef, useState} from 'react';
 import {
-    Button, CssBaseline, TextField, Box, Typography, Container, IconButton, InputAdornment, Snackbar, Divider
+    CssBaseline, Box, Typography, Container, Snackbar, SnackbarContent
 } from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {GoogleOAuthProvider, GoogleLogin} from '@react-oauth/google';
 import Copyright from "../../components/Copyright";
 import axiosClient from "../../axios-client";
 import {useStateContext} from "../../context/GlobalContext";
 import LogoJetimob from "../../components/LogoJetimob";
+import {LoginForm} from "../../components/LoginForm";
 
 export default function Login() {
     const {setUser, setToken} = useStateContext();
@@ -33,12 +32,11 @@ export default function Login() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const payload = {
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
+            email: emailRef.current.value, password: passwordRef.current.value,
         };
         if (validateForm({email: payload.email, password: payload.password})) {
             try {
-                const response= await axiosClient.post('/login', payload);
+                const response = await axiosClient.post('/login', payload);
                 const {user, token} = response.data;
                 setUser(user);
                 setToken(token);
@@ -51,6 +49,23 @@ export default function Login() {
         }
     };
 
+    const handleLoginGoogle = async (googleResponse) => {
+        try {
+            const googleToken = googleResponse.credential;
+            const response = await axiosClient.post('/login-google', {googleToken});
+            const {user, token} = response.data;
+            setUser(user);
+            setToken(token);
+        } catch (error) {
+            if (error.response.status == 404) {
+                setErrorMessage('Email não cadastrado.');
+            } else {
+                setErrorMessage('Login com Google falhou!');
+            }
+            setOpenSnack(true);
+        }
+    };
+
     return (<Container component="main" maxWidth="xs" sx={{
         display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center', height: '100vh'
     }}
@@ -59,71 +74,10 @@ export default function Login() {
             <LogoJetimob disableLink={true} logoWidth="40px" logoHeight="40px" fontSize="30px"/>
         </Box>
         <CssBaseline/>
-        <Box
-            sx={{
-                marginTop: 5,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                boxShadow: 3,
-                borderRadius: '15px',
-                padding: '20px'
-            }}
-        >
-            <Typography component="h1" variant="h5">
-                Bem-vindo
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{mt: 2}}>
-                <TextField
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    inputRef={emailRef}
-                    autoFocus
-                />
-                <TextField
-                    margin="normal"
-                    fullWidth
-                    id="password"
-                    label="Senha"
-                    name="password"
-                    inputRef={passwordRef}
-                    type={showPassword ? 'text' : 'password'}
-                    InputProps={{
-                        endAdornment: (<InputAdornment position="end">
-                            <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={() => {
-                                    setShowPassword(!showPassword)
-                                }}
-                            >
-                                {showPassword ? <Visibility/> : <VisibilityOff/>}
-                            </IconButton>
-                        </InputAdornment>),
-                    }}
-                />
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{mt: 3, mb: 2}}
-                >
-                    ENTRAR
-                </Button>
-                <Divider orientation="horizontal" flexItem>
-                    <Typography variant="body2">ou</Typography>
-                </Divider>
-                <Box sx={{marginTop: 1.5, display: 'flex', justifyContent: 'center'}}>
-                    <GoogleOAuthProvider
-                        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
-                        <GoogleLogin onSuccess={() => {
-                        }}/>
-                    </GoogleOAuthProvider>
-                </Box>
-            </Box>
-        </Box>
+        <LoginForm handleSubmit={handleSubmit} emailRef={emailRef} passwordRef={passwordRef}
+                   showPassword={showPassword} setShowPassword={setShowPassword}
+                   handleLoginGoogle={handleLoginGoogle}
+        />
         <Box
             sx={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 'auto',
@@ -135,8 +89,12 @@ export default function Login() {
             anchorOrigin={{vertical: "top", horizontal: "left"}}
             open={openSnack}
             onClose={() => setOpenSnack(false)}
-            message={errorMessage}
             autoHideDuration={5000}
-        />
+        >
+            <SnackbarContent
+                style={{backgroundColor: '#B22222'}}
+                message={errorMessage}
+            />
+        </Snackbar>
     </Container>);
 }
