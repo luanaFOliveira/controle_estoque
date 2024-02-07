@@ -8,6 +8,7 @@ import User from "./views/User/UserList";
 import EquipmentList from "./views/Equipment/EquipmentList";
 import UserForm from "./views/User/UserForm";
 import SectorForm from "./views/Sector/SectorForm";
+import EquipmentRequestPage from "./views/EquipmentRequestPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         path: "/equipments",
         element: <EquipmentList />,
       },
+      {
+        path: '/solicitar-equipamento',
+        element: <EquipmentRequestPage/>,
+      }
     ],
   },
   {
