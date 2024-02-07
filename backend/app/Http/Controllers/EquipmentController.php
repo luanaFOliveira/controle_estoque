@@ -9,6 +9,7 @@ use App\Services\EquipmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 class EquipmentController extends Controller
 {
@@ -20,13 +21,13 @@ class EquipmentController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Equipment::query();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-
-            $query->where('name', 'ilike', "%$search%");
+        
+        if ($request->has('sector')) {
+            $sector = $request->input('sector');
+            
+            $query->where('sector_id', 'ilike', "%$sector%");
         }
-        //implementar filtros
+        
 
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
     }

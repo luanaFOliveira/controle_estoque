@@ -9,10 +9,12 @@ import Grid from '@mui/material/Grid';
 import axiosClient from "../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
+import {useStateContext} from "../context/GlobalContext";
 
 
 export default function EquipmentRequestPage() {
 
+    const {sector} = useStateContext();
     const [equipments,setEquipments] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
@@ -23,7 +25,7 @@ export default function EquipmentRequestPage() {
         const fetchEquipments = async () => {
             setIsLoadingEquip(true);
             try{
-                const response = await axiosClient.get(`/equipments?page=${paginationModelEquip.page+1}`);
+                const response = await axiosClient.get(`/equipments?page=${paginationModelEquip.page+1}&sector=${sector}`);
                 const equipmentsWithId = response.data.data.map(equipment => ({
                     ...equipment, id: equipment?.equipment_id
                 }));
@@ -131,6 +133,7 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    console.log(sector);
 
     return(<>
             <Container sx={{mt: 5}}>
