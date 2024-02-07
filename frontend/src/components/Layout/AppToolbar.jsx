@@ -25,6 +25,21 @@ import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
+const selectStyle = {
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "white",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    borderColor: "white",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "white",
+  },
+  "& .MuiSelect-icon": {
+    color: "white",
+  },
+};
+
 const AppToolbar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -97,7 +112,15 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
           {dashboardName}
         </Typography>
         <FormControl sx={{ mr: 2 }}>
-          <InputLabel id="demo-simple-select-label" sx={{ color: "white" }}>
+          <InputLabel
+            id="demo-simple-select-label"
+            sx={{
+              color: "white",
+              "&.Mui-focused": {
+                color: "white",
+              },
+            }}
+          >
             Setor
           </InputLabel>
           <Select
@@ -105,8 +128,25 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
             id="demo-customized-select"
             value={sector}
             onChange={(event) => setSector(event.target.value)}
-            input={<OutlinedInput label="Setor" />}
-            sx={{ color: "white", height: "48px", minWidth: 150 }}
+
+            input={
+              <OutlinedInput
+                label="Setor"
+              />
+            }
+            sx={{ color: "white", minWidth: 150 ,
+              "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "white",
+            },"& .MuiSelect-icon": {
+                color: "white",
+              },
+            }}
           >
             {sectors.map((sector, index) => (
               <MenuItem key={index} value={sector.sector_id}>

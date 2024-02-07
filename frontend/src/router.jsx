@@ -6,6 +6,7 @@ import NotFound from "./views/shared/NotFound";
 import Sector from "./views/Sector/SectorList";
 import User from "./views/User/UserList";
 import EquipmentList from "./views/Equipment/EquipmentList";
+import UserForm from "./views/User/UserForm";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: <User />,
+      },
+      {
+        path: "/addUser",
+        element: <UserForm />,
       },
       {
         path: "/equipments",

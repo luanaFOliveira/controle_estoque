@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Container } from "@mui/material";
+import {Button, CircularProgress, Container} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
+import {useNavigate} from "react-router-dom";
 
 function UserList() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowCount, setRowCount] = useState(0);
@@ -67,6 +69,13 @@ function UserList() {
 
   return (
     <Container sx={{ mt: 5 }}>
+      <Button
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          onClick={() => navigate('/addUser')}
+      >
+        Criar Usuário
+      </Button>
       {users.length > 0 ? (
         <BaseTable
           rows={users}

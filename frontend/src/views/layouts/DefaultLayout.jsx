@@ -19,35 +19,6 @@ const defaultTheme = createTheme({
       main: "#284670",
     },
   },
-  components: {
-    MuiOutlinedInput: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
-          },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "white",
-          },
-          "& .MuiSelect-icon": {
-            color: "white",
-          },
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          "&.Mui-focused": {
-            color: "white",
-          },
-        },
-      },
-    },
-  },
 });
 
 export default function DefaultLayout() {
