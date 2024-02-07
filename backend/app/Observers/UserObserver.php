@@ -30,7 +30,7 @@ class UserObserver
     public function updated(User $user,$options=[])
     {
         //
-       
+
     }
 
     /**
@@ -40,7 +40,7 @@ class UserObserver
      * @return void
      */
     public function deleted(User $user)
-    { 
+    {
         UserSector::where('user_id', $user->user_id)->delete();
 
         $equipmentsId = UserEquipment::where('user_id', $user->user_id)->pluck('equipment_id');
@@ -50,5 +50,5 @@ class UserObserver
 
     }
 
-    
+
 }

@@ -1,11 +1,20 @@
 import {
-  Box, Button, Divider, IconButton, InputAdornment, TextField, Typography, Container, Grid, Link,
-} from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import React, { useRef, useState } from 'react';
-import { LoginGoogle } from './LoginGoogle';
-import axiosClient from '../../axios-client';
-import { useStateContext } from '../../context/GlobalContext';
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import React, { useRef, useState } from "react";
+import { LoginGoogle } from "./LoginGoogle";
+import axiosClient from "../../axios-client";
+import { useStateContext } from "../../context/GlobalContext";
 
 export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
   const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
@@ -17,15 +26,15 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
   const handleLoginGoogle = async (googleResponse) => {
     try {
       const googleToken = googleResponse.credential;
-      const response = await axiosClient.post('/login-google', { googleToken });
+      const response = await axiosClient.post("/login-google", { googleToken });
       const { user, token } = response.data;
       setUser(user);
       setToken(token);
     } catch (error) {
       if (error.response.status === 404) {
-        setErrorMessage('Email não cadastrado.');
+        setErrorMessage("Email não cadastrado.");
       } else {
-        setErrorMessage('Login com Google falhou!');
+        setErrorMessage("Login com Google falhou!");
       }
       setOpenSnack(true);
     }
@@ -33,11 +42,11 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
 
   const validateForm = ({ password, email }) => {
     if (!emailRegex.test(email)) {
-      setErrorMessage('O email fornecido não é válido!');
+      setErrorMessage("O email fornecido não é válido!");
       return false;
     }
     if (password.length < 5) {
-      setErrorMessage('A senha deve ter pelo menos 5 caracteres!');
+      setErrorMessage("A senha deve ter pelo menos 5 caracteres!");
       return false;
     }
     return true;
@@ -46,16 +55,17 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const payload = {
-      email: emailRef.current?.value, password: passwordRef.current?.value,
+      email: emailRef.current?.value,
+      password: passwordRef.current?.value,
     };
     if (validateForm({ email: payload.email, password: payload.password })) {
       try {
-        const response = await axiosClient.post('/login', payload);
+        const response = await axiosClient.post("/login", payload);
         const { user, token } = response.data;
         setUser(user);
         setToken(token);
       } catch (error) {
-        setErrorMessage('Credencias inválidas!');
+        setErrorMessage("Credencias inválidas!");
         setOpenSnack(true);
       }
     } else {
@@ -85,18 +95,20 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
           label="Senha"
           name="password"
           inputRef={passwordRef}
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           InputProps={{
-            endAdornment: (<InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => {
-                  setShowPassword(!showPassword);
-                }}
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-                           </InputAdornment>),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
           }}
         />
         <Grid item container justifyContent="flex-end" marginTop="5px">

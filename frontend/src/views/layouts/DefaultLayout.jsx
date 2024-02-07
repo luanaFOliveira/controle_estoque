@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Copyright from '../../components/shared/Copyright';
-import CustomDrawer from '../../components/Layout/Drawer';
-import CustomAppBar from '../../components/Layout/AppToolbar';
-import { useStateContext } from '../../context/GlobalContext';
-import { useTheme } from '../../context/ThemeProvider';
-import axiosClient from '../../axios-client';
+import React, { useEffect, useState } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Copyright from "../../components/shared/Copyright";
+import CustomDrawer from "../../components/Layout/Drawer";
+import CustomAppBar from "../../components/Layout/AppToolbar";
+import { useStateContext } from "../../context/GlobalContext";
+import { useTheme } from "../../context/ThemeProvider";
+import axiosClient from "../../axios-client";
 
 const defaultTheme = createTheme({
   palette: {
     primary: {
-      main: '#284670',
+      main: "#284670",
     },
   },
   components: {
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'white',
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
           },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'white',
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
           },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'white',
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "white",
           },
-          '& .MuiSelect-icon': {
-            color: 'white',
+          "& .MuiSelect-icon": {
+            color: "white",
           },
         },
       },
@@ -41,8 +41,8 @@ const defaultTheme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: {
-          '&.Mui-focused': {
-            color: 'white',
+          "&.Mui-focused": {
+            color: "white",
           },
         },
       },
@@ -57,13 +57,17 @@ export default function DefaultLayout() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosClient.get('/user/').then(({ data }) => {
-      setUser(data);
-    }).catch((error) => {
-      alert('Usuário não autorizado, realize o login para continuar.');
-    }).finally(() => {
-      setLoading(false);
-    });
+    axiosClient
+      .get("/user/")
+      .then(({ data }) => {
+        setUser(data);
+      })
+      .catch((error) => {
+        alert("Usuário não autorizado, realize o login para continuar.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   if (!token) {
@@ -75,23 +79,31 @@ export default function DefaultLayout() {
 
   const darkTheme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: "dark",
     },
   });
 
   return (
-    <ThemeProvider theme={themeMode === 'light' ? defaultTheme : darkTheme}>
-      <Box sx={{ display: 'flex' }}>
+    <ThemeProvider theme={themeMode === "light" ? defaultTheme : darkTheme}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <CustomAppBar open={open} toggleDrawer={toggleDrawer} />
-        <CustomDrawer open={open} toggleDrawer={toggleDrawer} is_admin={user.is_admin} loading={loading} />
+        <CustomDrawer
+          open={open}
+          toggleDrawer={toggleDrawer}
+          is_admin={user.is_admin}
+          loading={loading}
+        />
         <Box
           component="main"
           sx={{
-            backgroundColor: (theme) => (theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900]),
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            height: "100vh",
+            overflow: "auto",
           }}
         >
           <Toolbar />
