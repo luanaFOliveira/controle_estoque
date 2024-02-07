@@ -144,6 +144,7 @@ export default function EquipmentRequestPage() {
         };
         try {
             const response = await axiosClient.post("/equipment-requests", payload);
+            window.location.reload();
             console.log(response);
         } catch (error) {
             console.error(error);
