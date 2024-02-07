@@ -25,21 +25,6 @@ import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
-const selectStyle = {
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "white",
-  },
-  "&:hover .MuiOutlinedInput-notchedOutline": {
-    borderColor: "white",
-  },
-  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    borderColor: "white",
-  },
-  "& .MuiSelect-icon": {
-    color: "white",
-  },
-};
-
 const AppToolbar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
