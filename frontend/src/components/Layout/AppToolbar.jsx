@@ -43,10 +43,10 @@ const AppToolbar = styled(MuiAppBar, {
   }),
 }));
 
+
 const CustomAppBar = ({ open, toggleDrawer }) => {
   const { themeMode, toggleTheme } = useTheme();
-  const { setToken, setUser } = useStateContext();
-  const [sector, setSector] = useState();
+  const {setToken, setUser,sector,setSector} = useStateContext();
   const [sectors, setSectors] = useState([]);
   const location = useLocation();
   const pathNames = {
@@ -67,10 +67,18 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
     ev.preventDefault();
 
     axiosClient.post("/logout").then(() => {
-      setUser({});
-      setToken(null);
+        setUser({});
+        setToken(null);
+        setSector({});
     });
   };
+
+  const handleSectorChange = (event) => {
+      const newSector = event.target.value;
+      setSector(newSector);
+      window.location.reload();
+  };
+    
 
   return (
     <AppToolbar position="absolute" open={open}>
@@ -112,7 +120,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
             labelId="demo-customized-select-label"
             id="demo-customized-select"
             value={sector}
-            onChange={(event) => setSector(event.target.value)}
+            onChange={handleSectorChange}
 
             input={
               <OutlinedInput
@@ -149,6 +157,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
       </Toolbar>
     </AppToolbar>
   );
+    
 };
 
 export default CustomAppBar;

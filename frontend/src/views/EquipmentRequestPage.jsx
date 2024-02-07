@@ -7,20 +7,56 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import axiosClient from "../axios-client";
+import {CircularProgress, Container} from "@mui/material";
+import Typography from '@mui/material/Typography';
+import {useStateContext} from "../context/GlobalContext";
 
 
 export default function EquipmentRequestPage() {
+
+    const {sector} = useStateContext();
+    const [equipments,setEquipments] = useState([]);
+    const [isLoadingEquip, setIsLoadingEquip] = useState(true);
+    const [rowCountEquip, setRowCountEquip] = useState(0);
+    const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 5 });
+
     
+    useEffect(() => {
+        const fetchEquipments = async () => {
+            setIsLoadingEquip(true);
+            try{
+                const response = await axiosClient.get(`/equipments?page=${paginationModelEquip.page+1}&sector=${sector}`);
+                const equipmentsWithId = response.data.data.map(equipment => ({
+                    ...equipment, id: equipment?.equipment_id
+                }));
+                setEquipments(equipmentsWithId);
+                setRowCountEquip((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
+            
+            }catch(error){
+                console.error(error);
+            }finally{
+                setIsLoadingEquip(false);
+            }
+
+        };
+        fetchEquipments().then(r => {
+        });
+
+    },[paginationModelEquip.page]);
+
+
     const columnsEquip = [
-        { field: 'id', headerName: 'Codigo', width: 70,},
-        { field: 'name', headerName: 'Nome', width: 170,sortable: false,},
-        { field: 'brand', headerName: 'Marca', width: 130,sortable: false,},
-        { field: 'type', headerName: 'Tipo', width: 130,sortable: false,},
-        { field: 'location', headerName: 'Local', width: 130,sortable: false,},
+        { field: 'id', headerName: 'Codigo', width: 80 },
+        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
+        { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
+        { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
+        { field: 'location', headerName: 'Local', flex:1,sortable: false,
+            renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
+        },
         { 
             field: 'requestButton',
             headerName: 'Solicitar retirada',
-            width: 130,
+            flex:1,
             renderCell: (params) => (
                 <RequestEquipButtonCell onClick={(event) => handleButtonClick(event, params.row)} />
             ),
@@ -28,21 +64,45 @@ export default function EquipmentRequestPage() {
             align: 'center',
         },
     ];
-    const rowsEquip = [
-        { id: 1, name: 'Ideapad gaming 3i', brand: 'Lenovo', type: 'Notebook',location:'Escritorio' },
-        { id: 2, name: 'Nitro 5', brand: 'Acer', type: 'Notebook',location:'Escritorio' },
-        { id: 3, name: 'Inspiron 15', brand: 'Dell', type: 'Notebook',location:'Home Office' },
-        { id: 4, name: 'Galaxy Book 2', brand: 'Samsung', type: 'Notebook',location:'Home Office' },
-    ];
 
     
-    const columnsHistory = [
-        { field: 'id', headerName: 'Codigo', width: 70,},
-        { field: 'name', headerName: 'Nome', width: 170,sortable: false,},
+    const [history,setHistory] = useState([]);
+    const [isLoadingHist, setIsLoadingHist] = useState(true);
+    const [rowCountHist, setRowCountHist] = useState(0);
+    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 5 });
+
+    
+    useEffect(() => {
+        const fetchHistory = async () => {
+            setIsLoadingHist(true);
+            try{
+                const response = await axiosClient.get(`/equipment-requests?page=${paginationModelEquip.page+1}`);
+                const historyWithId = response.data.data.map(history => ({
+                    ...history, id: history?.equipment_request_id
+                }));
+                setHistory(historyWithId);
+                setRowCountHist((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
+            
+            }catch(error){
+                console.error(error);
+            }finally{
+                setIsLoadingHist(false);
+            }
+
+        };
+        fetchHistory().then(r => {
+        });
+
+    },[paginationModelHist.page]);
+
+    
+    const columnsHist = [
+        { field: 'id', headerName: 'Codigo', flex:1,},
+        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
         { 
             field: 'status',
             headerName: 'Status', 
-            width: 130, 
+            flex:1, 
             renderCell: (params) => <StatusField value={params.value} />, 
             sortable: false, 
             selectable: false, 
@@ -51,13 +111,7 @@ export default function EquipmentRequestPage() {
     
     ];
       
-    const rowsHistory = [
-        { id: 1, name: 'Ideapad gaming 3i',status:'Aprovado' },
-        { id: 2, name: 'Nitro 5' ,status:'Pendente'},
-        { id: 3, name: 'Inspiron 15',status:'Aprovado' },
-        { id: 4, name: 'Galaxy Book 2',status:'Reprovado' },
-    ];
-
+    
     const [formValues, setFormValues] = useState({ motive: '', rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -72,27 +126,55 @@ export default function EquipmentRequestPage() {
 
     const handleRequestSubmit = () => {
         console.log(formValues);
+        //precisaria do setor que esta na toolbar, do proprio equipment_id, do sector_id e do motivo
         handleClose();
     };
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    console.log(sector);
 
     return(<>
-        <div style={{display:'flex',flexDirection:'column'} }>
-            <div>
-                <h1>Equipamentos Disponiveis</h1>
-                <div style={{ height: 350, width: '100%'}}>
-                    <BaseTable rows={rowsEquip} columns={columnsEquip} checkBox={false} pageSize={5} pageSizeOption={[5,10,15]}  />
-                </div>
-            </div>
-            <div>
-                <h1>Historico de solicitacao</h1>
-                <div style={{ height: 350, width: '100%' }}>
-                    <BaseTable rows={rowsHistory} columns={columnsHistory} checkBox={false} pageSize={5} pageSizeOption={[5,10,15]}  />
-                </div>
-            </div>
+            <Container sx={{mt: 5}}>
+                <Typography component="h1" variant="h4">
+                    Equipamentos disponiveis
+                </Typography>
+                {equipments.length > 0 ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
+                                                    rowCount={rowCountEquip} paginationModel={paginationModelEquip}
+                                                    setPaginationModel={setPaginationModelEquip}
+                                                    isLoading={isLoadingEquip}/> : <Grid item container justifyContent="center">
+                <CircularProgress/>
+                </Grid>}
+            </Container>
+            <Container sx={{mt: 10}}>
+                <Typography component="h1" variant="h4">
+                    Historico de solicitações
+                </Typography>
+                {isLoadingHist ? (
+                    <Grid item container justifyContent="center">
+                        <CircularProgress />
+                    </Grid>
+                ) : (
+                <>
+                {rowCountHist > 0 ? (
+                    <BaseTable
+                    rows={history}
+                    columns={columnsHist}
+                    checkBox={false}
+                    rowCount={rowCountHist}
+                    paginationModel={paginationModelHist}
+                    setPaginationModel={setPaginationModelHist}
+                    isLoading={isLoadingHist}
+                    />
+                ) : (
+                    <Typography variant="body1" color="textSecondary">
+                    Nenhum dado encontrado.
+                    </Typography>
+                )}
+                </>
+            )}
+            </Container>
             <Popover
                 id={id}
                 open={open}
@@ -151,7 +233,6 @@ export default function EquipmentRequestPage() {
                 }
                 `}
             </style>
-        </div>
         
     </>);
 

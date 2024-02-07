@@ -6,6 +6,7 @@ const StateContext = createContext({});
 export function GlobalContext({ children }) {
   const [user, _setUser] = useState({});
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
+  const [sector, _setSector] = useState(localStorage.getItem('sector'));
 
   const setToken = (token) => {
     _setToken(token);
@@ -22,8 +23,17 @@ export function GlobalContext({ children }) {
       localStorage.setItem("user", JSON.stringify(user));
     } else {
       localStorage.removeItem("user");
-    }
-  };
+      }
+    };
+
+    const setSector = (sector) => {
+        _setSector(sector);
+        if(sector){
+            localStorage.setItem('sector', JSON.stringify(sector));
+        } else {
+            localStorage.removeItem('sector');
+      }
+    };
 
   return (
     <ThemeProvider>
@@ -31,8 +41,10 @@ export function GlobalContext({ children }) {
         value={{
           user,
           token,
+          sector,
           setUser,
           setToken,
+          setSector,
         }}
       >
         {children}
