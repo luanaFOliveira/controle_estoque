@@ -107,18 +107,7 @@ export const LoginForm = ({handleShowLogin, setErrorMessage, setOpenSnack}) => {
                     </InputAdornment>),
                 }}
             />
-            <Grid item container justifyContent="flex-end" marginTop="5px">
-                <Link
-                    component="button"
-                    variant="body2"
-                    onClick={(event) => {
-                        event.preventDefault();
-                        handleShowLogin();
-                    }}
-                >
-                    Esqueceu sua senha?
-                </Link>
-            </Grid>
+
             <Button
                 type="submit"
                 fullWidth

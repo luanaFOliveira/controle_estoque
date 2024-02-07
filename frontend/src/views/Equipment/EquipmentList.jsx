@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
 import axiosClient from "../../axios-client";
-import {CircularProgress, Container} from "@mui/material";
+import {CircularProgress, Container, Link} from "@mui/material";
 import BaseTable from "../../components/shared/BaseTable";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import Grid from "@mui/material/Grid";
+import {useNavigate} from "react-router-dom";
 
 export default function EquipmentList() {
+    const navigate = useNavigate();
     const [equipments, setEquipments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [rowCount, setRowCount] = useState(0);
@@ -14,8 +16,14 @@ export default function EquipmentList() {
         page: 0, pageSize: 10,
     });
 
-    const columnsEquip = [{field: 'id', headerName: 'Código', width: 80}, {
-        field: 'name', headerName: 'Nome', flex: 1, sortable: false
+    const columnsEquip = [{field: 'equipment_id', headerName: 'Código', width: 80}, {
+        field: 'name',
+        headerName: 'Nome',
+        flex: 1,
+        sortable: false,
+        renderCell: (params) => (<Link component="button" onClick={() => {
+            navigate(`/equipments/${params.row.id}`)
+        }} underline="hover" sx={{cursor: 'pointer',}}>{params.row.name}</Link>),
     }, {field: 'brand', headerName: 'Marca', flex: 1, sortable: false}, {
         field: 'type', headerName: 'Tipo', flex: 1, sortable: false
     }, {
@@ -35,14 +43,20 @@ export default function EquipmentList() {
         const fetchEquipments = async () => {
             setIsLoading(true);
             try {
-                const response = await axiosClient.get(`/equipments?page=${paginationModel.page + 1}`);
-                const equipmentsWithId = response.data.data.map(equipment => ({
-                    ...equipment, id: equipment?.equipment_id
+                const response = await axiosClient.get(`/equipments`, {
+                    params: {
+                        page: paginationModel.page + 1,
+                    }
+                });
+
+                const equipmentsWithId = response.data.data.map((equipment) => ({
+                    ...equipment, id: equipment?.equipment_id,
                 }));
+
                 setEquipments(equipmentsWithId);
-                setRowCount((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState)
+                setRowCount((prevRowCountState) => response.data.meta.total ?? prevRowCountState);
             } catch (error) {
-                console.log('error:', error);
+                console.log("error:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -56,8 +70,9 @@ export default function EquipmentList() {
         {equipments.length > 0 ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
                                             rowCount={rowCount} paginationModel={paginationModel}
                                             setPaginationModel={setPaginationModel}
-                                            isLoading={isLoading}/> : <Grid item container justifyContent="center">
-            <CircularProgress/>
-        </Grid>}
+                                            isLoading={isLoading} /> :
+            <Grid item container justifyContent="center">
+                <CircularProgress/>
+            </Grid>}
     </Container>;
 }
