@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import axiosClient from '../../axios-client';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const UserForm = () => {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ const UserForm = () => {
         sectors: formData.sectors
       })
       .then(() => {
+        toast('Usuário criado com sucesso!');
         navigate('/users');
       })
       .catch((error) => {

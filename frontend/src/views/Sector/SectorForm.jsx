@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import axiosClient from "../../axios-client";
 import {useNavigate} from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const SectorForm = () => {
     const navigate = useNavigate();
@@ -28,9 +29,10 @@ const SectorForm = () => {
         e.preventDefault();
 
         axiosClient
-            .post("/sectors", formData) // Assuming your Laravel API endpoint is '/sectors'
+            .post("/sectors", formData)
             .then((response) => {
-                navigate('/sectors')
+                toast('Setor criado com sucesso!');
+                navigate('/sectors');
             })
             .catch((error) => {
                 console.error(error);
