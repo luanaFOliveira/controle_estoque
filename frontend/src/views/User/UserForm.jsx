@@ -1,41 +1,71 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
   Checkbox,
   Container,
-  FormControlLabel,
+  FormControlLabel, InputLabel, MenuItem, Select,
   TextField,
   Typography,
-} from "@mui/material";
-import axiosClient from "../../axios-client";
-import { useNavigate } from "react-router-dom";
+} from '@mui/material';
+import axiosClient from '../../axios-client';
+import { useNavigate } from 'react-router-dom';
 
 const UserForm = () => {
   const navigate = useNavigate();
+  const [sectors, setSectors] = useState([]);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    password_confirmation: "",
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
     is_admin: false,
+    sectors: [],
   });
 
-  const handleChange = (e) => {
-    const { name, value, checked } = e.target;
+  useEffect(() => {
+    getAllSectors();
+  }, []);
+
+  const getAllSectors = () => {
+    axiosClient.get('/sectors')
+      .then((data) => {
+        setSectors(data.data.data);
+      });
+  };
+
+  const handleSelectChange = (event) => {
     setFormData((prevData) => ({
       ...prevData,
-      [name]: e.target.type === "checkbox" ? checked : value,
+      sectors: event.target.value,
+    }));
+  };
+
+  const handleChange = (e) => {
+    const {
+      name,
+      value,
+      checked
+    } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: e.target.type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    console.log({
+      ...formData,
+      sectors: formData.sectors
+    })
     axiosClient
-      .post("/users", formData)
-      .then((response) => {
-        navigate("/users");
+      .post('/users', {
+        ...formData,
+        sectors: formData.sectors
+      })
+      .then(() => {
+        navigate('/users');
       })
       .catch((error) => {
         console.error(error);
@@ -47,9 +77,9 @@ const UserForm = () => {
       <Box
         sx={{
           marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
@@ -92,6 +122,21 @@ const UserForm = () => {
             type="password"
             onChange={handleChange}
           />
+          <InputLabel id="sector-select-label">Setores</InputLabel>
+          <Select
+            labelId="sector-select-label"
+            id="sector-select"
+            multiple
+            value={formData.sectors}
+            onChange={handleSelectChange}
+            fullWidth
+          >
+            {sectors.map((sector) => (
+              <MenuItem key={sector.name} value={sector.name}>
+                {sector.name}
+              </MenuItem>
+            ))}
+          </Select>
           <FormControlLabel
             control={
               <Checkbox
@@ -102,13 +147,19 @@ const UserForm = () => {
               />
             }
             label="Administrador"
-            sx={{ display: "flex", justifyContent: "center" }}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center'
+            }}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2
+            }}
           >
             Criar usuário
           </Button>

@@ -32,7 +32,7 @@ class UserService {
     public function createUserRelations(StoreUserRequest $request, User $user): void
     {
         $sectors = $request->input('sectors');
-        $sectorIds = Sector::whereIn('name', $sectors)->pluck('id')->toArray();
+        $sectorIds = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
         $user->sector()->attach($sectorIds);
     }
 
