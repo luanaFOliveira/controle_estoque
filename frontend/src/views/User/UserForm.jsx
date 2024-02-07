@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import {Box, Button, Checkbox, Container, FormControlLabel, TextField, Typography} from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import axiosClient from "../../axios-client";
+import { useNavigate } from "react-router-dom";
 
-const CreateUser = () => {
+const UserForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    password_confirmation: "",
     is_admin: false,
   });
 
@@ -25,7 +35,7 @@ const CreateUser = () => {
     axiosClient
       .post("/users", formData)
       .then((response) => {
-        console.log(response.data);
+        navigate("/users");
       })
       .catch((error) => {
         console.error(error);
@@ -78,21 +88,21 @@ const CreateUser = () => {
             required
             fullWidth
             label="Confirmar Senha"
-            name="confirmPassword"
+            name="password_confirmation"
             type="password"
             onChange={handleChange}
           />
           <FormControlLabel
-              control={
-                <Checkbox
-                    checked={formData.is_admin}
-                    onChange={handleChange}
-                    name="is_admin"
-                    color="primary"
-                />
-              }
-              label="Administrador"
-              sx={{  display: 'flex', justifyContent: 'center' }}
+            control={
+              <Checkbox
+                checked={formData.is_admin}
+                onChange={handleChange}
+                name="is_admin"
+                color="primary"
+              />
+            }
+            label="Administrador"
+            sx={{ display: "flex", justifyContent: "center" }}
           />
           <Button
             type="submit"
@@ -108,4 +118,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default UserForm;

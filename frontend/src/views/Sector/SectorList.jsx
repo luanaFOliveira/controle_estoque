@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Container } from "@mui/material";
+import {Button, CircularProgress, Container} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
+import {useNavigate} from "react-router-dom";
 
 function SectorList() {
+  const navigate = useNavigate();
   const [sectors, setSectors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rowCount, setRowCount] = useState(0);
@@ -68,6 +70,13 @@ function SectorList() {
 
   return (
     <Container sx={{ mt: 5 }}>
+      <Button
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          onClick={() => navigate('/addSector')}
+      >
+        Criar Setor
+      </Button>
       {sectors.length > 0 ? (
         <BaseTable
           rows={sectors}

@@ -86,26 +86,6 @@ class AuthController extends Controller
         ], 401);
     }
 
-    public function register(StoreUserRequest $request): JsonResponse
-    {
-        $data = $request->validated();
-
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => \Hash::make($data['password']),
-            'is_admin' => $data['is_admin']
-        ]);
-
-        $token = $user->createToken('ApiToken')->plainTextToken;
-
-        return response()->json([
-            'message' => 'Successfully registered',
-            'user' => $user,
-            'token' => $token
-        ], 200);
-    }
-
     public function logout(Request $request): JsonResponse
     {
         $user = $request->user();
