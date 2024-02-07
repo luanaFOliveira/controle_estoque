@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         element: <EquipmentList />,
       },
       {
-        path: '/solicitar-equipamento',
+        path: '/request-equipment',
         element: <EquipmentRequestPage/>,
       }
     ],
