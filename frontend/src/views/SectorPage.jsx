@@ -19,7 +19,8 @@ export default function SectorPage() {
     const {sector,user} = useStateContext();
     const [sectorInfo,setSectorInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 5 });
+    const [userPaginationModel, setUserPaginationModel] = useState({ page: 0, pageSize: 5 });
+    const [equipmentPaginationModel, setEquipmentPaginationModel] = useState({ page: 0, pageSize: 5 });
     const [sectorUsers,setSectorUsers] = useState([]);
     const [sectorEquipments,setSectorEquipments] = useState([]);
 
@@ -39,7 +40,7 @@ export default function SectorPage() {
                     ...equipment, id: equipment?.equipment_id
                 })) : [];
                 setSectorEquipments(equipmentsWithId);
-            
+
             }catch(error){
                 console.error(error);
             }finally{
@@ -50,7 +51,7 @@ export default function SectorPage() {
         fetchSector().then(r => {
         });
 
-    },[paginationModel.page]);
+    }, [userPaginationModel.page, equipmentPaginationModel.page]);
 
     
 
@@ -102,8 +103,8 @@ export default function SectorPage() {
                 columns={columnsUsers}
                 checkBox={false}
                 rowCount={rowCountUsers}
-                paginationModel={paginationModel}
-                setPaginationModel={setPaginationModel}
+                paginationModel={userPaginationModel}
+                setPaginationModel={setUserPaginationModel}
                 isLoading={isLoading}
                 />
             ) : (
@@ -130,8 +131,8 @@ export default function SectorPage() {
                 columns={columnsEquipments}
                 checkBox={false}
                 rowCount={rowCountEquipments}
-                paginationModel={paginationModel}
-                setPaginationModel={setPaginationModel}
+                paginationModel={equipmentPaginationModel}
+                setPaginationModel={setEquipmentPaginationModel}
                 isLoading={isLoading}
                 />
             ) : (
