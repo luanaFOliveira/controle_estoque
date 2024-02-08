@@ -12,6 +12,7 @@ function UserList() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [rowCount, setRowCount] = useState(0);
+    const [firstLoading, setFirstLoading] = useState(true);
     const [paginationModel, setPaginationModel] = useState({
         page: 0, pageSize: 10,
     });
@@ -23,7 +24,10 @@ function UserList() {
     }, {
         field: "email", headerName: "Email", width: 300, sortable: false,
     }, {
-        field: "is_admin", headerName: "ADM", width: 250, sortable: false,
+        field: "is_admin",
+        headerName: "ADM",
+        width: 250,
+        sortable: false,
         renderCell: (params) => (params.value ? <CheckIcon/> : <CloseIcon/>)
     },];
 
@@ -40,6 +44,7 @@ function UserList() {
             console.error("Error fetching users:", error);
         } finally {
             setLoading(false);
+            setFirstLoading(false);
         }
     };
     useEffect(() => {
@@ -54,18 +59,17 @@ function UserList() {
         >
             Criar Usuário
         </Button>
-        {users.length > 0 ? (
-            <BaseTable
-                rows={users}
-                columns={columnsUser}
-                checkBox={false}
-                rowCount={rowCount}
-                paginationModel={paginationModel}
-                setPaginationModel={setPaginationModel}
-                loading={loading}
-            />) : (<Grid item container justifyContent="center">
+        {firstLoading ? (<Grid item container justifyContent="center">
             <CircularProgress/>
-        </Grid>)}
+        </Grid>) : (<BaseTable
+            rows={users}
+            columns={columnsUser}
+            checkBox={false}
+            rowCount={rowCount}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            loading={loading}
+        />)}
     </Container>);
 }
 

@@ -10,6 +10,7 @@ function SectorList() {
     const [sectors, setSectors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [rowCount, setRowCount] = useState(0);
+    const [firstLoading, setFirstLoading] = useState(true);
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
         pageSize: 10,
@@ -61,6 +62,7 @@ function SectorList() {
             console.error("Error fetching sectors:", error);
         } finally {
             setLoading(false);
+            setFirstLoading(false);
         }
     };
 
@@ -77,20 +79,20 @@ function SectorList() {
             >
                 Criar Setor
             </Button>
-            {sectors.length > 0 ? (
-                    <BaseTable
-                        rows={sectors}
-                        columns={columnsSector}
-                        checkBox={false}
-                        rowCount={rowCount}
-                        paginationModel={paginationModel}
-                        setPaginationModel={setPaginationModel}
-                        loading={loading}
-                    />
-            ) : (
+            {firstLoading ? (
                 <Grid item container justifyContent="center">
                     <CircularProgress/>
                 </Grid>
+            ) : (
+                <BaseTable
+                    rows={sectors}
+                    columns={columnsSector}
+                    checkBox={false}
+                    rowCount={rowCount}
+                    paginationModel={paginationModel}
+                    setPaginationModel={setPaginationModel}
+                    loading={loading}
+                />
             )}
         </Container>
     );

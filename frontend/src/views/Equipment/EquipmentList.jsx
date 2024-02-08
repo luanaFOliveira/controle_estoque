@@ -11,6 +11,7 @@ export default function EquipmentList() {
     const navigate = useNavigate();
     const [equipments, setEquipments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [firstLoading, setFirstLoading] = useState(true);
     const [rowCount, setRowCount] = useState(0);
     const [paginationModel, setPaginationModel] = useState({
         page: 0, pageSize: 10,
@@ -59,6 +60,7 @@ export default function EquipmentList() {
                 console.log("error:", error);
             } finally {
                 setIsLoading(false);
+                setFirstLoading(false);
             }
         };
 
@@ -67,12 +69,11 @@ export default function EquipmentList() {
     }, [paginationModel.page]);
 
     return <Container sx={{mt: 5}}>
-        {equipments.length > 0 ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
-                                            rowCount={rowCount} paginationModel={paginationModel}
-                                            setPaginationModel={setPaginationModel}
-                                            isLoading={isLoading} /> :
-            <Grid item container justifyContent="center">
-                <CircularProgress/>
-            </Grid>}
+        {firstLoading > 0 ? <Grid item container justifyContent="center">
+            <CircularProgress/>
+        </Grid> : <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
+                             rowCount={rowCount} paginationModel={paginationModel}
+                             setPaginationModel={setPaginationModel}
+                             isLoading={isLoading}/>}
     </Container>;
 }
