@@ -5,17 +5,7 @@ import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
 import {useNavigate} from "react-router-dom";
 
-function UserList() {
-  const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [rowCount, setRowCount] = useState(0);
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
-
-  const columnsUser = [
+const columnsUser = [
     {
       field: "id",
       headerName: "ID",
@@ -40,6 +30,16 @@ function UserList() {
       sortable: false,
     },
   ];
+
+function UserList() {
+  const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [rowCount, setRowCount] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -72,7 +72,7 @@ function UserList() {
       <Button
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => navigate('/addUser')}
+          onClick={() => navigate('/users/new')}
       >
         Criar Usuário
       </Button>

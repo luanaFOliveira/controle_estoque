@@ -12,6 +12,7 @@ import CustomAppBar from "../../components/Layout/AppToolbar";
 import { useStateContext } from "../../context/GlobalContext";
 import { useTheme } from "../../context/ThemeProvider";
 import axiosClient from "../../axios-client";
+import { useAuth } from '../../context/AuthProvider';
 
 const defaultTheme = createTheme({
   palette: {
@@ -22,28 +23,11 @@ const defaultTheme = createTheme({
 });
 
 export default function DefaultLayout() {
-  const { token, user, setUser } = useStateContext();
+  const { user, token } = useAuth();
   const { themeMode } = useTheme();
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    axiosClient
-      .get("/user/")
-      .then(({ data }) => {
-        setUser(data);
-      })
-      .catch((error) => {
-        alert("Usuário não autorizado, realize o login para continuar.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -51,6 +35,9 @@ export default function DefaultLayout() {
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
+      primary: {
+        main: "#284670",
+      },
     },
   });
 
@@ -62,7 +49,7 @@ export default function DefaultLayout() {
         <CustomDrawer
           open={open}
           toggleDrawer={toggleDrawer}
-          is_admin={user.is_admin}
+          is_admin={user?.is_admin}
           loading={loading}
         />
         <Box

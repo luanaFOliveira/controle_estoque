@@ -21,7 +21,8 @@ import {
 import { useTheme } from "../../context/ThemeProvider";
 import axiosClient from "../../axios-client";
 import { useStateContext } from "../../context/GlobalContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthProvider';
 
 const drawerWidth = 240;
 
@@ -45,8 +46,10 @@ const AppToolbar = styled(MuiAppBar, {
 
 
 const CustomAppBar = ({ open, toggleDrawer }) => {
+  const navigate = useNavigate();
   const { themeMode, toggleTheme } = useTheme();
-  const {setToken, setUser,sector,setSector} = useStateContext();
+  const {logout} = useAuth();
+  const {sector,setSector} = useStateContext();
   const [sectors, setSectors] = useState([]);
   const location = useLocation();
   const pathNames = {
@@ -65,12 +68,8 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
 
   const onLogout = (ev) => {
     ev.preventDefault();
-
-    axiosClient.post("/logout").then(() => {
-        setUser({});
-        setToken(null);
-        setSector({});
-    });
+    logout();
+    navigate('/login');
   };
 
   const handleSectorChange = (event) => {
@@ -78,7 +77,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
       setSector(newSector);
       window.location.reload();
   };
-    
+
 
   return (
     <AppToolbar position="absolute" open={open}>
@@ -157,7 +156,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
       </Toolbar>
     </AppToolbar>
   );
-    
+
 };
 
 export default CustomAppBar;

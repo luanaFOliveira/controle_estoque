@@ -9,6 +9,7 @@ export default function BaseTable({
   paginationModel,
   setPaginationModel,
   loading,
+  getRowId,
 }) {
   return (
     <DataGrid
@@ -16,6 +17,7 @@ export default function BaseTable({
       columns={columns}
       loading={loading}
       rowCount={rowCount}
+      getRowId={getRowId}
       paginationMode="server"
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}

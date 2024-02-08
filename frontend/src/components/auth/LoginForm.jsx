@@ -15,21 +15,26 @@ import React, { useRef, useState } from "react";
 import { LoginGoogle } from "./LoginGoogle";
 import axiosClient from "../../axios-client";
 import { useStateContext } from "../../context/GlobalContext";
+import { useAuth } from '../../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
+  const navigate = useNavigate();
   const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
   const emailRef = useRef();
   const passwordRef = useRef();
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser, setToken } = useStateContext();
+  const { login } = useAuth();
 
   const handleLoginGoogle = async (googleResponse) => {
     try {
       const googleToken = googleResponse.credential;
-      const response = await axiosClient.post("/login-google", { googleToken });
-      const { user, token } = response.data;
-      setUser(user);
-      setToken(token);
+      await axiosClient.post("/login-google", { googleToken })
+        .then((response) => {
+          const { user, token } = response.data;
+          login(user, token);
+          navigate('/home');
+        })
     } catch (error) {
       if (error.response.status === 404) {
         setErrorMessage("Email não cadastrado.");
@@ -60,10 +65,12 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
     };
     if (validateForm({ email: payload.email, password: payload.password })) {
       try {
-        const response = await axiosClient.post("/login", payload);
-        const { user, token } = response.data;
-        setUser(user);
-        setToken(token);
+        await axiosClient.post("/login", payload)
+          .then((response) => {
+            const { user, token } = response.data;
+            login(user, token);
+            navigate('/home');
+          })
       } catch (error) {
         setErrorMessage("Credencias inválidas!");
         setOpenSnack(true);

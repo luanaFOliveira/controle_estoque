@@ -3,7 +3,8 @@ import {Button, CircularProgress, Container} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import Link from '@mui/material/Link';
 
 function SectorList() {
   const navigate = useNavigate();
@@ -26,6 +27,9 @@ function SectorList() {
       headerName: "Nome",
       width: 270,
       sortable: false,
+      renderCell: (params) => (<Link component="button" onClick={() => {
+        navigate(`/sectors/${params.row.id}`);
+      }} underline="hover" sx={{cursor: 'pointer',}}>{params.row.name}</Link>),
     },
     {
       field: "users",
@@ -73,7 +77,7 @@ function SectorList() {
       <Button
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={() => navigate('/addSector')}
+          onClick={() => navigate('/sectors/new')}
       >
         Criar Setor
       </Button>

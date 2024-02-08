@@ -1,10 +1,50 @@
-import React, { useEffect, useState } from "react";
-import axiosClient from "../../axios-client";
-import { CircularProgress, Container } from "@mui/material";
-import BaseTable from "../../components/shared/BaseTable";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
-import Grid from "@mui/material/Grid";
+import React, { useEffect, useState } from 'react';
+import axiosClient from '../../axios-client';
+import { CircularProgress, Container } from '@mui/material';
+import BaseTable from '../../components/shared/BaseTable';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import Grid from '@mui/material/Grid';
+
+const columnsEquip = [
+  {
+    field: 'id',
+    headerName: 'Código',
+    width: 80
+  },
+  {
+    field: 'name',
+    headerName: 'Nome',
+    flex: 1,
+    sortable: false,
+  },
+  {
+    field: 'brand',
+    headerName: 'Marca',
+    flex: 1,
+    sortable: false
+  },
+  {
+    field: 'type',
+    headerName: 'Tipo',
+    flex: 1,
+    sortable: false,
+  },
+  {
+    field: 'is_at_office',
+    headerName: 'Local',
+    flex: 1,
+    sortable: false,
+    renderCell: (params) =>
+      params.value ? params.row.sector : 'Fora do escritório',
+  },
+  {
+    field: 'is_available',
+    headerName: 'Disponível',
+    flex: 1,
+    renderCell: (params) => (params.value ? <CheckIcon/> : <CloseIcon/>),
+  },
+];
 
 function EquipmentList() {
   const [equipments, setEquipments] = useState([]);
@@ -14,37 +54,6 @@ function EquipmentList() {
     page: 0,
     pageSize: 10,
   });
-
-  const columnsEquip = [
-    { field: "id", headerName: "Código", width: 80 },
-    {
-      field: "name",
-      headerName: "Nome",
-      flex: 1,
-      sortable: false,
-    },
-    { field: "brand", headerName: "Marca", flex: 1, sortable: false },
-    {
-      field: "type",
-      headerName: "Tipo",
-      flex: 1,
-      sortable: false,
-    },
-    {
-      field: "is_at_office",
-      headerName: "Local",
-      flex: 1,
-      sortable: false,
-      renderCell: (params) =>
-        params.value ? params.row.sector : "Fora do escritório",
-    },
-    {
-      field: "is_available",
-      headerName: "Disponível",
-      flex: 1,
-      renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
-    },
-  ];
 
   const fetchEquipments = async () => {
     setIsLoading(true);
@@ -63,7 +72,7 @@ function EquipmentList() {
           : prevRowCountState,
       );
     } catch (error) {
-      console.log("error:", error);
+      console.log('error:', error);
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +96,7 @@ function EquipmentList() {
         />
       ) : (
         <Grid item container justifyContent="center">
-          <CircularProgress />
+          <CircularProgress/>
         </Grid>
       )}
     </Container>
