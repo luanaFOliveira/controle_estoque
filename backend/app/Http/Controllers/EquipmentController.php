@@ -21,15 +21,15 @@ class EquipmentController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Equipment::query();
-        
+
         if ($request->has('sector')) {
             $sector = $request->input('sector');
-            
+
             $query->where('sector_id', 'ilike', "%$sector%");
         }
-        
 
-        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
+
+        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
     public function show(Request $request): JsonResponse

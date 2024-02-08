@@ -14,7 +14,7 @@ import {useStateContext} from "../context/GlobalContext";
 
 export default function EquipmentRequestPage() {
 
-    const {sector} = useStateContext();
+    const {sector,user} = useStateContext();
     const [equipments,setEquipments] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
@@ -81,6 +81,7 @@ export default function EquipmentRequestPage() {
                     ...history, id: history?.equipment_request_id
                 }));
                 setHistory(historyWithId);
+                console.log(historyWithId);
                 setRowCountHist((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
             
             }catch(error){
@@ -99,6 +100,7 @@ export default function EquipmentRequestPage() {
     const columnsHist = [
         { field: 'id', headerName: 'Codigo', flex:1,},
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
+        { field: 'reason', headerName: 'Motivo', flex:1,sortable: false,},
         { 
             field: 'status',
             headerName: 'Status', 
@@ -110,23 +112,43 @@ export default function EquipmentRequestPage() {
         },
     
     ];
-      
+
     
-    const [formValues, setFormValues] = useState({ motive: '', rowData: {}});
+    const rowsHist = history.map((row) => {
+        return {
+            id: row.equipment_request_id,
+            name: row.equipment_id,
+            reason: row.reason,
+            status: row.request_status_id,
+        };
+    });  
+    
+    const [formData, setFormData] = useState({ reason: '',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
-        setFormValues({ motive: '', rowData: row}); 
+        setFormData({ reason: '', rowData: row}); 
     };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleRequestSubmit = () => {
-        console.log(formValues);
-        //precisaria do setor que esta na toolbar, do proprio equipment_id, do sector_id e do motivo
+    const handleRequestSubmit = async () => {
+
+        const payload = {
+            reason: formData.reason,
+            equipment_id: formData.rowData.equipment_id,
+            user_id: user.user_id,
+        };
+        try {
+            const response = await axiosClient.post("/equipment-requests", payload);
+            window.location.reload();
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
         handleClose();
     };
 
@@ -159,7 +181,7 @@ export default function EquipmentRequestPage() {
                 <>
                 {rowCountHist > 0 ? (
                     <BaseTable
-                    rows={history}
+                    rows={rowsHist}
                     columns={columnsHist}
                     checkBox={false}
                     rowCount={rowCountHist}
@@ -195,7 +217,7 @@ export default function EquipmentRequestPage() {
                         <TextField
                             label="Equipamento a ser retirado"
                             fullWidth
-                            value={formValues.rowData.name}
+                            value={formData.rowData.name}
                             InputProps={{ readOnly: true }}
                             sx={{ marginBottom: 2 }} 
                         />
@@ -206,8 +228,8 @@ export default function EquipmentRequestPage() {
                             fullWidth
                             multiline
                             rows={2} 
-                            value={formValues.motive}
-                            onChange={(e) => setFormValues({ ...formValues, motive: e.target.value })}
+                            value={formData.reason}
+                            onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
                             sx={{ marginBottom: 2 }} 
                         />
                     </Grid>

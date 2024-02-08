@@ -18,9 +18,12 @@ class EquipRequestResource extends JsonResource
         return [
             'equipment_request_id' => $this->equipment_request_id,
             'reason' => $this->reason,
-            'request_status_id' => $this->request_status_id,
-            'user_id' => $this->user_id,
-            'equipment_id' => $this->equipment_id
+            'request_status_id' => $this->status()->value('status'),
+            'user_id' => $this->user()->value('name'),
+            'equipment_id' => $this->equipment()->value('name'),
         ];
     }
+
+    
+
 }
