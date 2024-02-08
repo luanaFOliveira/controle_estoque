@@ -70,7 +70,7 @@ function SectorList() {
 
     return (
         <Container sx={{mt: 5}}>
-            {sectors.length > 0 ? (
+            {!loading ? (
                 <Container>
                     <Button
                         variant="contained"

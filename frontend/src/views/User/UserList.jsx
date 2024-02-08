@@ -47,7 +47,7 @@ function UserList() {
     }, [paginationModel.page]);
 
     return (<Container sx={{mt: 5}}>
-        {users.length > 0 ? (<Container>
+        {!loading ? (<Container>
             <Button
                 variant="contained"
                 sx={{mt: 3, mb: 2}}
