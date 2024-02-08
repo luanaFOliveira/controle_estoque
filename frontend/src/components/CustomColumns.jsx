@@ -22,6 +22,24 @@ export const StatusField = ({ value }) => {
   return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
 };
 
+
+export const AvaiabilityColumn = ({ value }) => {
+  let color;
+
+  switch (value) {
+    case "Disponivel":
+      color = "green";
+      break;
+    case "Nao disponivel":
+      color = "red";
+      break;
+    default:
+      color = "black";
+  }
+
+  return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
+};
+
 export const RequestEquipButtonCell = ({ onClick }) => (
   <IconButton aria-label="solicitar" onClick={onClick}>
     <AddCircleIcon />
