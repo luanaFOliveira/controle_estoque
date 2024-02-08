@@ -77,7 +77,7 @@ function SectorList() {
             >
                 Criar Setor
             </Button>
-            {!loading ? (
+            {sectors.length > 0 ? (
                     <BaseTable
                         rows={sectors}
                         columns={columnsSector}

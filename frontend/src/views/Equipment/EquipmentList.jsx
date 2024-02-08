@@ -67,7 +67,7 @@ export default function EquipmentList() {
     }, [paginationModel.page]);
 
     return <Container sx={{mt: 5}}>
-        {!isLoading ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
+        {equipments.length > 0 ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
                                             rowCount={rowCount} paginationModel={paginationModel}
                                             setPaginationModel={setPaginationModel}
                                             isLoading={isLoading} /> :

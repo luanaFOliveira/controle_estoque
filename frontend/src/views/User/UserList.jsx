@@ -54,7 +54,7 @@ function UserList() {
         >
             Criar Usuário
         </Button>
-        {!loading ? (
+        {users.length > 0 ? (
             <BaseTable
                 rows={users}
                 columns={columnsUser}
