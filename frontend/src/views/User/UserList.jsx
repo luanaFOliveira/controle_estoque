@@ -47,14 +47,14 @@ function UserList() {
     }, [paginationModel.page]);
 
     return (<Container sx={{mt: 5}}>
-        {!loading ? (<Container>
-            <Button
-                variant="contained"
-                sx={{mt: 3, mb: 2}}
-                onClick={() => navigate('/addUser')}
-            >
-                Criar Usuário
-            </Button>
+        <Button
+            variant="contained"
+            sx={{mt: 3, mb: 2}}
+            onClick={() => navigate('/addUser')}
+        >
+            Criar Usuário
+        </Button>
+        {!loading ? (
             <BaseTable
                 rows={users}
                 columns={columnsUser}
@@ -63,7 +63,7 @@ function UserList() {
                 paginationModel={paginationModel}
                 setPaginationModel={setPaginationModel}
                 loading={loading}
-            /></Container>) : (<Grid item container justifyContent="center">
+            />) : (<Grid item container justifyContent="center">
             <CircularProgress/>
         </Grid>)}
     </Container>);

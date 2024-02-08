@@ -70,15 +70,14 @@ function SectorList() {
 
     return (
         <Container sx={{mt: 5}}>
+            <Button
+                variant="contained"
+                sx={{mt: 3, mb: 2}}
+                onClick={() => navigate('/addSector')}
+            >
+                Criar Setor
+            </Button>
             {!loading ? (
-                <Container>
-                    <Button
-                        variant="contained"
-                        sx={{mt: 3, mb: 2}}
-                        onClick={() => navigate('/addSector')}
-                    >
-                        Criar Setor
-                    </Button>
                     <BaseTable
                         rows={sectors}
                         columns={columnsSector}
@@ -87,7 +86,7 @@ function SectorList() {
                         paginationModel={paginationModel}
                         setPaginationModel={setPaginationModel}
                         loading={loading}
-                    /></Container>
+                    />
             ) : (
                 <Grid item container justifyContent="center">
                     <CircularProgress/>
