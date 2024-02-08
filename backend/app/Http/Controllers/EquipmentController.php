@@ -29,7 +29,7 @@ class EquipmentController extends Controller
         }
 
 
-        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
+        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
     }
 
     public function show(Request $request): JsonResponse

@@ -9,6 +9,7 @@ import SectorForm from "./views/Sector/SectorForm";
 import EquipmentRequestPage from "./views/EquipmentRequestPage.jsx";
 import SectorList from './views/Sector/SectorList';
 import UserList from './views/User/UserList';
+import MyEquipmentsPage from "./views/MyEquipmentsPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: '/request-equipment',
         element: <EquipmentRequestPage/>,
+      },
+      {
+        path: '/my-equipments',
+        element: <MyEquipmentsPage/>,
       }
     ],
   },

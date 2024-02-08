@@ -21,6 +21,17 @@ class HistoryController extends Controller
 
         $query = UserEquipment::where('user_id', $user_id);
 
+        if ($request->has('availability')) {
+            $status = $request->input('availability');
+            
+            if($status === 'available') {
+                $query->whereNull('returned_at');
+            } else if($status === 'unavailable') {
+                $query->whereNotNull('returned_at');
+            }
+
+        }
+
         return HistoryResource::collection($query->orderBy('created_at','desc')->paginate(10));
     }
 
