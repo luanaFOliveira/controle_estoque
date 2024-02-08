@@ -34,7 +34,7 @@ it('can return a paginated list detailing the history of a specified piece of eq
 
     $paginatedResponse = $response->json();
     expect($paginatedResponse)->toBePaginated();
-
+    
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
             'user',
@@ -44,6 +44,7 @@ it('can return a paginated list detailing the history of a specified piece of eq
             'created_at',
             'returned_at',
             'deleted_at'
+           
         ]);
     }
 });
@@ -71,7 +72,8 @@ it('can return a paginated list detailing the history of a specified piece of us
             'equipment_code',
             'created_at',
             'returned_at',
-            'deleted_at'
+            'deleted_at',
+            'equipment',
         ]);
     }
 });

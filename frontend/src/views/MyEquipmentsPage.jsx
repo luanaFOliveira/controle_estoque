@@ -97,8 +97,8 @@ export default function MyEquipmentsPage() {
             return {
                 id: row.user_equipment_id,
                 name: row.equipment.name,
-                brand: row.equipment.brand,
-                type: row.equipment.type,
+                brand: row.equipment.equipment_brand_id,
+                type: row.equipment.equipment_type_id,
                 is_at_office: row.equipment.is_at_office,
             };
         });  
@@ -110,8 +110,8 @@ export default function MyEquipmentsPage() {
             return {
                 id: row.user_equipment_id,
                 name: row.equipment.name,
-                brand: row.equipment.brand,
-                type: row.equipment.type,
+                brand: row.equipment.equipment_brand_id,
+                type: row.equipment.equipment_type_id,
                 is_at_office: row.equipment.is_at_office,
                 created_at: row.created_at,
                 returned_at: row.returned_at,
