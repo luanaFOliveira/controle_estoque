@@ -63,7 +63,6 @@ it('can return a paginated list detailing the history of a specified piece of us
 
     $paginatedResponse = $response->json();
     expect($paginatedResponse)->toBePaginated();
-
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
             'user',
