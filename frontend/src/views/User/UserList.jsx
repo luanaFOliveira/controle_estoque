@@ -68,7 +68,7 @@ function UserList() {
             rowCount={rowCount}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}
-            loading={loading}
+            isLoading={loading}
         />)}
     </Container>);
 }
