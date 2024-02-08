@@ -19,6 +19,7 @@ class HistoryResource extends JsonResource
             'created_at' => $this->created_at,
             'returned_at' => $this->returned_at,
             'deleted_at' => $this->deleted_at,
+            'equipment' => $this->equipment()->select('name','brand','type','is_at_office'),
         ];
     }
 }

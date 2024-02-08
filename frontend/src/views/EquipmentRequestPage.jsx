@@ -50,7 +50,7 @@ export default function EquipmentRequestPage() {
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
         { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
         { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        { field: 'location', headerName: 'Local', flex:1,sortable: false,
+        { field: 'is_at_office', headerName: 'Local', flex:1,sortable: false,
             renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
         },
         { 
@@ -108,7 +108,6 @@ export default function EquipmentRequestPage() {
             renderCell: (params) => <StatusField value={params.value} />, 
             sortable: false, 
             selectable: false, 
-            align: 'center', 
         },
     
     ];
