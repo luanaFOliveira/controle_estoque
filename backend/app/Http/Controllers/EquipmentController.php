@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
+use App\Models\EquipmentBrand;
+use App\Models\EquipmentType;
 use App\Services\EquipmentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Log;
 
 class EquipmentController extends Controller
 {
     private $equipmentService;
-    public function __construct(EquipmentService $equipmentService) {
+
+    public function __construct(EquipmentService $equipmentService)
+    {
         $this->equipmentService = $equipmentService;
     }
 
@@ -36,6 +39,17 @@ class EquipmentController extends Controller
     {
         $equipment = Equipment::auth()->findOrFail($request->route('equipment'));
         return response()->json(['data' => new EquipmentResource($equipment)]);
+    }
+
+    public function equipmentsDetails(): JsonResponse
+    {
+        $equipmentTypes = EquipmentType::all()->pluck('name');
+        $equipmentBrands = EquipmentBrand::all()->pluck('name');
+
+        return response()->json([
+            'equipment_types' => $equipmentTypes,
+            'equipment_brands' => $equipmentBrands,
+        ]);
     }
 
     public function store(StoreEquipmentRequest $request): JsonResponse

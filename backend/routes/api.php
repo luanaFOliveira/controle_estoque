@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => 'admin'], function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::apiResource('equipments', EquipmentController::class);
+        Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::apiResource('sectors',SectorController::class);
         Route::apiResource('equipment-requests', EquipRequestController::class);
         Route::apiResource('users',UserController::class);
@@ -55,3 +56,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/login',[AuthController::class, 'login']);
 Route::post('/login-google',[AuthController::class, 'googleLogin']);;
 Route::post('/recovery-password',[AuthController::class, 'recoveryPassword']);
+

@@ -3,38 +3,31 @@ import {
   Button,
   Container,
   Divider,
-  Grid,
   IconButton,
   InputAdornment,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import React, { useRef, useState } from "react";
 import { LoginGoogle } from "./LoginGoogle";
+import React, { useRef, useState } from "react";
 import axiosClient from "../../axios-client";
 import { useStateContext } from "../../context/GlobalContext";
-import { useAuth } from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 
-export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
-  const navigate = useNavigate();
+export const LoginForm = ({ setErrorMessage, setOpenSnack }) => {
   const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
   const emailRef = useRef();
   const passwordRef = useRef();
   const [showPassword, setShowPassword] = useState(false);
-  const { login } = useAuth();
+  const { setUser, setToken } = useStateContext();
 
   const handleLoginGoogle = async (googleResponse) => {
     try {
       const googleToken = googleResponse.credential;
-      await axiosClient.post("/login-google", { googleToken })
-        .then((response) => {
-          const { user, token } = response.data;
-          login(user, token);
-          navigate('/home');
-        })
+      const response = await axiosClient.post("/login-google", { googleToken });
+      const { user, token } = response.data;
+      setUser(user);
+      setToken(token);
     } catch (error) {
       if (error.response.status === 404) {
         setErrorMessage("Email não cadastrado.");
@@ -65,12 +58,10 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
     };
     if (validateForm({ email: payload.email, password: payload.password })) {
       try {
-        await axiosClient.post("/login", payload)
-          .then((response) => {
-            const { user, token } = response.data;
-            login(user, token);
-            navigate('/home');
-          })
+        const response = await axiosClient.post("/login", payload);
+        const { user, token } = response.data;
+        setUser(user);
+        setToken(token);
       } catch (error) {
         setErrorMessage("Credencias inválidas!");
         setOpenSnack(true);
@@ -118,18 +109,7 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
             ),
           }}
         />
-        <Grid item container justifyContent="flex-end" marginTop="5px">
-          <Link
-            component="button"
-            variant="body2"
-            onClick={(event) => {
-              event.preventDefault();
-              handleShowLogin();
-            }}
-          >
-            Esqueceu sua senha?
-          </Link>
-        </Grid>
+
         <Button
           type="submit"
           fullWidth
@@ -145,4 +125,4 @@ export function LoginForm({ handleShowLogin, setErrorMessage, setOpenSnack }) {
       </Box>
     </Container>
   );
-}
+};

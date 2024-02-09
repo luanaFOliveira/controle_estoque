@@ -3,6 +3,10 @@ import DefaultLayout from "./views/layouts/DefaultLayout";
 import GuestLayout from "./views/layouts/GuestLayout";
 import Login from "./views/auth/Login";
 import NotFound from "./views/shared/NotFound";
+import SectorList from "./views/Sector/SectorList";
+import SectorForm from "./views/Sector/SectorForm";
+import UserList from "./views/User/UserList";
+import UserForm from "./views/User/UserForm";
 import EquipmentList from "./views/Equipment/EquipmentList";
 import UserForm from "./views/User/UserForm";
 import SectorForm from "./views/Sector/SectorForm";
@@ -10,16 +14,16 @@ import EquipmentRequestPage from "./views/EquipmentRequestPage.jsx";
 import SectorList from './views/Sector/SectorList';
 import UserList from './views/User/UserList';
 import SectorDetail from './views/Sector/SectorDetail';
+import ManageEquipment from "./views/Equipment/ManageEquipment";
+import EquipmentRequestPage from "./views/EquipmentRequestPage";
+import ViewEquipment from "./views/Equipment/ViewEquipment";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <DefaultLayout />,
     children: [
-      {
-        path: "/",
-        element: <Navigate to="/home" />,
-      },
+      { path: "/", element: <Navigate to="/home" /> },
       {
         path: "/home",
       },
@@ -52,9 +56,21 @@ const router = createBrowserRouter([
         element: <EquipmentList />,
       },
       {
-        path: '/request-equipment',
-        element: <EquipmentRequestPage/>,
-      }
+        path: "/equipments/:equipment_id",
+        element: <ViewEquipment />,
+      },
+      {
+        path: "/new-equipment",
+        element: <ManageEquipment />,
+      },
+      {
+        path: "/edit-equipment/:equipment_id",
+        element: <ManageEquipment />,
+      },
+      {
+        path: "/request-equipment",
+        element: <EquipmentRequestPage />,
+      },
     ],
   },
   {

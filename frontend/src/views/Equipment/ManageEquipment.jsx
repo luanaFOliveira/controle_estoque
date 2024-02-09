@@ -3,7 +3,9 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Container,
+  FormControl,
   InputLabel,
   MenuItem,
   Select,
@@ -12,13 +14,29 @@ import {
 } from "@mui/material";
 import axiosClient from "../../axios-client";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const ManageEquipment = () => {
+  const params = useParams();
   const navigate = useNavigate();
+  const [editLoading, setEditloading] = useState(false);
   const [sectors, setSectors] = useState([]);
   const [equipmentBrands, setEquipmentBrands] = useState([]);
   const [equipmentTypes, setEquipmentTypes] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    equipment_brand: "",
+    equipment_type: "",
+    sector: "",
+  });
+
+  const handleChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   useEffect(() => {
     const getAllSectors = () => {
@@ -48,25 +66,54 @@ const ManageEquipment = () => {
     getAllSectors();
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    const payload = {
-      name: form.elements.name.value,
-      equipment_type: form.elements.equipment_type.value,
-      equipment_brand: form.elements.equipment_brand.value,
-      sector: form.elements.sector.value,
+  useEffect(() => {
+    const getEquipment = async () => {
+      if (params.equipment_id) {
+        setEditloading(true);
+        try {
+          const response = await axiosClient
+            .get(`/equipments/${params.equipment_id}`)
+            .finally(() => {
+              setEditloading(false);
+            });
+          const equipment = response.data.data;
+          setFormData({
+            name: equipment.name,
+            equipment_brand: equipment.brand,
+            equipment_type: equipment.type,
+            sector: equipment.sector,
+          });
+        } catch (error) {
+          console.log("Erro ao buscar detalhes do equipamento: ", error);
+        }
+      }
     };
 
-    axiosClient
-      .post("/equipments", payload)
-      .then((response) => {
-        toast("Equipamento registrado com sucesso!");
-        navigate('/equipments');
-      })
-      .catch((error) => {
-        console.error("Erro ao tentar registrar novo equipamento: ", error);
-      });
+    getEquipment();
+  }, [params.equipment_id]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (params.equipment_id) {
+      axiosClient
+        .put(`/equipments/${params.equipment_id}`, formData)
+        .then((response) => {
+          toast("Equipamento atualizado com sucesso!");
+          navigate(`/equipments`);
+        })
+        .catch((error) => {
+          console.error("Erro ao tentar registrar novo equipamento: ", error);
+        });
+    } else {
+      axiosClient
+        .post("/equipments", formData)
+        .then((response) => {
+          toast("Equipamento registrado com sucesso!");
+          navigate(`/equipments`);
+        })
+        .catch((error) => {
+          console.error("Erro ao tentar registrar novo equipamento: ", error);
+        });
+    }
   };
 
   return (
@@ -80,60 +127,95 @@ const ManageEquipment = () => {
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
-          Registrar novo equipamento
+          {params.equipment_id
+            ? "Editar Equipamento"
+            : "Registrar novo equipamento"}
         </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <TextField required fullWidth label="Nome:" name="name" autoFocus />
-          <Autocomplete
-            freeSolo
-            disablePortal
-            options={equipmentBrands}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                margin="normal"
-                required
-                fullWidth
-                label="Marca do equipamento:"
-                name="equipment_brand"
-              />
-            )}
-          />
-          <Autocomplete
-            freeSolo
-            disablePortal
-            options={equipmentTypes}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                margin="normal"
-                required
-                fullWidth
-                label="Tipo do equipamento:"
-                name="equipment_type"
-              />
-            )}
-          />
-          <InputLabel id="sector-select-label">Setor: *</InputLabel>
-          <Select margin="normal" name="sector" required fullWidth>
-            {sectors.map((sector) => (
-              <MenuItem key={sector.name} value={sector.name}>
-                {sector.name}
-              </MenuItem>
-            ))}
-          </Select>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 3,
-              mb: 2,
-            }}
-          >
-            Registrar equipamento
-          </Button>
-        </Box>
+        {!editLoading ? (
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <TextField
+              required
+              fullWidth
+              label="Nome:"
+              autoFocus
+              value={formData.name}
+              onChange={handleChange}
+              name="name"
+            />
+            <Autocomplete
+              freeSolo
+              disablePortal
+              options={equipmentBrands}
+              value={formData.equipment_brand}
+              onChange={(event, newValue) => {
+                setFormData({ ...formData, equipment_brand: newValue });
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Marca do equipamento:"
+                  name="equipment_brand"
+                />
+              )}
+            />
+            <Autocomplete
+              freeSolo
+              disablePortal
+              value={formData.equipment_type}
+              onChange={(event, newValue) => {
+                setFormData({ ...formData, equipment_type: newValue });
+              }}
+              options={equipmentTypes}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  margin="normal"
+                  required
+                  fullWidth
+                  label="Tipo do equipamento:"
+                  name="equipment_type"
+                />
+              )}
+            />
+
+            <InputLabel id="sector-select-label">Setor: *</InputLabel>
+            <FormControl fullWidth>
+              <Select
+                labelId="sector-select-label"
+                id="sector-select"
+                value={formData.sector}
+                onChange={handleChange}
+                name="sector"
+              >
+                {sectors.map((sector) => (
+                  <MenuItem key={sector.name} value={sector.name}>
+                    {sector.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 3,
+                mb: 2,
+              }}
+            >
+              {params.equipment_id
+                ? "Atualizar Equipamento"
+                : "Registrar equipamento"}
+            </Button>
+          </Box>
+        ) : (
+          <Grid item container justifyContent="center" sx={{ m: 10 }}>
+            <CircularProgress />
+          </Grid>
+        )}
       </Box>
     </Container>
   );
