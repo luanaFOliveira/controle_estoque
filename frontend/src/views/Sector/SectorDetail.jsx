@@ -12,6 +12,8 @@ import BaseTable from '../../components/shared/BaseTable';
 import { useNavigate, useParams } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import { toastDelete } from '../../components/shared/ToastComponents';
+import { toast } from 'react-toastify';
 
 export const columnsEquip = [
   {
@@ -54,29 +56,30 @@ export const columnsEquip = [
 ];
 const columnsUser = [
   {
-    field: "user_id",
-    headerName: "ID de usuário",
+    field: 'user_id',
+    headerName: 'ID de usuário',
     width: 150,
   },
   {
-    field: "name",
-    headerName: "Nome",
+    field: 'name',
+    headerName: 'Nome',
     width: 250,
     sortable: false,
   },
   {
-    field: "email",
-    headerName: "Email",
+    field: 'email',
+    headerName: 'Email',
     width: 300,
     sortable: false,
   },
   {
-    field: "is_admin",
-    headerName: "ADM",
+    field: 'is_admin',
+    headerName: 'ADM',
     width: 250,
     sortable: false,
   },
 ];
+
 function SectorDetail() {
   const navigate = useNavigate();
   const { sectorId } = useParams();
@@ -99,31 +102,26 @@ function SectorDetail() {
     fetchSectorDetail();
   }, [sectorId]);
 
-  const handleEdit = () => {
-    navigate(`/sectors/edit/${sectorId}`)
+  const handleDestroy = () => {
+    axiosClient
+      .delete(`/sectors/${sectorId}`)
+      .then(() => {
+        toast.success('Setor deletado com sucesso!');
+        navigate('/sectors');
+      })
+      .catch((error) => {
+        console.error('Erro ao tentar deletar setor:', error);
+        toast.error(
+          "Erro ao tentar deletar setor. Por favor, tente novamente.",
+        );
+      });
   };
-
-  const handleRemove = () => {
-    const isConfirmed = window.confirm(
-      "Tem certeza que quer deletar esse setor?"
-    );
-    if (isConfirmed) {
-      axiosClient
-        .delete(`/sectors/${sectorId}`)
-        .then(() => {
-          navigate("/sectors");
-        })
-        .catch((error) => {
-          console.error("Erro ao tentar deletar setor:", error);
-        });
-    }
-  }
 
   return (
     <Container sx={{ mt: 5 }}>
       {sectorDetail && (
         <>
-          <Grid container justifyContent='space-between'>
+          <Grid container justifyContent="space-between">
             <Grid>
               <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
                 {sectorDetail.name}
@@ -133,7 +131,9 @@ function SectorDetail() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleEdit()}
+                onClick={() => {
+                  navigate(`/sectors/edit/${sectorId}`);
+                }}
                 sx={{ marginRight: 1 }}
               >
                 EDITAR SETOR
@@ -141,7 +141,12 @@ function SectorDetail() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleRemove()}
+                onClick={() => {
+                  toastDelete({
+                    item: "setor",
+                    handleClick: handleDestroy,
+                  });
+                }}
               >
                 REMOVER SETOR
               </Button>
@@ -159,6 +164,14 @@ function SectorDetail() {
                   columns={columnsUser}
                   checkBox={false}
                   loading={loading}
+                  paginationMode="client"
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
+                    },
+                  }}
                 />
               ) : (
                 <Typography variant="body2">Nenhum usuário encontrado.</Typography>
@@ -177,6 +190,14 @@ function SectorDetail() {
                   columns={columnsEquip}
                   checkBox={false}
                   loading={loading}
+                  paginationMode="client"
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 10,
+                      },
+                    },
+                  }}
                 />
               ) : (
                 <Typography variant="body2">Nenhum equipamento encontrado.</Typography>
@@ -187,7 +208,7 @@ function SectorDetail() {
       )}
       {loading && (
         <Grid item container justifyContent="center">
-          <CircularProgress />
+          <CircularProgress/>
         </Grid>
       )}
       <Button
