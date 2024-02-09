@@ -12,6 +12,7 @@ import SectorDetail from "./views/Sector/SectorDetail";
 import ManageEquipment from "./views/Equipment/ManageEquipment";
 import EquipmentRequestPage from "./views/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
+import SectorPage from "./views/SectorPage";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
       {
         path: "/request-equipment",
         element: <EquipmentRequestPage />,
+      },
+      {
+        path: "/view-sector",
+        element: <SectorPage />,
       },
     ],
   },

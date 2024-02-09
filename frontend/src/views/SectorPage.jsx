@@ -10,7 +10,8 @@ import axiosClient from "../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../context/GlobalContext";
-
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
 
 //falta ver a paginacao pra ela funcionar 100%, por enquanto ta com o mesmo modelo para as duas tabelas, e se nao me engano as info nao vem paginadas
 
@@ -69,14 +70,11 @@ export default function SectorPage() {
         { field: 'is_at_office', headerName: 'Local', flex:1,sortable: false,
             renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
         },
-        { 
-            field: 'is_available',
-            headerName: 'Disponibilidade', 
-            flex:1, 
-            renderCell: (params) => (params.row ? <AvaiabilityColumn value= "Disponivel"/> : <AvaiabilityColumn value= "Nao disponivel"/>), 
-            sortable: false, 
-            selectable: false, 
-            align: 'center', 
+        {
+            field: "is_available",
+            headerName: "Disponível",
+            flex: 1,
+            renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
         },
     ];
 
