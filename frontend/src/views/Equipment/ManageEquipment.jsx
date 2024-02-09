@@ -109,7 +109,7 @@ const ManageEquipment = () => {
           formData: formData,
         });
         if (response) {
-          toast.sucess("Equipamento atualizado com sucesso!");
+          toast.success("Equipamento atualizado com sucesso!");
           navigate(`/equipments/${response.data.equipment_id}`);
         }
       } catch (error) {
@@ -120,7 +120,7 @@ const ManageEquipment = () => {
       try {
         const response = await createEquipment(formData);
         if (response) {
-          toast.sucess("Equipamento registrado com sucesso!");
+          toast.success("Equipamento registrado com sucesso!");
           navigate(`/equipments/${response.data.equipment_id}`);
         }
       } catch (error) {

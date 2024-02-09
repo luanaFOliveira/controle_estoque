@@ -87,7 +87,7 @@ const ViewEquipment = () => {
     try {
       const response = await destroyEquipment(params.equipment_id);
       if (response) {
-        toast.sucess("Equipamento deletado com sucesso!");
+        toast.success("Equipamento deletado com sucesso!");
         navigate("/equipments");
       }
     } catch (error) {
