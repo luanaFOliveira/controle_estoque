@@ -14,7 +14,7 @@ import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
 import UserDetail from './views/User/UserDetail';
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
-import SectorPage from "./views/SectorPage";
+import SectorPage from "./views/UserPages/SectorPage";
 
 const router = createBrowserRouter([
   {
