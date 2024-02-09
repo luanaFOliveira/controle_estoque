@@ -10,9 +10,9 @@ import SectorList from "./views/Sector/SectorList";
 import UserList from "./views/User/UserList";
 import SectorDetail from "./views/Sector/SectorDetail";
 import ManageEquipment from "./views/Equipment/ManageEquipment";
-import EquipmentRequestPage from "./views/EquipmentRequestPage";
+import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
-import MyEquipmentPage from "./views/MyEquipmentsPage";
+import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 
 const router = createBrowserRouter([
   {

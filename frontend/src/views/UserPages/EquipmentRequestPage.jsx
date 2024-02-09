@@ -1,15 +1,15 @@
 import React ,{ useState,useEffect }from 'react';
-import BaseTable from '../components/shared/BaseTable';
-import { StatusField,RequestEquipButtonCell } from '../components/CustomColumns';
+import BaseTable from '../../components/shared/BaseTable';
+import { StatusField,RequestEquipButtonCell } from '../../components/CustomColumns';
 import Box from '@mui/material/Box';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import axiosClient from "../axios-client";
+import axiosClient from "../../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
-import {useStateContext} from "../context/GlobalContext";
+import {useStateContext} from "../../context/GlobalContext";
 
 
 export default function EquipmentRequestPage() {
