@@ -11,32 +11,27 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoginGoogle } from "./LoginGoogle";
 import React, { useState } from "react";
-import axiosClient from "../../axios-client";
-import { toast } from "react-toastify";
 import { useAuth } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { logIn, logInWithGoogle } from "../../services/auth";
 
 export const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
   const handleLoginGoogle = async (googleResponse) => {
-    const googleToken = googleResponse.credential;
-    await axiosClient
-      .post("/login-google", { googleToken })
-      .then((response) => {
-        const { user, token } = response.data;
+    try {
+      const response = await logInWithGoogle(googleResponse);
+      if (response.token && response.user) {
+        const token = response.token;
+        const user = response.user;
         login(user, token);
         navigate("/home");
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          toast("Email não cadastrado.");
-        } else {
-          toast("Login com Google falhou!");
-        }
-      });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -46,19 +41,16 @@ export const LoginForm = () => {
       email: form.elements.email.value,
       password: form.elements.password.value,
     };
-    if (payload.password.length > 4) {
-      await axiosClient
-        .post("/login", payload)
-        .then((response) => {
-          const { user, token } = response.data;
-          login(user, token);
-          navigate("/home");
-        })
-        .catch((error) => {
-          toast(`Erro ao tentar logar: ${error.message}`);
-        });
-    } else {
-      toast("A senha deve conter no mínimo 5 caracteres!");
+    try {
+      const response = await logIn(payload);
+      if (response.token && response.user) {
+        const token = response.token;
+        const user = response.user;
+        login(user, token);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -97,6 +89,9 @@ export const LoginForm = () => {
                 </IconButton>
               </InputAdornment>
             ),
+          }}
+          inputProps={{
+            minLength: 5,
           }}
         />
         <Button
