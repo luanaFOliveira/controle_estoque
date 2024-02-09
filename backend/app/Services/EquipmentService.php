@@ -44,6 +44,8 @@ class EquipmentService
     private function createEquipment(StoreEquipmentRequest $request): EquipmentResource
     {
         $data = $request->validated();
+        $data['is_at_office'] = true;
+        $data['is_available'] = true;
 
         $this->updateEquipmentRelations($data);
 

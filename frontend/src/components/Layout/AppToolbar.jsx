@@ -26,23 +26,26 @@ import { useLocation } from "react-router-dom";
 const drawerWidth = 240;
 
 const AppToolbar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({theme, open}) => ({
-    zIndex: theme.zIndex.drawer + 1, transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen,
-    }), ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen,
-        }),
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
     }),
+  }),
 }));
-
 
 const CustomAppBar = ({ open, toggleDrawer }) => {
   const { themeMode, toggleTheme } = useTheme();
-  const {setToken, setUser,sector,setSector} = useStateContext();
+  const { setToken, setUser, sector, setSector } = useStateContext();
   const [sectors, setSectors] = useState([]);
   const location = useLocation();
   const pathNames = {
@@ -50,6 +53,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
     "/equipments": "Equipamentos",
     "/users": "Usuários",
     "/sectors": "Setores",
+    "/new-equipment": "Gerenciar Equipamento",
   };
   let dashboardName = pathNames[location.pathname] || "";
 
@@ -63,18 +67,17 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
     ev.preventDefault();
 
     axiosClient.post("/logout").then(() => {
-        setUser({});
-        setToken(null);
-        setSector({});
+      setUser({});
+      setToken(null);
+      setSector({});
     });
   };
 
   const handleSectorChange = (event) => {
-      const newSector = event.target.value;
-      setSector(newSector);
-      window.location.reload();
+    const newSector = event.target.value;
+    setSector(newSector);
+    window.location.reload();
   };
-
 
   return (
     <AppToolbar position="absolute" open={open}>
@@ -117,22 +120,20 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
             id="demo-customized-select"
             value={sector}
             onChange={handleSectorChange}
-
-            input={
-              <OutlinedInput
-                label="Setor"
-              />
-            }
-            sx={{ color: "white", minWidth: 150 ,
+            input={<OutlinedInput label="Setor" />}
+            sx={{
+              color: "white",
+              minWidth: 150,
               "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
-            },
+                borderColor: "white",
+              },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
-            },
+                borderColor: "white",
+              },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "white",
-            },"& .MuiSelect-icon": {
+                borderColor: "white",
+              },
+              "& .MuiSelect-icon": {
                 color: "white",
               },
             }}
@@ -153,7 +154,6 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
       </Toolbar>
     </AppToolbar>
   );
-
 };
 
 export default CustomAppBar;
