@@ -12,12 +12,13 @@ import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import { useAuth } from "../../context/AuthProvider";
 
 //falta ver a paginacao pra ela funcionar 100%, por enquanto ta com o mesmo modelo para as duas tabelas, e se nao me engano as info nao vem paginadas
 
 export default function SectorPage() {
 
-    const {sector,user} = useStateContext();
+    const {sector} = useStateContext();
     const [sectorInfo,setSectorInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sectorUsers,setSectorUsers] = useState([]);

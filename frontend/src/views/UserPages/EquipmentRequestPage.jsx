@@ -10,11 +10,13 @@ import axiosClient from "../../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
+import { useAuth } from "../../context/AuthProvider";
 
 
 export default function EquipmentRequestPage() {
 
-    const {sector,user} = useStateContext();
+    const {sector} = useStateContext();
+    const { user} = useAuth();
     const [equipments,setEquipments] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
@@ -154,7 +156,7 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    console.log(sector);
+    console.log(`user ${user.user_id}`);
 
     return(<>
             <Container sx={{mt: 5}}>
