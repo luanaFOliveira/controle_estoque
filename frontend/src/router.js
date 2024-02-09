@@ -68,9 +68,13 @@ const router = createBrowserRouter([
         element: <EquipmentRequestPage />,
       },
       {
-        path: "/my-equipments",
-        element: <MyEquipmentPage />,
+        path: '/request-equipment',
+        element: <EquipmentRequestPage/>,
       },
+      {
+        path: '/my-equipments',
+        element: <MyEquipmentsPage/>,
+      }
     ],
   },
   {
