@@ -77,14 +77,12 @@ const router = createBrowserRouter([
         path: "/request-equipment",
         element: <EquipmentRequestPage />,
       },
-      {
-        path: '/request-equipment',
-        element: <EquipmentRequestPage/>,
-      },
+      
       {
         path: '/my-equipments',
         element: <MyEquipmentPage/>,
-      }
+      },
+      {
         path: "/view-sector",
         element: <SectorPage />,
       },
