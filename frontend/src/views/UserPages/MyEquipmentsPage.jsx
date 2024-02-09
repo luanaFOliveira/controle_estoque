@@ -51,8 +51,13 @@ export default function MyEquipmentsPage() {
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
         { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
         { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        { field: 'is_at_office', headerName: 'Local', flex:1,sortable: false,
-            renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
+        {
+            field: "is_at_office",
+            headerName: "Local",
+            flex: 1,
+            sortable: false,
+            renderCell: (params) =>
+              params.value ? params.row.sector : "Fora do escritório",
         },
         
     ];
@@ -85,8 +90,13 @@ export default function MyEquipmentsPage() {
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
         { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
         { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        { field: 'is_at_office', headerName: 'Local', flex:1,sortable: false,
-            renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
+        {
+            field: "is_at_office",
+            headerName: "Local",
+            flex: 1,
+            sortable: false,
+            renderCell: (params) =>
+              params.value ? params.row.sector : "Fora do escritório",
         },
         { field: 'created_at', headerName: 'Data de retirada', flex:1,},
         { field: 'returned_at', headerName: 'Data de devolucao', flex:1,},
@@ -99,14 +109,14 @@ export default function MyEquipmentsPage() {
         rowsEquipAvailable = equipAvailable.map((row) => {
             const { user, equipment } = row;
             if (equipment && equipment.length > 0) {
-                const { name, equipment_brand, equipment_type, is_at_office } = equipment[0];
+                const { name, equipment_brand, equipment_type, is_at_office, sector } = equipment[0];
                 
                 return {
                     id: user.user_id,
                     name: name,
                     brand: equipment_brand,
                     type: equipment_type,
-                    is_at_office: is_at_office,
+                    is_at_office: is_at_office ? "Fora do escritório" : sector ,
                 };
             } else {
                 return {};
@@ -121,14 +131,14 @@ export default function MyEquipmentsPage() {
         rowsEquipUnavailable = equipUnavailable.map((row) => {
             const { user, equipment,created_at,returned_at } = row;
             if (equipment && equipment.length > 0) {
-                const { name, equipment_brand, equipment_type, is_at_office } = equipment[0];
+                const { name, equipment_brand, equipment_type, is_at_office, sector } = equipment[0];
                 
                 return {
                     id: user.user_id,
                     name: name,
                     brand: equipment_brand,
                     type: equipment_type,
-                    is_at_office: is_at_office,
+                    is_at_office: is_at_office ? "Fora do escritório" : sector ,
                     created_at: created_at,
                     returned_at: returned_at,
                 };
