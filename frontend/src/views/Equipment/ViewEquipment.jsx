@@ -87,12 +87,12 @@ const ViewEquipment = () => {
     await axiosClient
       .delete(`/equipments/${params.equipment_id}`)
       .then(() => {
-        toast("Equipamento deletado com sucesso!");
+        toast.success("Equipamento deletado com sucesso!");
         navigate("/equipments");
       })
       .catch((error) => {
         console.log("Erro ao tentar excluir equipamento: ", error);
-        toast(
+        toast.error(
           "Erro ao tentar excluir equipamento. Por favor, tente novamente.",
         );
       });

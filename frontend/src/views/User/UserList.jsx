@@ -6,33 +6,7 @@ import BaseTable from "../../components/shared/BaseTable";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-
-const columnsUser = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 70,
-  },
-  {
-    field: "name",
-    headerName: "Nome",
-    width: 250,
-    sortable: false,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    width: 300,
-    sortable: false,
-  },
-  {
-    field: "is_admin",
-    headerName: "ADM",
-    width: 250,
-    sortable: false,
-    renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
-  },
-];
+import Link from '@mui/material/Link';
 
 function UserList() {
   const navigate = useNavigate();
@@ -43,6 +17,45 @@ function UserList() {
     page: 0,
     pageSize: 10,
   });
+
+  const columnsUser = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 70,
+    },
+    {
+      field: "name",
+      headerName: "Nome",
+      width: 270,
+      sortable: false,
+      renderCell: (params) => (
+        <Link
+          component="button"
+          onClick={() => {
+            navigate(`/users/${params.row.id}`);
+          }}
+          underline="hover"
+          sx={{ cursor: "pointer" }}
+        >
+          {params.row.name}
+        </Link>
+      ),
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 300,
+      sortable: false,
+    },
+    {
+      field: "is_admin",
+      headerName: "ADM",
+      width: 250,
+      sortable: false,
+      renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
+    },
+  ];
 
   const fetchUsers = async () => {
     setLoading(true);

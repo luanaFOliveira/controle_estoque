@@ -47,7 +47,7 @@ const SectorForm = () => {
       axiosClient
         .put(`/sectors/${sectorId}`, formData)
         .then(() => {
-          toast('Setor atualizado com sucesso!');
+          toast.success('Setor atualizado com sucesso!');
           navigate('/sectors');
         })
         .catch((error) => {
@@ -57,7 +57,7 @@ const SectorForm = () => {
       axiosClient
         .post('/sectors', formData)
         .then((response) => {
-          toast('Setor criado com sucesso!');
+          toast.error('Setor criado com sucesso!');
           navigate('/sectors');
         })
         .catch((error) => {
@@ -77,7 +77,7 @@ const SectorForm = () => {
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
-          Criar novo setor
+          {sectorId ? 'Editar setor' : 'Criar novo setor'}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
@@ -99,7 +99,7 @@ const SectorForm = () => {
               mb: 2
             }}
           >
-            Criar Setor
+            {sectorId ? 'Editar Setor' : 'Criar Setor'}
           </Button>
         </Box>
       </Box>

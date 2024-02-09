@@ -18,14 +18,14 @@ export const AuthProvider = ({ children }) => {
 
   const getUser = async () => {
     await axiosClient
-      .get("/user/")
+      .get('/user/')
       .then(({ data }) => {
         setUser(data);
       })
       .catch((error) => {
-        toast("Usuário não autorizado, realize o login para continuar.");
-      })
-  }
+        toast('Usuário não autorizado, realize o login para continuar.');
+      });
+  };
 
   const login = (userData, token) => {
     setToken(token);
@@ -42,14 +42,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    axiosClient.post("/logout").then(() => {
-      setUser(null);
-      setToken(null);
-    });
+    axiosClient.post('/logout')
+      .then(() => {
+        setUser(null);
+        setToken(null);
+      });
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{
+      user,
+      login,
+      logout,
+      isAuthenticated
+    }}>
       {children}
     </AuthContext.Provider>
   );

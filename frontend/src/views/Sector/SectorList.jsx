@@ -96,6 +96,7 @@ function SectorList() {
           columns={columnsSector}
           checkBox={false}
           rowCount={rowCount}
+          paginationMode='server'
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
           loading={loading}

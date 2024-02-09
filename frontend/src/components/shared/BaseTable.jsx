@@ -14,16 +14,18 @@ export default function BaseTable({
   rowCount,
   paginationModel,
   setPaginationModel,
+  paginationMode,
   isLoading,
   getRowId,
   maxWidth,
   maxHeight,
+  initialState,
 }) {
   function CustomToolbar() {
     return (
       <Grid item container justifyContent="end">
         <GridToolbarColumnsButton />
-        <GridToolbarDensitySelector />
+        <GridToolbarDensitySelector  />
         <GridToolbarExport />
       </Grid>
     );
@@ -40,7 +42,8 @@ export default function BaseTable({
       loading={isLoading}
       rowCount={rowCount}
       getRowId={getRowId}
-      paginationMode="server"
+      initialState={initialState}
+      paginationMode={paginationMode}
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
       {...(checkBox ? { checkboxSelection: true } : {})}

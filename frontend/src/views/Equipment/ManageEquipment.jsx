@@ -97,7 +97,7 @@ const ManageEquipment = () => {
       axiosClient
         .put(`/equipments/${params.equipment_id}`, formData)
         .then((response) => {
-          toast("Equipamento atualizado com sucesso!");
+          toast.success("Equipamento atualizado com sucesso!");
           navigate(`/equipments`);
         })
         .catch((error) => {
@@ -107,7 +107,7 @@ const ManageEquipment = () => {
       axiosClient
         .post("/equipments", formData)
         .then((response) => {
-          toast("Equipamento registrado com sucesso!");
+          toast.success("Equipamento registrado com sucesso!");
           navigate(`/equipments`);
         })
         .catch((error) => {

@@ -9,10 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import axiosClient from '../../axios-client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const UserForm = () => {
+  const { userId } = useParams();
   const navigate = useNavigate();
   const [sectors, setSectors] = useState([]);
   const [formData, setFormData] = useState({
@@ -21,12 +22,25 @@ const UserForm = () => {
     password: '',
     password_confirmation: '',
     is_admin: false,
-    sectors: [],
+    sectors: [
+      {sector_id:'', name: ''}
+    ],
   });
 
   useEffect(() => {
     getAllSectors();
-  }, []);
+    if (userId) {
+      axiosClient.get(`/users/${userId}`)
+        .then((data) => {
+          const updatedFormData = {
+            ...formData,
+            ...data.data.data,
+          };
+          setFormData(updatedFormData);
+          console.log(updatedFormData.sectors);
+        });
+    }
+  }, [userId]);
 
   const getAllSectors = () => {
     axiosClient.get('/sectors')
@@ -56,22 +70,35 @@ const UserForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      ...formData,
-      sectors: formData.sectors
-    })
-    axiosClient
-      .post('/users', {
-        ...formData,
-        sectors: formData.sectors
-      })
-      .then(() => {
-        toast('Usuário criado com sucesso!');
-        navigate('/users');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+    if(userId){
+      axiosClient
+        .put(`/users/${userId}`, {
+          ...formData,
+          sectors: formData.sectors
+        })
+        .then(() => {
+          console.log(formData.sectors)
+          toast.success('Usuário atualizado com sucesso!');
+          navigate('/users');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axiosClient
+        .post('/users', {
+          ...formData,
+          sectors: formData.sectors
+        })
+        .then(() => {
+          toast.success('Usuário criado com sucesso!');
+          navigate('/users');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   return (
@@ -85,7 +112,7 @@ const UserForm = () => {
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
-          Criar novo usuário
+          {userId ? 'Editar usuário' : 'Criar novo usuário'}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
@@ -95,6 +122,7 @@ const UserForm = () => {
             label="Nome"
             name="name"
             autoFocus
+            value={formData.name}
             onChange={handleChange}
           />
           <TextField
@@ -104,6 +132,7 @@ const UserForm = () => {
             label="Email"
             name="email"
             type="email"
+            value={formData.email}
             onChange={handleChange}
           />
           <TextField
@@ -163,7 +192,7 @@ const UserForm = () => {
               mb: 2
             }}
           >
-            Criar usuário
+            {userId ? 'Editar usuário' : 'Criar usuário'}
           </Button>
         </Box>
       </Box>
