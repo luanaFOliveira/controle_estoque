@@ -1,35 +1,38 @@
 import React, { useEffect, useState } from "react";
-import {Button, CircularProgress, Container} from "@mui/material";
+import { Button, CircularProgress, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 const columnsUser = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 70,
-    },
-    {
-      field: "name",
-      headerName: "Nome",
-      width: 250,
-      sortable: false,
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      width: 300,
-      sortable: false,
-    },
-    {
-      field: "is_admin",
-      headerName: "ADM",
-      width: 250,
-      sortable: false,
-    },
-  ];
+  {
+    field: "id",
+    headerName: "ID",
+    width: 70,
+  },
+  {
+    field: "name",
+    headerName: "Nome",
+    width: 250,
+    sortable: false,
+  },
+  {
+    field: "email",
+    headerName: "Email",
+    width: 300,
+    sortable: false,
+  },
+  {
+    field: "is_admin",
+    headerName: "ADM",
+    width: 250,
+    sortable: false,
+    renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
+  },
+];
 
 function UserList() {
   const navigate = useNavigate();
@@ -70,9 +73,9 @@ function UserList() {
   return (
     <Container sx={{ mt: 5 }}>
       <Button
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          onClick={() => navigate('/users/new')}
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={() => navigate("/users/new")}
       >
         Criar Usuário
       </Button>

@@ -10,64 +10,55 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { LoginGoogle } from "./LoginGoogle";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import axiosClient from "../../axios-client";
-import { useStateContext } from "../../context/GlobalContext";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-export const LoginForm = ({ setErrorMessage, setOpenSnack }) => {
-  const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
-  const emailRef = useRef();
-  const passwordRef = useRef();
+export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser, setToken } = useStateContext();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLoginGoogle = async (googleResponse) => {
-    try {
-      const googleToken = googleResponse.credential;
-      const response = await axiosClient.post("/login-google", { googleToken });
-      const { user, token } = response.data;
-      setUser(user);
-      setToken(token);
-    } catch (error) {
-      if (error.response.status === 404) {
-        setErrorMessage("Email não cadastrado.");
-      } else {
-        setErrorMessage("Login com Google falhou!");
-      }
-      setOpenSnack(true);
-    }
-  };
-
-  const validateForm = ({ password, email }) => {
-    if (!emailRegex.test(email)) {
-      setErrorMessage("O email fornecido não é válido!");
-      return false;
-    }
-    if (password.length < 5) {
-      setErrorMessage("A senha deve ter pelo menos 5 caracteres!");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const payload = {
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
-    };
-    if (validateForm({ email: payload.email, password: payload.password })) {
-      try {
-        const response = await axiosClient.post("/login", payload);
+    const googleToken = googleResponse.credential;
+    await axiosClient
+      .post("/login-google", { googleToken })
+      .then((response) => {
         const { user, token } = response.data;
-        setUser(user);
-        setToken(token);
-      } catch (error) {
-        setErrorMessage("Credencias inválidas!");
-        setOpenSnack(true);
-      }
+        login(user, token);
+        navigate("/home");
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          toast("Email não cadastrado.");
+        } else {
+          toast("Login com Google falhou!");
+        }
+      });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const payload = {
+      email: form.elements.email.value,
+      password: form.elements.password.value,
+    };
+    if (payload.password.length > 4) {
+      await axiosClient
+        .post("/login", payload)
+        .then((response) => {
+          const { user, token } = response.data;
+          login(user, token);
+          navigate("/home");
+        })
+        .catch((error) => {
+          toast(`Erro ao tentar logar: ${error.message}`);
+        });
     } else {
-      setOpenSnack(true);
+      toast("A senha deve conter no mínimo 5 caracteres!");
     }
   };
 
@@ -80,19 +71,18 @@ export const LoginForm = ({ setErrorMessage, setOpenSnack }) => {
         <TextField
           margin="normal"
           fullWidth
-          id="email"
           label="Email"
+          type="email"
           name="email"
-          inputRef={emailRef}
+          required
           autoFocus
         />
         <TextField
           margin="normal"
           fullWidth
-          id="password"
           label="Senha"
           name="password"
-          inputRef={passwordRef}
+          required
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -109,7 +99,6 @@ export const LoginForm = ({ setErrorMessage, setOpenSnack }) => {
             ),
           }}
         />
-
         <Button
           type="submit"
           fullWidth
