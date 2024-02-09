@@ -14,6 +14,7 @@ import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
 import UserDetail from './views/User/UserDetail';
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
+import SectorPage from "./views/SectorPage";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,9 @@ const router = createBrowserRouter([
         path: '/my-equipments',
         element: <MyEquipmentPage/>,
       }
+        path: "/view-sector",
+        element: <SectorPage />,
+      },
     ],
   },
   {
