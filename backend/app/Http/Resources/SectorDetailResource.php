@@ -25,7 +25,8 @@ class SectorDetailResource extends JsonResource
 
     protected function getUsers(): array
     {
-        return $this->user->map(function ($user) {
+        $users = $this->user;
+        return $users->map(function ($user) {
             return [
                 'user_id' => $user->user_id,
                 'name' => $user->name,
@@ -37,7 +38,8 @@ class SectorDetailResource extends JsonResource
 
     protected function getEquipments(): array
     {
-        return $this->equipment->map(function ($equipment) {
+        $equipments = $this->equipment;
+        return $equipments->map(function ($equipment) {
             return [
                 'equipment_id' => $equipment->equipment_id,
                 'name' => $equipment->name,
