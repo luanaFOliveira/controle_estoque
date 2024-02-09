@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axiosClient from "../../axios-client";
 import { Button, CircularProgress, Container, Link } from "@mui/material";
 import BaseTable from "../../components/shared/BaseTable";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
+import { indexEquipments } from "../../services/equipmentService";
+import { errorToast } from "../../services/api";
 
 export default function EquipmentList() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function EquipmentList() {
         <Link
           component="button"
           onClick={() => {
-            navigate(`/equipments/${params.row.id}`);
+            navigate(`/equipments/${params.row.equipment_id}`);
           }}
           underline="hover"
           sx={{ cursor: "pointer" }}
@@ -65,22 +66,15 @@ export default function EquipmentList() {
     const fetchEquipments = async () => {
       setIsLoading(true);
       try {
-        const response = await axiosClient.get(`/equipments`, {
-          params: {
-            page: paginationModel.page + 1,
-          },
-        });
+        const page = paginationModel.page + 1;
+        const response = await indexEquipments(page);
 
-        const equipmentsWithId = response.data.data.map((equipment) => ({
-          ...equipment,
-          id: equipment?.equipment_id,
-        }));
-
-        setEquipments(equipmentsWithId);
+        setEquipments(response.data);
         setRowCount(
-          (prevRowCountState) => response.data.meta.total ?? prevRowCountState,
+          (prevRowCountState) => response.meta.total ?? prevRowCountState,
         );
       } catch (error) {
+        errorToast(error);
         console.log("error:", error);
       } finally {
         setIsLoading(false);
@@ -109,6 +103,7 @@ export default function EquipmentList() {
           rows={equipments}
           columns={columnsEquip}
           checkBox={false}
+          getRowId={(row) => row.equipment_id}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}

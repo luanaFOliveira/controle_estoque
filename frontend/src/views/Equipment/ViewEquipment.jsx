@@ -9,10 +9,15 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import axiosClient from "../../axios-client";
 import { toast } from "react-toastify";
 import { toastDelete } from "../../components/shared/ToastComponents";
 import BaseTable from "../../components/shared/BaseTable";
+import {
+  destroyEquipment,
+  getEquipment,
+  getHistoryEquipment,
+} from "../../services/equipmentService";
+import { errorToast } from "../../services/api";
 
 const ViewEquipment = () => {
   const params = useParams();
@@ -44,17 +49,15 @@ const ViewEquipment = () => {
 
   useEffect(() => {
     const equipment = async () => {
-      await axiosClient
-        .get(`/equipments/${params.equipment_id}`)
-        .then((response) => {
-          setEquipment(response.data.data);
-        })
-        .catch((error) => {
-          console.log("Erro ao buscar equipamento: ", error);
-        })
-        .finally(() => {
-          setFirstLoading(false);
-        });
+      try {
+        const response = await getEquipment(params.equipment_id);
+        setEquipment(response.data);
+      } catch (error) {
+        errorToast(error);
+        console.log(error);
+      } finally {
+        setFirstLoading(false);
+      }
     };
 
     equipment();
@@ -63,39 +66,34 @@ const ViewEquipment = () => {
   useEffect(() => {
     const history = async () => {
       setIsLoading(true);
-      await axiosClient
-        .get(`/history/equipments?equipment_id=${params.equipment_id}`)
-        .then((response) => {
-          setHistory(response.data.data);
-          setRowCount(
-            (prevRowCountState) =>
-              response.data.meta.total ?? prevRowCountState,
-          );
-        })
-        .catch((error) => {
-          console.log("Erro ao buscar histórico do equipamento: ", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      try {
+        const response = await getHistoryEquipment(params.equipment_id);
+        setHistory(response.data);
+        setRowCount(
+          (prevRowCountState) => response.meta.total ?? prevRowCountState,
+        );
+      } catch (error) {
+        errorToast(error);
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     history();
   }, [paginationModel.page]);
 
   const handleDestroy = async () => {
-    await axiosClient
-      .delete(`/equipments/${params.equipment_id}`)
-      .then(() => {
+    try {
+      const response = await destroyEquipment(params.equipment_id);
+      if (response) {
         toast("Equipamento deletado com sucesso!");
         navigate("/equipments");
-      })
-      .catch((error) => {
-        console.log("Erro ao tentar excluir equipamento: ", error);
-        toast(
-          "Erro ao tentar excluir equipamento. Por favor, tente novamente.",
-        );
-      });
+      }
+    } catch (error) {
+      errorToast(error);
+      console.log(error);
+    }
   };
 
   const EquipmentCard = ({ label, value }) => {

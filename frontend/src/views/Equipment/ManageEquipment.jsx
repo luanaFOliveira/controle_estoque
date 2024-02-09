@@ -12,10 +12,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axiosClient from "../../axios-client";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
+import {
+  createEquipment,
+  getEquipment,
+  getEquipmentDetails,
+  updateEquipment,
+} from "../../services/equipmentService";
+import { errorToast } from "../../services/api";
+import { indexSectors } from "../../services/sectorService";
 
 const ManageEquipment = () => {
   const params = useParams();
@@ -39,27 +46,29 @@ const ManageEquipment = () => {
   };
 
   useEffect(() => {
-    const getAllSectors = () => {
-      axiosClient
-        .get("/sectors")
-        .then((data) => {
-          setSectors(data.data.data);
-        })
-        .catch((error) => {
-          console.log("erro ao buscar setores: ", error);
-        });
+    const getAllSectors = async () => {
+      try {
+        const response = await indexSectors();
+        if (response) {
+          setSectors(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+        errorToast(error);
+      }
     };
 
-    const getAllEquipmentInfos = () => {
-      axiosClient
-        .get("/equipment-details")
-        .then((data) => {
-          setEquipmentBrands(data.data.equipment_brands);
-          setEquipmentTypes(data.data.equipment_types);
-        })
-        .catch((error) => {
-          console.log("erro ao buscar detalhes de equipamentos: ", error);
-        });
+    const getAllEquipmentInfos = async () => {
+      try {
+        const response = await getEquipmentDetails();
+        if (response) {
+          setEquipmentBrands(response.equipment_brands);
+          setEquipmentTypes(response.equipment_types);
+        }
+      } catch (error) {
+        console.log(error);
+        errorToast(error);
+      }
     };
 
     getAllEquipmentInfos();
@@ -67,16 +76,12 @@ const ManageEquipment = () => {
   }, []);
 
   useEffect(() => {
-    const getEquipment = async () => {
+    const returnEquipment = async () => {
       if (params.equipment_id) {
         setEditloading(true);
         try {
-          const response = await axiosClient
-            .get(`/equipments/${params.equipment_id}`)
-            .finally(() => {
-              setEditloading(false);
-            });
-          const equipment = response.data.data;
+          const response = await getEquipment(params.equipment_id);
+          const equipment = response.data;
           setFormData({
             name: equipment.name,
             equipment_brand: equipment.brand,
@@ -84,35 +89,44 @@ const ManageEquipment = () => {
             sector: equipment.sector,
           });
         } catch (error) {
-          console.log("Erro ao buscar detalhes do equipamento: ", error);
+          errorToast(error);
+          console.log(error);
+        } finally {
+          setEditloading(false);
         }
       }
     };
 
-    getEquipment();
+    returnEquipment();
   }, [params.equipment_id]);
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (params.equipment_id) {
-      axiosClient
-        .put(`/equipments/${params.equipment_id}`, formData)
-        .then((response) => {
+      try {
+        const response = await updateEquipment({
+          equipment_id: params.equipment_id,
+          formData: formData,
+        });
+        if (response) {
           toast("Equipamento atualizado com sucesso!");
-          navigate(`/equipments`);
-        })
-        .catch((error) => {
-          console.error("Erro ao tentar registrar novo equipamento: ", error);
-        });
+          navigate(`/equipments/${response.data.equipment_id}`);
+        }
+      } catch (error) {
+        console.log(error);
+        errorToast(error);
+      }
     } else {
-      axiosClient
-        .post("/equipments", formData)
-        .then((response) => {
+      try {
+        const response = await createEquipment(formData);
+        if (response) {
           toast("Equipamento registrado com sucesso!");
-          navigate(`/equipments`);
-        })
-        .catch((error) => {
-          console.error("Erro ao tentar registrar novo equipamento: ", error);
-        });
+          navigate(`/equipments/${response.data.equipment_id}`);
+        }
+      } catch (error) {
+        console.log(error);
+        errorToast(error);
+      }
     }
   };
 
