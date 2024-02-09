@@ -13,7 +13,7 @@ import { LoginGoogle } from "./LoginGoogle";
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { logIn, logInWithGoogle } from "../../services/auth";
+import { logIn, logInWithGoogle } from "../../services/authService";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
