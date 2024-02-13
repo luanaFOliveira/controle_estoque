@@ -1,25 +1,10 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Container,
-  CssBaseline,
-  Snackbar,
-  SnackbarContent,
-} from "@mui/material";
+import React from "react";
+import { Box, Container, CssBaseline } from "@mui/material";
 import Copyright from "../../components/shared/Copyright";
 import LogoJetimob from "../../components/shared/LogoJetimob";
 import { LoginForm } from "../../components/auth/LoginForm";
-import { SendEmailForm } from "../../components/auth/SendEmailForm";
 
 export default function Login() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [openSnack, setOpenSnack] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const handleShowLogin = () => {
-    setShowLogin(!showLogin);
-  };
-
   return (
     <Container
       component="main"
@@ -52,19 +37,7 @@ export default function Login() {
           padding: "20px",
         }}
       >
-        {showLogin ? (
-          <SendEmailForm
-            handleShowLogin={handleShowLogin}
-            setErrorMessage={setErrorMessage}
-            setOpenSnack={setOpenSnack}
-          />
-        ) : (
-          <LoginForm
-            setErrorMessage={setErrorMessage}
-            setOpenSnack={setOpenSnack}
-            handleShowLogin={handleShowLogin}
-          />
-        )}
+        <LoginForm />
       </Box>
       <Box
         sx={{
@@ -76,17 +49,6 @@ export default function Login() {
       >
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Box>
-      <Snackbar
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={openSnack}
-        onClose={() => setOpenSnack(false)}
-        autoHideDuration={5000}
-      >
-        <SnackbarContent
-          style={{ backgroundColor: "#B22222" }}
-          message={errorMessage}
-        />
-      </Snackbar>
     </Container>
   );
 }
