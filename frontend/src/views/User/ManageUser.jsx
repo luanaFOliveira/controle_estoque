@@ -1,52 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Checkbox,
   Container,
-  FormControlLabel, InputLabel, MenuItem, Select,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
-} from '@mui/material';
-import axiosClient from '../../axios-client';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+} from "@mui/material";
+import axiosClient from "../../axios-client";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const UserForm = () => {
+const ManageUser = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [sectors, setSectors] = useState([]);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
     is_admin: false,
-    sectors: [
-      {sector_id:'', name: ''}
-    ],
+    sectors: [{ sector_id: "", name: "" }],
   });
 
   useEffect(() => {
     getAllSectors();
     if (userId) {
-      axiosClient.get(`/users/${userId}`)
-        .then((data) => {
-          const updatedFormData = {
-            ...formData,
-            ...data.data.data,
-          };
-          setFormData(updatedFormData);
-          console.log(updatedFormData.sectors);
-        });
+      axiosClient.get(`/users/${userId}`).then((data) => {
+        const updatedFormData = {
+          ...formData,
+          ...data.data.data,
+        };
+        setFormData(updatedFormData);
+        console.log(updatedFormData.sectors);
+      });
     }
   }, [userId]);
 
   const getAllSectors = () => {
-    axiosClient.get('/sectors')
-      .then((data) => {
-        setSectors(data.data.data);
-      });
+    axiosClient.get("/sectors").then((data) => {
+      setSectors(data.data.data);
+    });
   };
 
   const handleSelectChange = (event) => {
@@ -57,43 +56,39 @@ const UserForm = () => {
   };
 
   const handleChange = (e) => {
-    const {
-      name,
-      value,
-      checked
-    } = e.target;
+    const { name, value, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: e.target.type === 'checkbox' ? checked : value,
+      [name]: e.target.type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if(userId){
+    if (userId) {
       axiosClient
         .put(`/users/${userId}`, {
           ...formData,
-          sectors: formData.sectors
+          sectors: formData.sectors,
         })
         .then(() => {
-          console.log(formData.sectors)
-          toast.success('Usuário atualizado com sucesso!');
-          navigate('/users');
+          console.log(formData.sectors);
+          toast.success("Usuário atualizado com sucesso!");
+          navigate("/users");
         })
         .catch((error) => {
           console.error(error);
         });
     } else {
       axiosClient
-        .post('/users', {
+        .post("/users", {
           ...formData,
-          sectors: formData.sectors
+          sectors: formData.sectors,
         })
         .then(() => {
-          toast.success('Usuário criado com sucesso!');
-          navigate('/users');
+          toast.success("Usuário criado com sucesso!");
+          navigate("/users");
         })
         .catch((error) => {
           console.error(error);
@@ -106,13 +101,13 @@ const UserForm = () => {
       <Box
         sx={{
           marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <Typography component="h1" variant="h5" fontWeight="bold">
-          {userId ? 'Editar usuário' : 'Criar novo usuário'}
+          {userId ? "Editar usuário" : "Criar novo usuário"}
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <TextField
@@ -179,8 +174,8 @@ const UserForm = () => {
             }
             label="Administrador"
             sx={{
-              display: 'flex',
-              justifyContent: 'center'
+              display: "flex",
+              justifyContent: "center",
             }}
           />
           <Button
@@ -189,10 +184,10 @@ const UserForm = () => {
             variant="contained"
             sx={{
               mt: 3,
-              mb: 2
+              mb: 2,
             }}
           >
-            {userId ? 'Editar usuário' : 'Criar usuário'}
+            {userId ? "Editar usuário" : "Criar usuário"}
           </Button>
         </Box>
       </Box>
@@ -200,4 +195,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default ManageUser;

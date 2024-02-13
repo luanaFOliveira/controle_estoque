@@ -4,7 +4,7 @@ import GuestLayout from "./views/layouts/GuestLayout";
 import Login from "./views/auth/Login";
 import NotFound from "./views/shared/NotFound";
 import EquipmentList from "./views/Equipment/EquipmentList";
-import UserForm from "./views/User/UserForm";
+import ManageUser from "./views/User/ManageUser";
 import ManageSector from "./views/Sector/ManageSector";
 import SectorList from "./views/Sector/SectorList";
 import UserList from "./views/User/UserList";
@@ -12,9 +12,9 @@ import ViewSector from "./views/Sector/ViewSector";
 import ManageEquipment from "./views/Equipment/ManageEquipment";
 import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
-import UserDetail from "./views/User/UserDetail";
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
+import ViewUser from "./views/User/ViewUser";
 
 const router = createBrowserRouter([
   {
@@ -47,15 +47,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/users/new",
-        element: <UserForm />,
+        element: <ManageUser />,
       },
       {
         path: "/users/edit/:userId",
-        element: <UserForm />,
+        element: <ManageUser />,
       },
       {
         path: "/users/:userId",
-        element: <UserDetail />,
+        element: <ViewUser />,
       },
       {
         path: "/equipments",

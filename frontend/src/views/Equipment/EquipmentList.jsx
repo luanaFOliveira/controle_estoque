@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, CircularProgress, Container, Link } from "@mui/material";
+import { Button, CircularProgress, Container } from "@mui/material";
 import BaseTable from "../../components/shared/BaseTable";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import { indexEquipments } from "../../services/equipmentService";
 import { errorToast } from "../../services/api";
+import EquipmentTableColumns from "../../components/columns/EquipmentTableColumns";
 
 export default function EquipmentList() {
   const navigate = useNavigate();
@@ -19,48 +18,7 @@ export default function EquipmentList() {
     pageSize: 10,
   });
 
-  const columnsEquip = [
-    { field: "equipment_id", headerName: "Código", width: 80 },
-    {
-      field: "name",
-      headerName: "Nome",
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => (
-        <Link
-          component="button"
-          onClick={() => {
-            navigate(`/equipments/${params.row.equipment_id}`);
-          }}
-          underline="hover"
-          sx={{ cursor: "pointer" }}
-        >
-          {params.row.name}
-        </Link>
-      ),
-    },
-    { field: "brand", headerName: "Marca", flex: 1, sortable: false },
-    {
-      field: "type",
-      headerName: "Tipo",
-      flex: 1,
-      sortable: false,
-    },
-    {
-      field: "is_at_office",
-      headerName: "Local",
-      flex: 1,
-      sortable: false,
-      renderCell: (params) =>
-        params.value ? params.row.sector : "Fora do escritório",
-    },
-    {
-      field: "is_available",
-      headerName: "Disponível",
-      flex: 1,
-      renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
-    },
-  ];
+  const columnsEquip = EquipmentTableColumns();
 
   useEffect(() => {
     const fetchEquipments = async () => {
