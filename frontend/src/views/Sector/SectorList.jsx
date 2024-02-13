@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import axiosClient from "../../axios-client";
 import BaseTable from "../../components/shared/BaseTable";
 import { useNavigate } from "react-router-dom";
-import Link from "@mui/material/Link";
+import SectorTableColumns from "../../components/columns/SectorTableColumns";
+import { indexSectors } from "../../services/sectorService";
+import { errorToast } from "../../services/api";
 
 function SectorList() {
   const navigate = useNavigate();
@@ -16,62 +17,23 @@ function SectorList() {
     pageSize: 10,
   });
 
-  const columnsSector = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 150,
-    },
-    {
-      field: "name",
-      headerName: "Nome",
-      width: 270,
-      sortable: false,
-      renderCell: (params) => (
-        <Link
-          component="button"
-          onClick={() => {
-            navigate(`/sectors/${params.row.id}`);
-          }}
-          underline="hover"
-          sx={{ cursor: "pointer" }}
-        >
-          {params.row.name}
-        </Link>
-      ),
-    },
-    {
-      field: "users",
-      headerName: "Nº de pessoas",
-      width: 200,
-      sortable: false,
-    },
-    {
-      field: "equipments_count",
-      headerName: "Nº de equipamentos",
-      width: 200,
-      sortable: false,
-    },
-  ];
+  const columnsSector = SectorTableColumns();
 
   const fetchSectors = async () => {
     setLoading(true);
     try {
-      const response = await axiosClient.get(
-        `/sectors?page=${paginationModel.page + 1}`,
-      );
-      const sectorsWithId = response.data.data.map((sector) => ({
-        ...sector,
-        id: sector.sector_id,
-      }));
-      setSectors(sectorsWithId);
-      setRowCount((prevRowCountState) =>
-        response.data.meta.total !== undefined
-          ? response.data.meta.total
-          : prevRowCountState,
-      );
+      const page = paginationModel.page + 1;
+      const response = await indexSectors(page);
+      if (response) {
+        console.log(response);
+        setSectors(response.data);
+        setRowCount(
+          (prevRowCountState) => response.meta.total ?? prevRowCountState,
+        );
+      }
     } catch (error) {
-      console.error("Error fetching sectors:", error);
+      console.error(error);
+      errorToast(error);
     } finally {
       setLoading(false);
     }
@@ -94,9 +56,10 @@ function SectorList() {
         <BaseTable
           rows={sectors}
           columns={columnsSector}
+          getRowId={(row) => row.sector_id}
           checkBox={false}
           rowCount={rowCount}
-          paginationMode='server'
+          paginationMode="server"
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
           loading={loading}

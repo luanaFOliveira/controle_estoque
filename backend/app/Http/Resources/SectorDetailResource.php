@@ -46,8 +46,8 @@ class SectorDetailResource extends JsonResource
                 'is_available' => $equipment->is_available,
                 'sector_id' => $equipment->sector_id,
                 'sector' => $equipment->sector()->value('name'),
-                'equipment_brand' => $equipment->brand()->value('name'),
-                'equipment_type' => $equipment->type()->value('name'),
+                'type' => $equipment->type()->value('name'),
+                'brand' => $equipment->brand()->value('name'),
                 'is_at_office' => $equipment->is_at_office,
             ];
         })->toArray();

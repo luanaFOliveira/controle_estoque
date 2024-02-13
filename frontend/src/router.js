@@ -5,14 +5,14 @@ import Login from "./views/auth/Login";
 import NotFound from "./views/shared/NotFound";
 import EquipmentList from "./views/Equipment/EquipmentList";
 import UserForm from "./views/User/UserForm";
-import SectorForm from "./views/Sector/SectorForm";
+import ManageSector from "./views/Sector/ManageSector";
 import SectorList from "./views/Sector/SectorList";
 import UserList from "./views/User/UserList";
-import SectorDetail from "./views/Sector/SectorDetail";
+import ViewSector from "./views/Sector/ViewSector";
 import ManageEquipment from "./views/Equipment/ManageEquipment";
 import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
 import ViewEquipment from "./views/Equipment/ViewEquipment";
-import UserDetail from './views/User/UserDetail';
+import UserDetail from "./views/User/UserDetail";
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
 
@@ -31,15 +31,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/sectors/:sectorId",
-        element: <SectorDetail />,
+        element: <ViewSector />,
       },
       {
         path: "/sectors/edit/:sectorId",
-        element: <SectorForm />,
+        element: <ManageSector />,
       },
       {
         path: "/sectors/new",
-        element: <SectorForm />,
+        element: <ManageSector />,
       },
       {
         path: "/users",
@@ -77,10 +77,10 @@ const router = createBrowserRouter([
         path: "/request-equipment",
         element: <EquipmentRequestPage />,
       },
-      
+
       {
-        path: '/my-equipments',
-        element: <MyEquipmentPage/>,
+        path: "/my-equipments",
+        element: <MyEquipmentPage />,
       },
       {
         path: "/view-sector",
@@ -105,4 +105,3 @@ const router = createBrowserRouter([
 ]);
 
 export default router;
-
