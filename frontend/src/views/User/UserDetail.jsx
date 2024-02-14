@@ -28,8 +28,9 @@ const ViewEquipment = () => {
   const columnsHistory = [
     {
       field: 'user',
-      headerName: 'Usuário',
-      width: 70,
+      headerName: 'ID do Usuário',
+      width: 170,
+      renderCell: (params) => params.value.user_id,
     },
     {
       field: 'equipment_code',
@@ -171,6 +172,7 @@ const ViewEquipment = () => {
           rows={history}
           columns={columnsHistory}
           checkBox={false}
+          getRowId={(row) => row.user.user_id}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}

@@ -43,7 +43,7 @@ class UserDetailedResource extends JsonResource
     {
         return $this->sector->map(function ($sector) {
             return [
-                'sector_id' => $sector->equipment_id,
+                'sector_id' => $sector->sector_id,
                 'name' => $sector->name,
             ];
         })->toArray();
