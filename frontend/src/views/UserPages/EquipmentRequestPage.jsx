@@ -7,10 +7,11 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import axiosClient from "../../axios-client";
-import {CircularProgress, Container} from "@mui/material";
+import {CircularProgress, Container, MenuItem, Select} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
+import EquipmentRequestHistoryTableColumns from "../../components/columns/EquipmentRequestHistoryColumns";
 
 
 export default function EquipmentRequestPage() {
@@ -18,6 +19,7 @@ export default function EquipmentRequestPage() {
     const {sector} = useStateContext();
     const { user} = useAuth();
     const [equipments,setEquipments] = useState([]);
+    const [requestMotives,setRequestMotives] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
     const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 5 });
@@ -27,11 +29,8 @@ export default function EquipmentRequestPage() {
         const fetchEquipments = async () => {
             setIsLoadingEquip(true);
             try{
-                const response = await axiosClient.get(`/equipments?page=${paginationModelEquip.page+1}&sector=${sector}`);
-                const equipmentsWithId = response.data.data.map(equipment => ({
-                    ...equipment, id: equipment?.equipment_id
-                }));
-                setEquipments(equipmentsWithId);
+                const response = await axiosClient.get(`/equipments-available?page=${paginationModelEquip.page+1}&sector=${sector}`);
+                setEquipments(response.data.data);
                 setRowCountEquip((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
             
             }catch(error){
@@ -48,7 +47,7 @@ export default function EquipmentRequestPage() {
 
 
     const columnsEquip = [
-        { field: 'id', headerName: 'Codigo', width: 80 },
+        { field: 'equipment_id', headerName: 'Codigo', width: 80 },
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
         { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
         { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
@@ -79,11 +78,7 @@ export default function EquipmentRequestPage() {
             setIsLoadingHist(true);
             try{
                 const response = await axiosClient.get(`/equipment-requests?page=${paginationModelEquip.page+1}`);
-                const historyWithId = response.data.data.map(history => ({
-                    ...history, id: history?.equipment_request_id
-                }));
-                setHistory(historyWithId);
-                console.log(historyWithId);
+                setHistory(response.data.data);
                 setRowCountHist((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
             
             }catch(error){
@@ -98,38 +93,34 @@ export default function EquipmentRequestPage() {
 
     },[paginationModelHist.page]);
 
+    useEffect(() => {
+        const fetchMotives = async () => {
+            try{
+                const response = await axiosClient.get(`/request-motives`);
+                setRequestMotives(response.data.data);
+            
+            }catch(error){
+                console.error(error);
+            }
+        };
+        fetchMotives().then(r => {
+        });
+
+    },[]);
     
-    const columnsHist = [
-        { field: 'id', headerName: 'Codigo', flex:1,},
-        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
-        { field: 'reason', headerName: 'Motivo', flex:1,sortable: false,},
-        { 
-            field: 'status',
-            headerName: 'Status', 
-            flex:1, 
-            renderCell: (params) => <StatusField value={params.value} />, 
-            sortable: false, 
-            selectable: false, 
-        },
-    
-    ];
+    const columnsHist = EquipmentRequestHistoryTableColumns();
 
     
-    const rowsHist = history.map((row) => {
-        return {
-            id: row.equipment_request_id,
-            name: row.equipment_id,
-            reason: row.reason,
-            status: row.request_status_id,
-        };
-    });  
+    console.log(history);
+
     
-    const [formData, setFormData] = useState({ reason: '',rowData: {}});
+    
+    const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
-        setFormData({ reason: '', rowData: row}); 
+        setFormData({ observation: '',motive:'', rowData: row}); 
     };
 
     const handleClose = () => {
@@ -139,8 +130,9 @@ export default function EquipmentRequestPage() {
     const handleRequestSubmit = async () => {
 
         const payload = {
-            reason: formData.reason,
+            observation: formData.observation,
             equipment_id: formData.rowData.equipment_id,
+            request_motive_id: formData.motive,
             user_id: user?.user_id,
         };
         try {
@@ -156,7 +148,6 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    //console.log(`user ${user?.user_id}`);
 
     return(<>
             <Container sx={{mt: 5}}>
@@ -165,6 +156,7 @@ export default function EquipmentRequestPage() {
                 </Typography>
                 {equipments.length > 0 ? <BaseTable rows={equipments} columns={columnsEquip} checkBox={false}
                                                     rowCount={rowCountEquip} paginationModel={paginationModelEquip}
+                                                    getRowId={(row) => row.equipment_id}
                                                     setPaginationModel={setPaginationModelEquip}
                                                     isLoading={isLoadingEquip}/> : <Grid item container justifyContent="center">
                 <CircularProgress/>
@@ -174,29 +166,13 @@ export default function EquipmentRequestPage() {
                 <Typography component="h1" variant="h4">
                     Historico de solicitações
                 </Typography>
-                {isLoadingHist ? (
-                    <Grid item container justifyContent="center">
-                        <CircularProgress />
-                    </Grid>
-                ) : (
-                <>
-                {rowCountHist > 0 ? (
-                    <BaseTable
-                    rows={rowsHist}
-                    columns={columnsHist}
-                    checkBox={false}
-                    rowCount={rowCountHist}
-                    paginationModel={paginationModelHist}
-                    setPaginationModel={setPaginationModelHist}
-                    isLoading={isLoadingHist}
-                    />
-                ) : (
-                    <Typography variant="body1" color="textSecondary">
-                    Nenhum dado encontrado.
-                    </Typography>
-                )}
-                </>
-            )}
+                {history.length > 0 ? <BaseTable rows={history} columns={columnsHist} checkBox={false}
+                                                    rowCount={rowCountHist} paginationModel={paginationModelHist}
+                                                    getRowId={(row) => row.equipment_request_id}
+                                                    setPaginationModel={setPaginationModelHist}
+                                                    isLoading={isLoadingHist}/> : <Grid item container justifyContent="center">
+                <CircularProgress/>
+                </Grid>}
             </Container>
             <Popover
                 id={id}
@@ -224,13 +200,28 @@ export default function EquipmentRequestPage() {
                         />
                     </Grid>
                     <Grid item xs={12}>
+                        <Select
+                            label="Motivo"
+                            fullWidth
+                            value={formData.motive}
+                            sx={{ marginBottom: 2 }} 
+                            onChange={(e) => setFormData({ ...formData, motive: e.target.value })}
+                        >
+                            {requestMotives.map((motive) => (
+                                <MenuItem key={motive.request_motive_id} value={motive.request_motive_id}>
+                                    {motive.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </Grid>
+                    <Grid item xs={12}>
                         <TextField
-                            label="Motivo da retirada"
+                            label="Observação"
                             fullWidth
                             multiline
                             rows={2} 
-                            value={formData.reason}
-                            onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                            value={formData.observation}
+                            onChange={(e) => setFormData({ ...formData, observation: e.target.value })}
                             sx={{ marginBottom: 2 }} 
                         />
                     </Grid>
