@@ -44,7 +44,7 @@ const AppToolbar = styled(MuiAppBar, {
   }),
 }));
 
-const CustomAppBar = ({ open, toggleDrawer }) => {
+const CustomAppBar = ({ open, toggleDrawer, is_admin }) => {
   const navigate = useNavigate();
   const { themeMode, toggleTheme } = useTheme();
   const { logout } = useAuth();
@@ -59,6 +59,7 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
     "/view-sector": "Vizualizar setor",
     "/request-equipment": "Solicitar equipamento",
     "/my-equipments": "Meus equipamentos",
+    "/equipment-requests": "Pedidos de retirada",
   };
   let dashboardName = pathNames[location.pathname] || "";
 
@@ -116,35 +117,37 @@ const CustomAppBar = ({ open, toggleDrawer }) => {
           >
             Setor
           </InputLabel>
-          <Select
-            labelId="demo-customized-select-label"
-            id="demo-customized-select"
-            value={sector}
-            onChange={handleSectorChange}
-            input={<OutlinedInput label="Setor" />}
-            sx={{
-              color: "white",
-              minWidth: 150,
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "white",
-              },
-              "& .MuiSelect-icon": {
+          {is_admin === false && (
+            <Select
+              labelId="demo-customized-select-label"
+              id="demo-customized-select"
+              value={sector}
+              onChange={handleSectorChange}
+              input={<OutlinedInput label="Setor" />}
+              sx={{
                 color: "white",
-              },
-            }}
-          >
-            {sectors.map((sector, index) => (
-              <MenuItem key={index} value={sector.sector_id}>
-                {sector.name}
-              </MenuItem>
-            ))}
-          </Select>
+                minWidth: 150,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+                "& .MuiSelect-icon": {
+                  color: "white",
+                },
+              }}
+            >
+              {sectors.map((sector, index) => (
+                <MenuItem key={index} value={sector.sector_id}>
+                  {sector.name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
         </FormControl>
         <IconButton color="inherit" onClick={toggleTheme} sx={{ m: 2 }}>
           {themeMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
