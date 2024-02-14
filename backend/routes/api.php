@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('sectors',SectorController::class)->only(['show', 'index']);
     Route::apiResource('equipments', EquipmentController::class)->only(['show', 'index']);
     Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store', 'index']);
+    Route::get('equipments-available', [EquipRequestController::class, 'equipmentsAvailable']);
     Route::post('equipment/return/{equipment_id}', [EquipmentController::class, 'returnEquipment']);
     Route::group(['prefix' => 'history'], function () {
         Route::get('/users', [HistoryController::class, 'indexUser']);

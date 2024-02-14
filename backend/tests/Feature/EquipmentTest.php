@@ -29,9 +29,28 @@ it('should return a paginated list of equipments', function () {
     actingAs($this->user, 'sanctum');
     $response = get('/api/equipments')->assertOk();
     $paginatedResponse = $response->json();
-    dd($response->json());
 
     
+    expect($paginatedResponse)->toBePaginated();
+    foreach ($paginatedResponse['data'] as $equipment) {
+        expect($equipment)->toHaveKeys([
+            'equipment_id',
+            'name',
+            'type',
+            'brand',
+            'sector',
+            'is_available',
+            'is_at_office'
+        ]);
+    }
+});
+
+
+it('should return a paginated list of equipments that are available', function () {
+    actingAs($this->user, 'sanctum');
+    $response = get('/api/equipments-available')->assertOk();
+    $paginatedResponse = $response->json();
+
     expect($paginatedResponse)->toBePaginated();
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
