@@ -22,3 +22,28 @@ export const toastDelete = ({ item, handleClick }) => {
     },
   );
 };
+
+export const toastConfirmation = ({ item, handleClick }) => {
+  toast.info(
+    <Box sx={{ color: "black" }}>
+      <Typography variant="body1">Confirme sua escolha:</Typography>
+      <Typography variant="body1">{item}</Typography>
+      <Grid item container justifyContent="end">
+        <Button
+          onClick={() => {
+            handleClick();
+          }}
+          style={{ color: "black" }}
+        >
+          Confirmar
+        </Button>
+      </Grid>
+    </Box>,
+    {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: true,
+      theme: "colored",
+    },
+  );
+};

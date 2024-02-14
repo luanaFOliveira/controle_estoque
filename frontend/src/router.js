@@ -19,6 +19,7 @@ import { useAuth } from "./context/AuthProvider";
 import React, { useEffect, useState } from 'react';
 import { CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 
 const PrivateRoute = ({ element, adminOnly }) => {
   const { user } = useAuth();
@@ -45,7 +46,6 @@ const PrivateRoute = ({ element, adminOnly }) => {
   return element;
 };
 
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -59,6 +59,12 @@ const router = createBrowserRouter([
       {
         path: "/sectors",
         element: <PrivateRoute element={<SectorList />} adminOnly={true} />,
+      },
+      {
+        path: "/equipment-requests",
+        element: (
+          <PrivateRoute element={<EquipmentRequests />} adminOnly={true} />
+        ),
       },
       {
         path: "/sectors/:sectorId",
