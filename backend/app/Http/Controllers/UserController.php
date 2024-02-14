@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\SectorResource;
 use App\Http\Resources\UserDetailedResource;
@@ -58,7 +59,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function update(StoreUserRequest $request, User $user): JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         $userResource = $this->userService->updateUser($request, $user);
         return response()->json(['message' => 'User updated successfully', 'data' => $userResource]);

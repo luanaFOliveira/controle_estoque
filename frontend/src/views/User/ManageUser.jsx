@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   Container,
   FormControlLabel,
   InputLabel,
@@ -14,10 +15,12 @@ import {
 import axiosClient from "../../axios-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Grid from '@mui/material/Grid';
 
 const ManageUser = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [sectors, setSectors] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
@@ -25,20 +28,29 @@ const ManageUser = () => {
     password: "",
     password_confirmation: "",
     is_admin: false,
-    sectors: [{ sector_id: "", name: "" }],
+    sectors: [],
   });
 
   useEffect(() => {
     getAllSectors();
     if (userId) {
-      axiosClient.get(`/users/${userId}`).then((data) => {
-        const updatedFormData = {
-          ...formData,
-          ...data.data.data,
-        };
-        setFormData(updatedFormData);
-        console.log(updatedFormData.sectors);
-      });
+      axiosClient
+          .get(`/users/${userId}`)
+          .then((data) => {
+            const updatedFormData = {
+              ...formData,
+              ...data.data.data,
+              sectors: data.data.data.sectors.map((sector) => sector.name),
+            };
+            setFormData(updatedFormData);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+            setLoading(false);
+          });
+    } else {
+      setLoading(false);
     }
   }, [userId]);
 
@@ -72,23 +84,30 @@ const ManageUser = () => {
           ...formData,
           sectors: formData.sectors,
         })
-        .then(() => {
-          console.log(formData.sectors);
-          toast.success("Usuário atualizado com sucesso!");
-          navigate("/users");
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            toast.success('Usuário atualizado com sucesso!');
+            navigate('/users');
+          } else {
+            toast.error('Erro ao atualizar usuário!');
+          }
         })
         .catch((error) => {
           console.error(error);
         });
     } else {
       axiosClient
-        .post("/users", {
+        .post('/users', {
           ...formData,
-          sectors: formData.sectors,
+          sectors: formData.sectors
         })
-        .then(() => {
-          toast.success("Usuário criado com sucesso!");
-          navigate("/users");
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            toast.success('Usuário criado com sucesso!');
+            navigate('/users');
+          } else {
+            toast.error('Erro ao criar usuário!');
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -98,6 +117,11 @@ const ManageUser = () => {
 
   return (
     <Container component="main" maxWidth="xs">
+      {loading ? (
+          <Grid item container justifyContent="center">
+            <CircularProgress />
+          </Grid>
+      ) : (
       <Box
         sx={{
           marginTop: 8,
@@ -190,7 +214,7 @@ const ManageUser = () => {
             {userId ? "Editar usuário" : "Criar usuário"}
           </Button>
         </Box>
-      </Box>
+      </Box>)}
     </Container>
   );
 };
