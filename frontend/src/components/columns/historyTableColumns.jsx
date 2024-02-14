@@ -1,4 +1,5 @@
-export default function EquipmentHistoryTableColumns() {
+
+export default function UserHistoryTableColumns() {
   return [
     {
       field: "user",
@@ -34,3 +35,6 @@ export default function EquipmentHistoryTableColumns() {
     },
   ];
 }
+
+
+

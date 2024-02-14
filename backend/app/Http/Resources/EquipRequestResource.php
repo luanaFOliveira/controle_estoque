@@ -24,4 +24,6 @@ class EquipRequestResource extends JsonResource
             'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name')->first()->toArray(),
         ];
     }
+
+
 }

@@ -76,11 +76,17 @@ it('can retrieve a list of the user equipment requests', function () {
     }
 });
 
+it('can retrieve a list of the request motives', function () {
+    actingAs($this->user, 'sanctum');
+
+    $response = $this->getJson("/api/request-motives")
+        ->assertOk();
+});
+
 it('can retrieve a specific equipment request using the show method', function () {
     /* @var EquipmentRequest $equipmentRequest */
     actingAs($this->user, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
-    dd($equipmentRequest);
     get("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk()->assertJson([
         'data' => [
             'equipment_request_id' => $equipmentRequest->equipment_request_id,

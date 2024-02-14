@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEquipRequestRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\EquipRequestResource;
+use App\Http\Resources\RequestMotiveResource;
 use App\Models\Equipment;
 use App\Models\EquipmentRequest;
+use App\Models\RequestMotive;
 use App\Models\RequestStatus;
 use App\Models\UserEquipment;
 use App\Services\EquipRequestService;
@@ -37,6 +39,12 @@ class EquipRequestController extends Controller
 
         
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
+    }
+
+    public function getRequestMotives(Request $request): AnonymousResourceCollection
+    {
+        $query = RequestMotive::all();
+        return RequestMotiveResource::collection($query);
     }
 
     public function index(Request $request): AnonymousResourceCollection
