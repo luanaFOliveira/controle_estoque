@@ -19,7 +19,7 @@ export async function createUser(formData) {
   return response.data;
 }
 
-export async function updateUser({ user_id, formData }) {
+export async function updateUser( user_id, formData ) {
   const response = await api.put(`/users/${user_id}`, formData);
   return response.data;
 }

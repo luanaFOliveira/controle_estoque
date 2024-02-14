@@ -16,9 +16,27 @@ import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
 import ViewUser from "./views/AdminPages/User/ViewUser";
 import { useAuth } from "./context/AuthProvider";
+import React, { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 const PrivateRoute = ({ element, adminOnly }) => {
   const { user } = useAuth();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(delay);
+  }, []);
+
+  if (loading) {
+    return <Grid item container justifyContent="center">
+      <CircularProgress/>
+      </Grid>;
+  }
 
   if (adminOnly && !user?.is_admin) {
     return <Navigate to="*" />;
@@ -26,6 +44,7 @@ const PrivateRoute = ({ element, adminOnly }) => {
 
   return element;
 };
+
 
 const router = createBrowserRouter([
   {

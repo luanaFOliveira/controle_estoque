@@ -25,7 +25,6 @@ function SectorList() {
       const page = paginationModel.page + 1;
       const response = await indexSectors(page);
       if (response) {
-        console.log(response);
         setSectors(response.data);
         setRowCount(
           (prevRowCountState) => response.meta.total ?? prevRowCountState,
