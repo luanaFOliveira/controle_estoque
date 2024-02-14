@@ -47,11 +47,7 @@ class EquipRequestController extends Controller
         return RequestMotiveResource::collection($query);
     }
 
-    public function getRequestMotives(Request $request): AnonymousResourceCollection
-    {
-        $query = RequestMotive::all();
-        return RequestMotiveResource::collection($query);
-    }
+    
 
     public function index(Request $request): AnonymousResourceCollection
     {
