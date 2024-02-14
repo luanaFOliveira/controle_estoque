@@ -1,6 +1,5 @@
-import { useNavigate } from "react-router-dom";
 
-export default function HistoryTableColumns() {
+export default function UserHistoryTableColumns() {
   return [
     {
       field: "user",
@@ -24,3 +23,6 @@ export default function HistoryTableColumns() {
     },
   ];
 }
+
+
+

@@ -12,7 +12,7 @@ import {
 import { toast } from "react-toastify";
 import { toastDelete } from "../../components/shared/ToastComponents";
 import BaseTable from "../../components/shared/BaseTable";
-import HistoryTableColumns from "../../components/columns/historyTableColumns";
+import UserHistoryTableColumns from "../../components/columns/historyTableColumns";
 import { errorToast } from "../../services/api";
 import { destroyUser, getUser } from "../../services/userService";
 import { getUserHistory } from "../../services/historyService";
@@ -29,7 +29,7 @@ const ViewUser = () => {
     pageSize: 10,
   });
 
-  const columnsHistory = HistoryTableColumns();
+  const columnsHistory = UserHistoryTableColumns();
 
   useEffect(() => {
     const fetchUserDetail = async () => {

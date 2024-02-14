@@ -20,33 +20,10 @@ class EquipRequestResource extends JsonResource
             'observation' => $this->observation,
             'request_status' => $this->status()->value('status'),
             'request_motive' => $this->motive()->value('name'),
-            'user' => $this->getUser(),
-            'equipment' => $this->getEquipment(),
+            'user' => $this->user()->select('user.user_id', 'user.name')->first()->toArray(),
+            'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name')->first()->toArray(),
         ];
     }
 
-    protected function getEquipment(): array
-    {
-        $equipments = $this->equipment;
-        return $equipments->map(function ($equipment) {
-            return [
-                'equipment_id' => $equipment->equipment_id,
-                'name' => $equipment->name,
-            ];
-        })->toArray();
-    }
-    protected function getUser(): array
-    {
-        $users = $this->user;
-        return $users->map(function ($user) {
-            return [
-                'user_id' => $user->user_id,
-                'name' => $user->name,
-            ];
-        })->toArray();
-    }
-
-
-    
 
 }
