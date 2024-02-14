@@ -15,77 +15,87 @@ import ViewEquipment from "./views/Equipment/ViewEquipment";
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
 import ViewUser from "./views/User/ViewUser";
+import { useAuth } from "./context/AuthProvider";
+
+const PrivateRoute = ({ element, adminOnly }) => {
+  const { user } = useAuth();
+
+  if (adminOnly && !user?.is_admin) {
+    return <Navigate to="*" />;
+  }
+
+  return element;
+};
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <DefaultLayout />,
     children: [
-      { path: "/",  element: <Navigate to='/home'/>},
+      { path: "/", element: <Navigate to="/home" /> },
       {
         path: "/home",
-        element: <SectorPage/>
+        element: <PrivateRoute element={<SectorPage />} adminOnly={false} />,
       },
       {
         path: "/sectors",
-        element: <SectorList />,
+        element: <PrivateRoute element={<SectorList />} adminOnly={true} />,
       },
       {
         path: "/sectors/:sectorId",
-        element: <ViewSector />,
+        element: <PrivateRoute element={<ViewSector />} adminOnly={true} />,
       },
       {
         path: "/sectors/edit/:sectorId",
-        element: <ManageSector />,
+        element: <PrivateRoute element={<ManageSector />} adminOnly={true} />,
       },
       {
         path: "/sectors/new",
-        element: <ManageSector />,
+        element: <PrivateRoute element={<ManageSector />} adminOnly={true} />,
       },
       {
         path: "/users",
-        element: <UserList />,
+        element: <PrivateRoute element={<UserList />} adminOnly={true} />,
       },
       {
         path: "/users/new",
-        element: <ManageUser />,
+        element: <PrivateRoute element={<ManageUser />} adminOnly={true} />,
       },
       {
         path: "/users/edit/:userId",
-        element: <ManageUser />,
+        element: <PrivateRoute element={<ManageUser />} adminOnly={true} />,
       },
       {
         path: "/users/:userId",
-        element: <ViewUser />,
+        element: <PrivateRoute element={<ViewUser />} adminOnly={true} />,
       },
       {
         path: "/equipments",
-        element: <EquipmentList />,
+        element: <PrivateRoute element={<EquipmentList />} adminOnly={true} />,
       },
       {
         path: "/equipments/:equipment_id",
-        element: <ViewEquipment />,
+        element: <PrivateRoute element={<ViewEquipment />} adminOnly={true} />,
       },
       {
         path: "/new-equipment",
-        element: <ManageEquipment />,
+        element: <PrivateRoute element={<ManageEquipment />} adminOnly={true} />,
       },
       {
         path: "/edit-equipment/:equipment_id",
-        element: <ManageEquipment />,
+        element: <PrivateRoute element={<ManageEquipment />} adminOnly={true} />,
       },
       {
         path: "/request-equipment",
-        element: <EquipmentRequestPage />,
+        element: <PrivateRoute element={<EquipmentRequestPage />} adminOnly={false} />,
       },
-
       {
         path: "/my-equipments",
-        element: <MyEquipmentPage />,
+        element: <PrivateRoute element={<MyEquipmentPage />} adminOnly={false} />,
       },
       {
         path: "/view-sector",
-        element: <SectorPage />,
+        element: <PrivateRoute element={<SectorPage />} adminOnly={false} />,
       },
     ],
   },

@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import axiosClient from '../axios-client';
 import { toast } from 'react-toastify';
-import Login from '../views/auth/Login';
 
 const AuthContext = createContext();
 
