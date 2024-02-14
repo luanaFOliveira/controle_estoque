@@ -17,12 +17,35 @@ class EquipRequestResource extends JsonResource
     {
         return [
             'equipment_request_id' => $this->equipment_request_id,
-            'reason' => $this->reason,
-            'request_status_id' => $this->status()->value('status'),
-            'user_id' => $this->user()->value('name'),
-            'equipment_id' => $this->equipment()->value('name'),
+            'observation' => $this->observation,
+            'request_status' => $this->status()->value('status'),
+            'request_motive' => $this->motive()->value('name'),
+            'user' => $this->getUser(),
+            'equipment' => $this->getEquipment(),
         ];
     }
+
+    protected function getEquipment(): array
+    {
+        $equipments = $this->equipment;
+        return $equipments->map(function ($equipment) {
+            return [
+                'equipment_id' => $equipment->equipment_id,
+                'name' => $equipment->name,
+            ];
+        })->toArray();
+    }
+    protected function getUser(): array
+    {
+        $users = $this->user;
+        return $users->map(function ($user) {
+            return [
+                'user_id' => $user->user_id,
+                'name' => $user->name,
+            ];
+        })->toArray();
+    }
+
 
     
 

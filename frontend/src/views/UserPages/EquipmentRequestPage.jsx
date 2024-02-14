@@ -141,7 +141,7 @@ export default function EquipmentRequestPage() {
         const payload = {
             reason: formData.reason,
             equipment_id: formData.rowData.equipment_id,
-            user_id: user.user_id,
+            user_id: user?.user_id,
         };
         try {
             const response = await axiosClient.post("/equipment-requests", payload);
@@ -156,7 +156,7 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    console.log(`user ${user.user_id}`);
+    //console.log(`user ${user?.user_id}`);
 
     return(<>
             <Container sx={{mt: 5}}>

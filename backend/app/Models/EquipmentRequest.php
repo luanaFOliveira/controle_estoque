@@ -12,8 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $equipment_request_id
- * @property string $reason
+ * @property string $observation
  * @property int $request_status_id
+ * @property int $request_motive_id
  * @property int $equipment_id
  * @property int $user_id
  * @property Carbon|null $updated_at
@@ -28,7 +29,8 @@ class EquipmentRequest extends Model
     protected $primaryKey = 'equipment_request_id';
 
     protected $fillable = [
-        'reason',
+        'observation',
+        'request_motive_id',
         'request_status_id',
         'equipment_id',
         'user_id',
@@ -49,6 +51,11 @@ class EquipmentRequest extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(RequestStatus::class, 'request_status_id');
+    }
+
+    public function motive(): BelongsTo
+    {
+        return $this->belongsTo(RequestMotive::class, 'request_motive_id');
     }
 
     public function user(): BelongsTo

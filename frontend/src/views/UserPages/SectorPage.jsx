@@ -9,7 +9,6 @@ import EquipmentTableColumns from "../../components/columns/EquipmentTableColumn
 import { getSector } from "../../services/sectorService";
 import { errorToast } from "../../services/api";
 
-//falta ver a paginacao pra ela funcionar 100%, por enquanto ta com o mesmo modelo para as duas tabelas, e se nao me engano as info nao vem paginadas
 
 export default function SectorPage() {
   const { sector } = useStateContext();

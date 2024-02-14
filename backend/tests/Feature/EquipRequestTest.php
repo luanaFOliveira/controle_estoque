@@ -41,10 +41,11 @@ it('can retrieve a list of equipment requests', function () {
     foreach ($paginatedResponse['data'] as $equipmentRequest) {
         expect($equipmentRequest)->toHaveKeys([
             'equipment_request_id',
-            'reason',
-            'request_status_id',
-            'user_id',
-            'equipment_id',
+            'observation',
+            'request_status',
+            'request_motive',
+            'user',
+            'equipment',
         ]);
     }
 });
@@ -66,10 +67,11 @@ it('can retrieve a list of the user equipment requests', function () {
     foreach ($paginatedResponse['data'] as $equipmentRequest) {
         expect($equipmentRequest)->toHaveKeys([
             'equipment_request_id',
-            'reason',
-            'request_status_id',
-            'user_id',
-            'equipment_id',
+            'observation',
+            'request_status',
+            'request_motive',
+            'user',
+            'equipment',
         ]);
     }
 });
@@ -78,14 +80,15 @@ it('can retrieve a specific equipment request using the show method', function (
     /* @var EquipmentRequest $equipmentRequest */
     actingAs($this->user, 'sanctum');
     $equipmentRequest = EquipmentRequest::factory()->create();
-
+    dd($equipmentRequest);
     get("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk()->assertJson([
         'data' => [
             'equipment_request_id' => $equipmentRequest->equipment_request_id,
-            'reason' => $equipmentRequest->reason,
-            'request_status_id' => $equipmentRequest->request_status_id,
-            'user_id' => $equipmentRequest->user_id,
-            'equipment_id' => $equipmentRequest->equipment_id,
+            'observation' => $equipmentRequest->observation,
+            'request_status' => $equipmentRequest->status()->value('status'),
+            'request_motive' => $equipmentRequest->motive()->value('name'),
+            'user' => $equipmentRequest->user()->value('name'),
+            'equipment' => $equipmentRequest->equipment()->value('name'),
         ]
     ]);
 
@@ -105,9 +108,10 @@ it('can create an equipment request', function () {
     ]);
 
     $data = [
-        'reason' => 'Test Reason',
+        'observation' => 'Test Obs',
         'user_id' => $this->user->user_id,
         'equipment_id' => $equipment->equipment_id,
+        'request_motive_id' => 1,
     ];
 
     $response = post('/api/equipment-requests', $data);
@@ -123,12 +127,13 @@ it('can update an equipment request', function () {
     actingAs($this->admin, 'sanctum');
 
     $equipmentRequest = EquipmentRequest::factory()->create([
-        'reason' => 'Old Reason',
+        'observation' => 'Old Observation',
     ]);
 
     $data = [
-        'reason' => 'Updated Reason',
+        'observation' => 'Updated Observation',
         'request_status_id' => $equipmentRequest->request_status_id,
+        'request_motive_id' => $equipmentRequest->request_motive_id,
         'user_id' => $this->admin->user_id,
         'equipment_id' => $equipmentRequest->equipment_id,
     ];
