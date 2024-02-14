@@ -29,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => 'admin'], function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::apiResource('equipments', EquipmentController::class);
+        Route::post('handle-equipment-request/{action}', [EquipRequestController::class, 'handleRequest']);
+        Route::apiResource('equipments', EquipmentController::class);
         Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::apiResource('sectors',SectorController::class);
         Route::apiResource('equipment-requests', EquipRequestController::class);
@@ -41,13 +43,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('sectors',SectorController::class)->only(['show', 'index']);
     Route::apiResource('equipments', EquipmentController::class)->only(['show', 'index']);
-    Route::get('user', function (Request $request){
-        return $request->user();
-    });
     Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store', 'index']);
     Route::post('equipment/return/{equipment_id}', [EquipmentController::class, 'returnEquipment']);
     Route::group(['prefix' => 'history'], function () {
         Route::get('/users', [HistoryController::class, 'indexUser']);
+    });
+    Route::get('user', function (Request $request){
+        return $request->user();
     });
 
     Route::post('/logout',[AuthController::class, 'logout']);

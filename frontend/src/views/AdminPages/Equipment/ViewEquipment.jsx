@@ -18,6 +18,7 @@ import {
   getHistoryEquipment,
 } from "../../../services/equipmentService";
 import { errorToast } from "../../../services/api";
+import EquipmentHistoryTableColumns from "../../../components/columns/historyTableColumns";
 
 const ViewEquipment = () => {
   const params = useParams();
@@ -32,20 +33,7 @@ const ViewEquipment = () => {
     pageSize: 10,
   });
 
-  const columnsHistory = [
-    {
-      field: "user",
-      headerName: "Usuário",
-      width: 70,
-    },
-    {
-      field: "equipment_code",
-      headerName: "Código do equipamento",
-      width: 200,
-    },
-    { field: "created_at", headerName: "Criado em", width: 100 },
-    { field: "returned_at", headerName: "Devolvido em", width: 120 },
-  ];
+  const columnsHistory = EquipmentHistoryTableColumns();
 
   useEffect(() => {
     const equipment = async () => {
@@ -180,6 +168,7 @@ const ViewEquipment = () => {
             rows={history}
             columns={columnsHistory}
             checkBox={false}
+            getRowId={(row) => row.equipment_code}
             rowCount={rowCount}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}

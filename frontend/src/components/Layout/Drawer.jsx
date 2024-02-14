@@ -39,7 +39,7 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const CustomDrawer = ({ open, toggleDrawer, is_admin, loading }) => {
+const CustomDrawer = ({ open, toggleDrawer, is_admin }) => {
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
