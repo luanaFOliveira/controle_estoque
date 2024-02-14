@@ -20,9 +20,9 @@ import {
   getEquipment,
   getEquipmentDetails,
   updateEquipment,
-} from "../../services/equipmentService";
-import { errorToast } from "../../services/api";
-import { indexSectors } from "../../services/sectorService";
+} from "../../../services/equipmentService";
+import { errorToast } from "../../../services/api";
+import { indexSectors } from "../../../services/sectorService";
 
 const ManageEquipment = () => {
   const params = useParams();

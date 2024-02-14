@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axiosClient from "../../axios-client";
+import axiosClient from "../../../axios-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import Grid from '@mui/material/Grid';

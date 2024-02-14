@@ -3,18 +3,18 @@ import DefaultLayout from "./views/layouts/DefaultLayout";
 import GuestLayout from "./views/layouts/GuestLayout";
 import Login from "./views/auth/Login";
 import NotFound from "./views/shared/NotFound";
-import EquipmentList from "./views/Equipment/EquipmentList";
-import ManageUser from "./views/User/ManageUser";
-import ManageSector from "./views/Sector/ManageSector";
-import SectorList from "./views/Sector/SectorList";
-import UserList from "./views/User/UserList";
-import ViewSector from "./views/Sector/ViewSector";
-import ManageEquipment from "./views/Equipment/ManageEquipment";
+import EquipmentList from "./views/AdminPages/Equipment/EquipmentList";
+import ManageUser from "./views/AdminPages/User/ManageUser";
+import ManageSector from "./views/AdminPages/Sector/ManageSector";
+import SectorList from "./views/AdminPages/Sector/SectorList";
+import UserList from "./views/AdminPages/User/UserList";
+import ViewSector from "./views/AdminPages/Sector/ViewSector";
+import ManageEquipment from "./views/AdminPages/Equipment/ManageEquipment";
 import EquipmentRequestPage from "./views/UserPages/EquipmentRequestPage";
-import ViewEquipment from "./views/Equipment/ViewEquipment";
+import ViewEquipment from "./views/AdminPages/Equipment/ViewEquipment";
 import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
-import ViewUser from "./views/User/ViewUser";
+import ViewUser from "./views/AdminPages/User/ViewUser";
 import { useAuth } from "./context/AuthProvider";
 
 const PrivateRoute = ({ element, adminOnly }) => {

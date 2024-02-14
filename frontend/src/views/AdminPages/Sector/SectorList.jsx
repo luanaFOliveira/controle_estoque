@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import BaseTable from "../../components/shared/BaseTable";
+import BaseTable from "../../../components/shared/BaseTable";
 import { useNavigate } from "react-router-dom";
-import SectorTableColumns from "../../components/columns/SectorTableColumns";
-import { indexSectors } from "../../services/sectorService";
-import { errorToast } from "../../services/api";
+import SectorTableColumns from "../../../components/columns/SectorTableColumns";
+import { indexSectors } from "../../../services/sectorService";
+import { errorToast } from "../../../services/api";
 
 function SectorList() {
   const navigate = useNavigate();

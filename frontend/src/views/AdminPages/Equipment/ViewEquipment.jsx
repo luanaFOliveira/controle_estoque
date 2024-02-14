@@ -10,14 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { toastDelete } from "../../components/shared/ToastComponents";
-import BaseTable from "../../components/shared/BaseTable";
+import { toastDelete } from "../../../components/shared/ToastComponents";
+import BaseTable from "../../../components/shared/BaseTable";
 import {
   destroyEquipment,
   getEquipment,
   getHistoryEquipment,
-} from "../../services/equipmentService";
-import { errorToast } from "../../services/api";
+} from "../../../services/equipmentService";
+import { errorToast } from "../../../services/api";
 
 const ViewEquipment = () => {
   const params = useParams();

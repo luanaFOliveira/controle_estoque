@@ -10,12 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { toastDelete } from "../../components/shared/ToastComponents";
-import BaseTable from "../../components/shared/BaseTable";
-import HistoryTableColumns from "../../components/columns/historyTableColumns";
-import { errorToast } from "../../services/api";
-import { destroyUser, getUser } from "../../services/userService";
-import { getUserHistory } from "../../services/historyService";
+import { toastDelete } from "../../../components/shared/ToastComponents";
+import BaseTable from "../../../components/shared/BaseTable";
+import HistoryTableColumns from "../../../components/columns/historyTableColumns";
+import { errorToast } from "../../../services/api";
+import { destroyUser, getUser } from "../../../services/userService";
+import { getUserHistory } from "../../../services/historyService";
 
 const ViewUser = () => {
   const { userId } = useParams();

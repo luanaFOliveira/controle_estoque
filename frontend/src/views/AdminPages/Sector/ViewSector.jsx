@@ -6,14 +6,14 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import BaseTable from "../../components/shared/BaseTable";
+import BaseTable from "../../../components/shared/BaseTable";
 import { useNavigate, useParams } from "react-router-dom";
-import { toastDelete } from "../../components/shared/ToastComponents";
+import { toastDelete } from "../../../components/shared/ToastComponents";
 import { toast } from "react-toastify";
-import { destroySector, getSector } from "../../services/sectorService";
-import { errorToast } from "../../services/api";
-import EquipmentTableColumns from "../../components/columns/EquipmentTableColumns";
-import UserTableColumns from "../../components/columns/UserTableColumns";
+import { destroySector, getSector } from "../../../services/sectorService";
+import { errorToast } from "../../../services/api";
+import EquipmentTableColumns from "../../../components/columns/EquipmentTableColumns";
+import UserTableColumns from "../../../components/columns/UserTableColumns";
 
 function ViewSector() {
   const navigate = useNavigate();

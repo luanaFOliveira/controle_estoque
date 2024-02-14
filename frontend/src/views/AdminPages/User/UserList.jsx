@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import BaseTable from "../../components/shared/BaseTable";
+import BaseTable from "../../../components/shared/BaseTable";
 import { useNavigate } from "react-router-dom";
-import UserTableColumns from "../../components/columns/UserTableColumns";
-import { errorToast } from "../../services/api";
-import { indexUsers } from "../../services/userService";
+import UserTableColumns from "../../../components/columns/UserTableColumns";
+import { errorToast } from "../../../services/api";
+import { indexUsers } from "../../../services/userService";
 
 function UserList() {
   const navigate = useNavigate();

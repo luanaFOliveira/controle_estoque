@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { errorToast } from "../../services/api";
+import { errorToast } from "../../../services/api";
 import {
   createSector,
   getSector,
   updateSector,
-} from "../../services/sectorService";
+} from "../../../services/sectorService";
 import Grid from "@mui/material/Grid";
 
 const ManageSector = () => {
