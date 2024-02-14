@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserEquipment;
 use App\Models\UserSector;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 
 class UserService
@@ -33,11 +34,20 @@ class UserService
         $user->sector()->attach($sectorIds);
     }
 
+
     public function updateUser(UpdateUserRequest $request, User $user): UserResource
     {
         $data = $request->validated();
 
         $user->update($data);
+
+        if (isset($data['email'])) {
+            $existingUser = User::where('email', $data['email'])->where('user_id', '<>', $user->user_id)->first();
+
+            if ($existingUser) {
+                throw ValidationException::withMessages(['email' => ['The email has already been taken.']]);
+            }
+        }
 
         $this->updateUserRelations($request, $user);
 
@@ -55,8 +65,8 @@ class UserService
         }
 
         $sectors = $request->input('sectors');
-        $user->sector()->detach();
 
+        $user->sector()->detach();
         if (is_array($sectors) && count($sectors) > 0) {
             $sectorIds = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
             $user->sector()->sync($sectorIds);

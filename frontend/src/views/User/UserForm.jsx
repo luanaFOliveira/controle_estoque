@@ -85,10 +85,13 @@ const UserForm = () => {
           ...formData,
           sectors: formData.sectors
         })
-        .then(() => {
-          console.log(formData.sectors)
-          toast.success('Usuário atualizado com sucesso!');
-          navigate('/users');
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            toast.success('Usuário atualizado com sucesso!');
+            navigate('/users');
+          } else {
+            toast.error('Erro ao atualizar usuário!');
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -99,9 +102,13 @@ const UserForm = () => {
           ...formData,
           sectors: formData.sectors
         })
-        .then(() => {
-          toast.success('Usuário criado com sucesso!');
-          navigate('/users');
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            toast.success('Usuário criado com sucesso!');
+            navigate('/users');
+          } else {
+            toast.error('Erro ao criar usuário!');
+          }
         })
         .catch((error) => {
           console.error(error);
