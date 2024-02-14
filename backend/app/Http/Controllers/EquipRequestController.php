@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEquipRequestRequest;
+use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\EquipRequestResource;
+use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\RequestStatus;
 use App\Models\UserEquipment;
@@ -20,6 +22,21 @@ class EquipRequestController extends Controller
     public function __construct(EquipRequestService $equipmentRequestService)
     {
         $this->equipmentRequestService = $equipmentRequestService;
+    }
+
+    public function equipmentsAvailable(Request $request): AnonymousResourceCollection
+    {
+        $query = Equipment::query();
+        
+        $query->where('is_available', true);
+        if ($request->has('sector')) {
+            $sector = $request->input('sector');
+
+            $query->where('sector_id', 'ilike', "%$sector%");
+        }
+
+        
+        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
     }
 
     public function index(Request $request): AnonymousResourceCollection
