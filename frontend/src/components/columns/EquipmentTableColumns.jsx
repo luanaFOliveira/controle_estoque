@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function EquipmentTableColumns() {
+export default function EquipmentTableColumns({user_admin}) {
   const navigate = useNavigate();
 
   return [
@@ -14,18 +14,24 @@ export default function EquipmentTableColumns() {
       headerName: "Nome",
       flex: 1,
       sortable: false,
-      renderCell: (params) => (
-        <Link
-          component="button"
-          onClick={() => {
-            navigate(`/equipments/${params.row.equipment_id}`);
-          }}
-          underline="hover"
-          sx={{ cursor: "pointer" }}
-        >
-          {params.row.name}
-        </Link>
-      ),
+      renderCell: (params) => {
+        if (user_admin) {
+          return (
+            <Link
+              component="button"
+              onClick={() => {
+                navigate(`/equipments/${params.row.equipment_id}`);
+              }}
+              underline="hover"
+              sx={{ cursor: "pointer" }}
+            >
+              {params.row.name}
+            </Link>
+          );
+        } else {
+          return <span>{params.row.name}</span>;
+        }
+      },
     },
     { field: "brand", headerName: "Marca", flex: 1, sortable: false },
     {
