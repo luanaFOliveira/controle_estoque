@@ -5,6 +5,7 @@ import axiosClient from "../../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import { useAuth } from "../../context/AuthProvider";
+import { MyEquipmentAvailableTableColumns,MyEquipmentUnavailableTableColumns } from '../../components/columns/MyEquipmentTablesColumns';
 
 export default function MyEquipmentsPage() {
     const { user} = useAuth();
@@ -45,7 +46,7 @@ export default function MyEquipmentsPage() {
 
     },[paginationModelEquipAva.page]);
 
-    
+    /*
     const columnsEquipAvailable = [
         { field: 'id', headerName: 'Codigo', width: 80 },
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
@@ -61,7 +62,7 @@ export default function MyEquipmentsPage() {
         },
         
     ];
-
+*/
     useEffect(() => {
         const fetchEquipmentsUnavailable = async () => {
             setIsLoadingEquipUna(true);
@@ -85,6 +86,9 @@ export default function MyEquipmentsPage() {
 
     },[paginationModelEquipUna.page]);
 
+    const columnsEquipAvailable = MyEquipmentAvailableTableColumns();
+    const columnsEquipUnavailable = MyEquipmentUnavailableTableColumns();
+    /*
     const columnsEquipUnavailable = [
         { field: 'id', headerName: 'Codigo', flex:1,},
         { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
@@ -101,7 +105,7 @@ export default function MyEquipmentsPage() {
         { field: 'created_at', headerName: 'Data de retirada', flex:1,},
         { field: 'returned_at', headerName: 'Data de devolucao', flex:1,},
     ];
-
+*/
 
     var rowsEquipAvailable = [];
     

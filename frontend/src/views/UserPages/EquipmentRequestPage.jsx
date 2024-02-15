@@ -11,19 +11,23 @@ import {CircularProgress, Container, MenuItem, Select} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
-import EquipmentRequestHistoryTableColumns from "../../components/columns/EquipmentRequestHistoryColumns";
-
+import {EquipmentRequestHistoryTableColumns, EquipmentRequesEquipTableColumns} from "../../components/columns/EquipmentRequestTablesColumns";
 
 export default function EquipmentRequestPage() {
 
     const {sector} = useStateContext();
     const { user} = useAuth();
+
     const [equipments,setEquipments] = useState([]);
     const [requestMotives,setRequestMotives] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
     const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 5 });
 
+    const [history,setHistory] = useState([]);
+    const [isLoadingHist, setIsLoadingHist] = useState(true);
+    const [rowCountHist, setRowCountHist] = useState(0);
+    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 5 });
     
     useEffect(() => {
         const fetchEquipments = async () => {
@@ -45,34 +49,7 @@ export default function EquipmentRequestPage() {
 
     },[paginationModelEquip.page]);
 
-
-    const columnsEquip = [
-        { field: 'equipment_id', headerName: 'Codigo', width: 80 },
-        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
-        { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
-        { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        { field: 'is_at_office', headerName: 'Local', flex:1,sortable: false,
-            renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
-        },
-        { 
-            field: 'requestButton',
-            headerName: 'Solicitar retirada',
-            flex:1,
-            renderCell: (params) => (
-                <RequestEquipButtonCell onClick={(event) => handleButtonClick(event, params.row)} />
-            ),
-            sortable: false,
-            align: 'center',
-        },
-    ];
-
-    
-    const [history,setHistory] = useState([]);
-    const [isLoadingHist, setIsLoadingHist] = useState(true);
-    const [rowCountHist, setRowCountHist] = useState(0);
-    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 5 });
-
-    
+  
     useEffect(() => {
         const fetchHistory = async () => {
             setIsLoadingHist(true);
@@ -108,13 +85,7 @@ export default function EquipmentRequestPage() {
 
     },[]);
     
-    const columnsHist = EquipmentRequestHistoryTableColumns();
 
-    
-    console.log(history);
-
-    
-    
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -148,6 +119,8 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    const columnsEquip = EquipmentRequesEquipTableColumns({handleButtonClick});
+    const columnsHist = EquipmentRequestHistoryTableColumns();
 
     return(<>
             <Container sx={{mt: 5}}>
@@ -242,8 +215,8 @@ export default function EquipmentRequestPage() {
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background-color: rgba(0, 0, 0, 0.5); /* Cor escura semitransparente */
-                    z-index: 999; /* Certifique-se de que a camada de fundo esteja acima de outros elementos */
+                    background-color: rgba(0, 0, 0, 0.5); 
+                    z-index: 999; 
                 }
                 `}
             </style>
