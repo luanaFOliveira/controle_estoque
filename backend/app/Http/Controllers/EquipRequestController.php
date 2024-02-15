@@ -47,6 +47,8 @@ class EquipRequestController extends Controller
         return RequestMotiveResource::collection($query);
     }
 
+    
+
     public function index(Request $request): AnonymousResourceCollection
     {
         $status = $request->input('status');
