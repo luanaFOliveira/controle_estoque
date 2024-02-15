@@ -6,38 +6,45 @@ import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import axiosClient from "../../axios-client";
 import {CircularProgress, Container, MenuItem, Select} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
 import {EquipmentRequestHistoryTableColumns, EquipmentRequesEquipTableColumns} from "../../components/columns/EquipmentRequestTablesColumns";
+import { indexEquipmentsAvailable } from "../../services/equipmentService";
+import { createEquipmentRequests, getRequestMotives,indexEquipmentRequests} from "../../services/equipmentRequestService";
+import { errorToast } from "../../services/api";
+import { toast } from "react-toastify";
 
 export default function EquipmentRequestPage() {
 
     const {sector} = useStateContext();
     const { user} = useAuth();
 
+    const [reload, setReload] = useState(false);
+
     const [equipments,setEquipments] = useState([]);
     const [requestMotives,setRequestMotives] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
-    const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 5 });
+    const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 10 });
 
     const [history,setHistory] = useState([]);
     const [isLoadingHist, setIsLoadingHist] = useState(true);
     const [rowCountHist, setRowCountHist] = useState(0);
-    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 5 });
+    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
     
     useEffect(() => {
         const fetchEquipments = async () => {
             setIsLoadingEquip(true);
             try{
-                const response = await axiosClient.get(`/equipments-available?page=${paginationModelEquip.page+1}&sector=${sector}`);
-                setEquipments(response.data.data);
-                setRowCountEquip((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
+                const page = paginationModelEquip.page + 1;
+                const response = await indexEquipmentsAvailable({ page, sector});
+                setEquipments(response.data);
+                setRowCountEquip((prevRowCountState) => response.meta.total ?? prevRowCountState,);
             
             }catch(error){
+                errorToast(error);
                 console.error(error);
             }finally{
                 setIsLoadingEquip(false);
@@ -47,18 +54,22 @@ export default function EquipmentRequestPage() {
         fetchEquipments().then(r => {
         });
 
-    },[paginationModelEquip.page]);
+    },[paginationModelEquip.page,reload]);
 
   
     useEffect(() => {
         const fetchHistory = async () => {
             setIsLoadingHist(true);
             try{
-                const response = await axiosClient.get(`/equipment-requests?page=${paginationModelEquip.page+1}`);
-                setHistory(response.data.data);
-                setRowCountHist((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
+                const page = paginationModelHist.page + 1;
+                const response = await indexEquipmentRequests({
+                    page: page,
+                });
+                setHistory(response.data);
+                setRowCountHist((prevRowCountState) => response.meta.total ?? prevRowCountState,);
             
             }catch(error){
+                errorToast(error);
                 console.error(error);
             }finally{
                 setIsLoadingHist(false);
@@ -68,15 +79,16 @@ export default function EquipmentRequestPage() {
         fetchHistory().then(r => {
         });
 
-    },[paginationModelHist.page]);
+    },[paginationModelHist.page, reload]);
 
     useEffect(() => {
         const fetchMotives = async () => {
             try{
-                const response = await axiosClient.get(`/request-motives`);
-                setRequestMotives(response.data.data);
+                const response = await getRequestMotives();
+                setRequestMotives(response.data);
             
             }catch(error){
+                errorToast(error);
                 console.error(error);
             }
         };
@@ -107,8 +119,11 @@ export default function EquipmentRequestPage() {
             user_id: user?.user_id,
         };
         try {
-            const response = await axiosClient.post("/equipment-requests", payload);
-            window.location.reload();
+            const response = await createEquipmentRequests({ formData: payload });
+            if(response){
+                toast.success(`Equipamento solicitado com sucesso`);
+                setReload((prev) => !prev);
+            }
             console.log(response);
         } catch (error) {
             console.error(error);
