@@ -12,7 +12,7 @@ export const StatusField = ({ value }) => {
     case "Pendente":
       color = "#DAA520";
       break;
-    case "Reprovado":
+    case "Não Aprovado":
       color = "red";
       break;
     default:

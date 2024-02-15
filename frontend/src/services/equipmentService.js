@@ -9,6 +9,17 @@ export async function indexEquipments(page) {
   return response.data;
 }
 
+export async function indexEquipmentsAvailable({ page, sector }) {
+  const response = await api.get("/equipments-available", {
+    params: {
+      page: page,
+      sector: sector,
+    },
+  });
+  return response.data;
+}
+
+
 export async function getEquipment(equipment_id) {
   const response = await api.get(`/equipments/${equipment_id}`);
   return response.data;

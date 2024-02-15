@@ -61,6 +61,7 @@ export default function BaseTable({
       paginationMode={paginationMode}
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
+      //pageSizeOptions={[5, 10]}
       {...(checkBox ? { checkboxSelection: true } : {})}
       sx={{ boxShadow: 2, maxWidth: maxWidth, maxHeight: maxHeight }}
     />

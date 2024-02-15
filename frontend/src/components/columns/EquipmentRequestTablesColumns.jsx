@@ -6,12 +6,12 @@ export function EquipmentRequestHistoryTableColumns() {
       {
         field: "equipment_request_id",
         headerName: "Codigo",
-        width: 70,
+        flex: 1,
       },
       {
         field: "name",
         headerName: "Nome",
-        width: 200,
+        flex: 1,
         renderCell: (params) => (
           <span>{params.row.equipment.name}</span>
         ),
@@ -20,20 +20,18 @@ export function EquipmentRequestHistoryTableColumns() {
       {
         field: "observation",
         headerName: "Observação",
-        width: 200,
+        flex: 1,
       },
       {
         field: "request_motive",
         headerName: "Motivo",
-        width: 200,
+        flex: 1,
       },
       { 
         field: 'status',
         headerName: 'Status', 
         flex:1, 
         renderCell: (params) => <StatusField value={params.row.request_status} />, 
-        sortable: false, 
-        selectable: false, 
     },
     ];
 }
@@ -44,27 +42,27 @@ export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
     {
       field: "equipment_id",
       headerName: "Codigo",
-      width: 80,
+      flex: 1,
     },
     {
       field: "name",
       headerName: "Nome",
-      width: 200,
+      flex: 1,
     },
     {
       field: "brand",
       headerName: "Marca",
-      width: 200,
+      flex: 1,
     },
     {
       field: "type",
       headerName: "Tipo",
-      width: 200,
+      flex: 1,
     },
     {
       field: "is_at_office",
       headerName: "Local",
-      width: 200,
+      flex: 1,
       renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
     },
     { 
@@ -74,7 +72,6 @@ export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
       renderCell: (params) => (
           <RequestEquipButtonCell onClick={(event) => handleButtonClick(event, params.row)} />
       ),
-      sortable: false,
       align: 'center',
   },
   ];
