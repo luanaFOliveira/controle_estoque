@@ -21,7 +21,7 @@ class EquipRequestResource extends JsonResource
             'request_status' => $this->status()->value('status'),
             'request_motive' => $this->motive()->value('name'),
             'user' => $this->user()->select('user.user_id', 'user.name')->first()->toArray(),
-            'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name')->first()->toArray(),
+            'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name', 'equipment.equipment_code')->first()->toArray(),
         ];
     }
 }

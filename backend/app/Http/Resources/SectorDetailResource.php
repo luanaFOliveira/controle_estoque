@@ -42,6 +42,7 @@ class SectorDetailResource extends JsonResource
         return $equipments->map(function ($equipment) {
             return [
                 'equipment_id' => $equipment->equipment_id,
+                'equipment_code' => $equipment->equipment_code,
                 'name' => $equipment->name,
                 'is_available' => $equipment->is_available,
                 'sector_id' => $equipment->sector_id,

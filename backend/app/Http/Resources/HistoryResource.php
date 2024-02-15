@@ -14,8 +14,8 @@ class HistoryResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'user_equipment_id' => $this->user_equipment_id,
             'user' => User::withoutGlobalScope('sectorScope')->auth()->select('user_id', 'name')->first(),
-            'equipment_code' => $this->equipment()->value('equipment_id'),
             'created_at' => $this->created_at,
             'returned_at' => $this->returned_at,
             'deleted_at' => $this->deleted_at,
@@ -28,6 +28,7 @@ class HistoryResource extends JsonResource
         return $this->equipment->map(function ($equipment) {
             return [
                 'equipment_id' => $equipment->equipment_id,
+                'equipment_code' => $equipment->equipment_code,
                 'name' => $equipment->name,
                 'is_available' => $equipment->is_available,
                 'sector_id' => $equipment->sector_id,

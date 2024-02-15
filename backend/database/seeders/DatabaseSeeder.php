@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
 
         User::factory(40)->create();
         Equipment::factory(40)->create();
-        EquipmentRequest::factory(20)->create();
+        EquipmentRequest::factory(40)->create();
         UserEquipment::factory(20)->create();
     }
 }

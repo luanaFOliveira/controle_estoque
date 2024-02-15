@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
  * \App\Models\Equipment
  *
  * @property int $equipment_id
+ * @property string $equipment_code
  * @property string $name
  * @property int $equipment_type_id
  * @property int $equipment_brand_id
@@ -50,7 +51,6 @@ class Equipment extends Model
         }
     }
 
-
     protected $fillable = [
         'name',
         'equipment_brand_id',
@@ -58,6 +58,7 @@ class Equipment extends Model
         'equipment_type_id',
         'sector_id',
         'is_at_office',
+        'equipment_code',
     ];
 
     public function type(): BelongsTo

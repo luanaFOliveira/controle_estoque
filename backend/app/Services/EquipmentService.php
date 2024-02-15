@@ -41,11 +41,27 @@ class EquipmentService
         $data['equipment_type_id'] = $type->equipment_type_id;
     }
 
+    private function generateEquipmentCode(): string
+    {
+        do {
+            $letters = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
+            $numbers = substr(str_shuffle("0123456789"), 0, 4);
+            $equipmentCode = $letters . '-' . $numbers;
+
+            $query = Equipment::where('equipment_code', $equipmentCode)->first();
+        } while ($query != null);
+
+        return $equipmentCode;
+    }
+
     private function createEquipment(StoreEquipmentRequest $request): EquipmentResource
     {
         $data = $request->validated();
         $data['is_at_office'] = true;
         $data['is_available'] = true;
+
+        $equipment_code = $this->generateEquipmentCode();
+        $data['equipment_code'] = $equipment_code;
 
         $this->updateEquipmentRelations($data);
 

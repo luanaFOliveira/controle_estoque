@@ -30,6 +30,7 @@ class UserDetailedResource extends JsonResource
         return $this->equipment->map(function ($equipment) {
             return [
                 'equipment_id' => $equipment->equipment_id,
+                'equipment_code' => $equipment->equipment_code,
                 'name' => $equipment->name,
                 'equipment_type_id' => $equipment->equipment_type_id,
                 'equipment_brand_id' => $equipment->equipment_brand_id,
