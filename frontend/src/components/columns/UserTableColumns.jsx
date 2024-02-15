@@ -11,12 +11,14 @@ export default function UserTableColumns() {
     {
       field: "user_id",
       headerName: "ID de usuário",
-      width: 150,
+      flex: 1,
+      minWidth: 100,
     },
     {
       field: "name",
       headerName: "Nome",
-      width: 250,
+      flex: 1,
+      minWidth: 200,
       sortable: false,
       renderCell: (params) => (
         <Link
@@ -34,13 +36,15 @@ export default function UserTableColumns() {
     {
       field: "email",
       headerName: "Email",
-      width: 300,
+      flex: 1,
+      minWidth: 200,
       sortable: false,
     },
     {
       field: "is_admin",
       headerName: "ADM",
-      width: 250,
+      flex: 1,
+      minWidth: 100,
       renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
       sortable: false,
     },

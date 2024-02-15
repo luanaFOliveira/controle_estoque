@@ -1,4 +1,4 @@
-import { Link } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
@@ -8,12 +8,11 @@ export default function EquipmentTableColumns() {
   const navigate = useNavigate();
 
   return [
-    { field: "equipment_id", headerName: "Código", width: 80 },
     {
-      field: "name",
-      headerName: "Nome",
+      field: "equipment_code",
+      headerName: "Código",
       flex: 1,
-      sortable: false,
+      minWidth: 100,
       renderCell: (params) => (
         <Link
           component="button"
@@ -23,21 +22,36 @@ export default function EquipmentTableColumns() {
           underline="hover"
           sx={{ cursor: "pointer" }}
         >
-          {params.row.name}
+          {params.row.equipment_code}
         </Link>
       ),
     },
-    { field: "brand", headerName: "Marca", flex: 1, sortable: false },
+    {
+      field: "name",
+      headerName: "Nome",
+      flex: 1,
+      minWidth: 200,
+      sortable: false,
+    },
+    {
+      field: "brand",
+      headerName: "Marca",
+      flex: 1,
+      sortable: false,
+      minWidth: 200,
+    },
     {
       field: "type",
       headerName: "Tipo",
       flex: 1,
+      minWidth: 200,
       sortable: false,
     },
     {
       field: "is_at_office",
       headerName: "Local",
       flex: 1,
+      minWidth: 200,
       sortable: false,
       renderCell: (params) =>
         params.value ? params.row.sector : "Fora do escritório",
@@ -46,7 +60,17 @@ export default function EquipmentTableColumns() {
       field: "is_available",
       headerName: "Disponível",
       flex: 1,
-      renderCell: (params) => (params.value ? <CheckIcon /> : <CloseIcon />),
+      minWidth: 140,
+      renderCell: (params) =>
+        params.value ? (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CheckIcon />
+          </Box>
+        ) : (
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <CloseIcon />
+          </Box>
+        ),
     },
   ];
 }

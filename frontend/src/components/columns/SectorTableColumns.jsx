@@ -9,12 +9,14 @@ export default function SectorTableColumns() {
     {
       field: "sector_id",
       headerName: "ID",
-      width: 150,
+      flex: 1,
+      minWidth: 70,
     },
     {
       field: "name",
       headerName: "Nome",
-      width: 270,
+      flex: 1,
+      minWidth: 200,
       sortable: false,
       renderCell: (params) => (
         <Link
@@ -32,13 +34,15 @@ export default function SectorTableColumns() {
     {
       field: "users",
       headerName: "Nº de pessoas",
-      width: 200,
+      flex: 1,
+      minWidth: 110,
       sortable: false,
     },
     {
       field: "equipments_count",
       headerName: "Nº de equipamentos",
-      width: 200,
+      flex: 1,
+      minWidth: 140,
       sortable: false,
     },
   ];

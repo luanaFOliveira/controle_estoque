@@ -137,7 +137,7 @@ const ViewEquipment = () => {
           <Grid>
             <EquipmentCard
               label="Código do Equipamento"
-              value={equipment.equipment_id}
+              value={equipment.equipment_code}
             />
             <EquipmentCard label="Nome do Equipamento" value={equipment.name} />
             <EquipmentCard
@@ -168,7 +168,7 @@ const ViewEquipment = () => {
             rows={history}
             columns={columnsHistory}
             checkBox={false}
-            getRowId={(row) => row.equipment_code}
+            getRowId={(row) => row.user_equipment_id}
             rowCount={rowCount}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}

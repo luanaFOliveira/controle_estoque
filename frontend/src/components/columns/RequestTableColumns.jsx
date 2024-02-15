@@ -29,14 +29,10 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
 
   let columns = [
     {
-      field: "equipment_request_id",
-      headerName: "ID",
-      width: 70,
-    },
-    {
       field: "user",
       headerName: "Usuário",
-      width: 150,
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
         <Link
           component="button"
@@ -51,9 +47,10 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
       ),
     },
     {
-      field: "equipment",
-      headerName: "Equipamento",
-      width: 120,
+      field: "equipment_code",
+      headerName: "Código do equipamento",
+      flex: 1,
+      minWidth: 110,
       renderCell: (params) => (
         <Link
           component="button"
@@ -63,14 +60,15 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
           underline="hover"
           sx={{ cursor: "pointer" }}
         >
-          {params.row.equipment.equipment_id}
+          {params.row.equipment.equipment_code}
         </Link>
       ),
     },
     {
       field: "request_motive",
       headerName: "Motivo da Solicitação",
-      width: 200,
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.row.request_motive}>
           <Typography variant="body2" noWrap>
@@ -82,7 +80,8 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
     {
       field: "observation",
       headerName: "Observação",
-      width: 200,
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
         <Tooltip title={params.row.observation}>
           <Typography variant="body2" noWrap>
@@ -97,7 +96,8 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
     columns.push({
       field: "accept_request",
       headerName: "Aceitar / Recusar",
-      width: 150,
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) => (
         <>
           <Button
@@ -132,14 +132,21 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
     columns.push({
       field: "request_status",
       headerName: "Status",
-      width: 150,
+      flex: 1,
+      minWidth: 200,
       renderCell: (params) =>
         params.row.request_status === "Não Aprovado" ? (
-          <Typography variant="body2" style={{ color: "red" }}>
+          <Typography
+            variant="body2"
+            style={{ color: "red", fontWeight: "bold" }}
+          >
             {params.row.request_status}
           </Typography>
         ) : (
-          <Typography variant="body2" style={{ color: "green" }}>
+          <Typography
+            variant="body2"
+            style={{ color: "green", fontWeight: "bold" }}
+          >
             {params.row.request_status}
           </Typography>
         ),
