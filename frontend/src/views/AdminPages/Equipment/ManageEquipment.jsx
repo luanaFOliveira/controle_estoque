@@ -102,6 +102,7 @@ const ManageEquipment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData)
     if (params.equipment_id) {
       try {
         const response = await updateEquipment({
@@ -128,6 +129,20 @@ const ManageEquipment = () => {
         errorToast(error);
       }
     }
+  };
+
+  const handleTypeChange = (event, value) => {
+    setFormData({
+      ...formData,
+      equipment_type: value.toUpperCase(),
+    });
+  };
+
+  const handleBrandChange = (event, value) => {
+    setFormData({
+      ...formData,
+      equipment_brand: value.toUpperCase(),
+    });
   };
 
   return (
@@ -161,9 +176,7 @@ const ManageEquipment = () => {
               disablePortal
               options={equipmentBrands}
               value={formData.equipment_brand}
-              onChange={(event, newValue) => {
-                setFormData({ ...formData, equipment_brand: newValue });
-              }}
+              onInputChange={handleBrandChange}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -179,9 +192,7 @@ const ManageEquipment = () => {
               freeSolo
               disablePortal
               value={formData.equipment_type}
-              onChange={(event, newValue) => {
-                setFormData({ ...formData, equipment_type: newValue });
-              }}
+              onInputChange={handleTypeChange}
               options={equipmentTypes}
               renderInput={(params) => (
                 <TextField
