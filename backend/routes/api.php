@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('equipments', EquipmentController::class);
         Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::apiResource('sectors',SectorController::class);
+        Route::get('/sector-names', [SectorController::class, 'sectorNames']);
         Route::apiResource('equipment-requests', EquipRequestController::class);
         Route::apiResource('users',UserController::class);
         Route::group(['prefix' => 'history'], function () {

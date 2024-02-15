@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use function Pest\Laravel\json;
 
 class SectorController extends Controller
 {
@@ -48,6 +49,13 @@ class SectorController extends Controller
         }
 
         return SectorResource::collection($sectors);
+    }
+
+    public function sectorNames():JsonResponse
+    {
+        $sectorNames = Sector::all()->pluck('name');
+
+        return response()->json($sectorNames);
     }
 
     public function show(Sector $sector):JsonResource

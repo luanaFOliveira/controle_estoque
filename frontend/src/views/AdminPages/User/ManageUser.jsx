@@ -57,9 +57,10 @@ const ManageUser = () => {
   }, [userId]);
 
   const getAllSectors = () => {
-    axiosClient.get('/sectors')
+    axiosClient.get('/sector-names')
       .then((data) => {
-        setSectors(data.data.data);
+        console.log(data.data)
+        setSectors(data.data);
       });
   };
 
@@ -185,8 +186,8 @@ const ManageUser = () => {
               fullWidth
             >
               {sectors.map((sector) => (
-                <MenuItem key={sector.name} value={sector.name}>
-                  {sector.name}
+                <MenuItem key={sector} value={sector}>
+                  {sector}
                 </MenuItem>
               ))}
             </Select>
