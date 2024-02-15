@@ -16,30 +16,15 @@ import MyEquipmentPage from "./views/UserPages/MyEquipmentsPage";
 import SectorPage from "./views/UserPages/SectorPage";
 import ViewUser from "./views/AdminPages/User/ViewUser";
 import { useAuth } from "./context/AuthProvider";
-import React, { useEffect, useState } from 'react';
-import { CircularProgress } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import React, { useEffect, useState } from "react";
+import { CircularProgress } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 
 const PrivateRoute = ({ element, adminOnly }) => {
-  const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const delay = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    return () => clearTimeout(delay);
-  }, []);
-
-  if (loading) {
-    return <Grid item container justifyContent="center">
-      <CircularProgress/>
-      </Grid>;
-  }
-
-  if (adminOnly && !user?.is_admin) {
+  if (!loading && adminOnly && !user?.is_admin) {
     return <Navigate to="*" />;
   }
 
@@ -104,19 +89,27 @@ const router = createBrowserRouter([
       },
       {
         path: "/new-equipment",
-        element: <PrivateRoute element={<ManageEquipment />} adminOnly={true} />,
+        element: (
+          <PrivateRoute element={<ManageEquipment />} adminOnly={true} />
+        ),
       },
       {
         path: "/edit-equipment/:equipment_id",
-        element: <PrivateRoute element={<ManageEquipment />} adminOnly={true} />,
+        element: (
+          <PrivateRoute element={<ManageEquipment />} adminOnly={true} />
+        ),
       },
       {
         path: "/request-equipment",
-        element: <PrivateRoute element={<EquipmentRequestPage />} adminOnly={false} />,
+        element: (
+          <PrivateRoute element={<EquipmentRequestPage />} adminOnly={false} />
+        ),
       },
       {
         path: "/my-equipments",
-        element: <PrivateRoute element={<MyEquipmentPage />} adminOnly={false} />,
+        element: (
+          <PrivateRoute element={<MyEquipmentPage />} adminOnly={false} />
+        ),
       },
       {
         path: "/view-sector",

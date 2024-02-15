@@ -63,7 +63,7 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
           underline="hover"
           sx={{ cursor: "pointer" }}
         >
-          {params.row.equipment.name}
+          {params.row.equipment.equipment_id}
         </Link>
       ),
     },

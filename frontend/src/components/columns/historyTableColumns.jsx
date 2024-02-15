@@ -15,11 +15,22 @@ export default function EquipmentHistoryTableColumns() {
       field: "created_at",
       headerName: "Criado em",
       width: 150,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleDateString("pt-BR");
+      },
     },
     {
       field: "returned_at",
-      headerName: "Devolvido em",
+      headerName: "Data de Devolução",
       width: 150,
+      valueFormatter: (params) => {
+        if (params.value === null) {
+          return "Em uso";
+        }
+        const date = new Date(params.value);
+        return date.toLocaleDateString("pt-BR");
+      },
     },
   ];
 }
