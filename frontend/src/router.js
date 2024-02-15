@@ -17,15 +17,23 @@ import SectorPage from "./views/UserPages/SectorPage";
 import ViewUser from "./views/AdminPages/User/ViewUser";
 import { useAuth } from "./context/AuthProvider";
 import React, { useEffect, useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 
 const PrivateRoute = ({ element, adminOnly }) => {
   const { user, loadingUser } = useAuth();
 
-  if (!loadingUser && adminOnly && !user?.is_admin) {
-    return <Navigate to="*" />;
+  if (loadingUser) {
+    return (
+      <Grid item container justifyContent="center" marginTop={2}>
+        <CircularProgress />
+      </Grid>
+    );
+  }
+
+  if (adminOnly && !user?.is_admin) {
+    return <Navigate to="/*" />;
   }
 
   return element;
