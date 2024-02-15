@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
+import Forbidden from './views/shared/Forbidden';
 
 const PrivateRoute = ({ element, adminOnly }) => {
   const { user, loadingUser } = useAuth();
@@ -33,7 +34,7 @@ const PrivateRoute = ({ element, adminOnly }) => {
   }
 
   if (adminOnly && !user?.is_admin) {
-    return <Navigate to="/*" />;
+    return <Navigate to="/forbidden" />;
   }
 
   return element;
@@ -134,6 +135,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    path: "/forbidden",
+    element: <Forbidden />,
   },
   {
     path: "*",
