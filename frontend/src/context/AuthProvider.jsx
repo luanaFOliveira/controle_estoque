@@ -8,7 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
-  const [loading, setLoading] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   const isAuthenticated = !!user;
 
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const getUser = async () => {
-    setLoading(true);
+    setLoadingUser(true);
     await axiosClient
       .get("/user/")
       .then(({ data }) => {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         toast("Usuário não autorizado, realize o login para continuar.");
       })
       .finally(() => {
-        setLoading(false);
+        setLoadingUser(false);
       });
   };
 
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         login,
         logout,
         isAuthenticated,
-        loading,
+        loadingUser,
       }}
     >
       {children}

@@ -22,9 +22,9 @@ import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 
 const PrivateRoute = ({ element, adminOnly }) => {
-  const { user, loading } = useAuth();
+  const { user, loadingUser } = useAuth();
 
-  if (!loading && adminOnly && !user?.is_admin) {
+  if (!loadingUser && adminOnly && !user?.is_admin) {
     return <Navigate to="*" />;
   }
 
