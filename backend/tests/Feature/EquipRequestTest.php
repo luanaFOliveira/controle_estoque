@@ -4,6 +4,7 @@ use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\User;
 use App\Models\Sector;
+use App\Models\UserEquipment;
 use function Pest\Laravel\{actingAs, get, post, delete,put};
 
 beforeEach(function (){
@@ -160,3 +161,17 @@ it('can delete an equipment request', function () {
     expect(EquipmentRequest::find($equipmentRequest->equipment_request_id))->toBeNull();
 });
 
+it('can return a equipment', function () {
+    actingAs($this->user, 'sanctum');
+
+    $equipment = Equipment::factory()->create(
+        ['is_available' => false,]
+    );
+    UserEquipment::factory()->create([
+        'user_id' => $this->user->user_id,
+        'equipment_id' => $equipment->equipment_id,
+    ]);
+
+    post("/api/equipment/return/{$equipment->equipment_id}")->assertOk();
+
+});

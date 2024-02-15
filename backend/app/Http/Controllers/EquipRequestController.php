@@ -38,7 +38,7 @@ class EquipRequestController extends Controller
         }
 
         
-        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(5));
+        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
     public function getRequestMotives(Request $request): AnonymousResourceCollection

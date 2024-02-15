@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Resources\EquipmentResource;
+use App\Http\Resources\HistoryResource;
 use App\Models\Equipment;
 use App\Models\EquipmentBrand;
 use App\Models\EquipmentType;
@@ -70,13 +71,15 @@ class EquipmentService
         return EquipmentResource::make($equipment);
     }
 
-    public function returnEquipment(Equipment $equipment): EquipmentResource
+    public function returnEquipment(Equipment $equipment): HistoryResource
     {
-        $userEquipment = UserEquipment::find($equipment->equipment_id);
+        $userEquipment = UserEquipment::where('equipment_id', $equipment->equipment_id)
+            ->whereNull('returned_at')
+            ->first();
         $userEquipment->returned_at = now();
         $userEquipment->save();
 
-        return EquipmentResource::make($userEquipment);
+        return HistoryResource::make($userEquipment);
     }
 
     private function updateEquipment(StoreEquipmentRequest $request, Equipment $equipment): EquipmentResource
