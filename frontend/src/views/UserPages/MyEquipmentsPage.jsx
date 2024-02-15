@@ -6,6 +6,8 @@ import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import { useAuth } from "../../context/AuthProvider";
 import { MyEquipmentAvailableTableColumns,MyEquipmentUnavailableTableColumns } from '../../components/columns/MyEquipmentTablesColumns';
+import { getUserHistory } from "../../services/historyService";
+import { errorToast } from "../../services/api";
 
 export default function MyEquipmentsPage() {
     const { user} = useAuth();
@@ -19,22 +21,23 @@ export default function MyEquipmentsPage() {
     const [rowCountEquipAva, setRowCountEquipAva] = useState(0);
     const [rowCountEquipUna, setRowCountEquipUna] = useState(0);
 
-    const [paginationModelEquipAva, setPaginationModelEquipAva] = useState({ page: 0, pageSize: 5 });
-    const [paginationModelEquipUna, setPaginationModelEquipUna] = useState({ page: 0, pageSize: 5 });
+    const [paginationModelEquipAva, setPaginationModelEquipAva] = useState({ page: 0, pageSize: 10 });
+    const [paginationModelEquipUna, setPaginationModelEquipUna] = useState({ page: 0, pageSize: 10 });
+    const [reload, setReload] = useState(false);
 
 
     useEffect(() => {
         const fetchEquipmentsAvailable = async () => {
             setIsLoadingEquipAva(true);
             try{
-                const response = await axiosClient.get(`/history/users?user_id=${user.user_id}&availability=available`);
-                const equipmentsWithId = response.data.data.map(equipment => ({
-                    ...equipment, id: equipment?.user_equipment_id
-                }));   
-                setEquipAvailable(equipmentsWithId);
-                setRowCountEquipAva((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
-            
+                const response = await getUserHistory({
+                    user_id: user.user_id,
+                    filter: "available",
+                });
+                setEquipAvailable(response.data);
+                setRowCountEquipAva((prevRowCountState) => response.meta.total ?? prevRowCountState,);
             }catch(error){
+                errorToast(error);
                 console.error(error);
             }finally{
                 setIsLoadingEquipAva(false);
@@ -44,37 +47,21 @@ export default function MyEquipmentsPage() {
         fetchEquipmentsAvailable().then(r => {
         });
 
-    },[paginationModelEquipAva.page]);
+    },[paginationModelEquipAva.page,reload]);
 
-    /*
-    const columnsEquipAvailable = [
-        { field: 'id', headerName: 'Codigo', width: 80 },
-        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
-        { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
-        { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        {
-            field: "is_at_office",
-            headerName: "Local",
-            flex: 1,
-            sortable: false,
-            renderCell: (params) =>
-              params.value ? params.row.sector : "Fora do escritório",
-        },
-        
-    ];
-*/
     useEffect(() => {
         const fetchEquipmentsUnavailable = async () => {
             setIsLoadingEquipUna(true);
             try{
-                const response = await axiosClient.get(`/history/users?user_id=${user.user_id}&availability=unavailable`);
-                const equipmentsWithId = response.data.data.map(equipment => ({
-                    ...equipment, id: equipment?.user_equipment_id
-                }));   
-                setEquipUnavailable(equipmentsWithId);
-                setRowCountEquipUna((prevRowCountState) => response.data.meta.total !== undefined ? response.data.meta.total : prevRowCountState);
+                const response = await getUserHistory({
+                    user_id: user.user_id,
+                    filter: "unavailable",
+                });
+                setEquipUnavailable(response.data);
+                setRowCountEquipUna((prevRowCountState) => response.meta.total ?? prevRowCountState,);
             
             }catch(error){
+                errorToast(error);
                 console.error(error);
             }finally{
                 setIsLoadingEquipUna(false);
@@ -84,74 +71,12 @@ export default function MyEquipmentsPage() {
         fetchEquipmentsUnavailable().then(r => {
         });
 
-    },[paginationModelEquipUna.page]);
+    },[paginationModelEquipUna.page,reload]);
 
-    const columnsEquipAvailable = MyEquipmentAvailableTableColumns();
+    
+    const columnsEquipAvailable = MyEquipmentAvailableTableColumns({setReload:setReload});
     const columnsEquipUnavailable = MyEquipmentUnavailableTableColumns();
-    /*
-    const columnsEquipUnavailable = [
-        { field: 'id', headerName: 'Codigo', flex:1,},
-        { field: 'name', headerName: 'Nome', flex:1,sortable: false,},
-        { field: 'brand', headerName: 'Marca', flex:1,sortable: false,},
-        { field: 'type', headerName: 'Tipo', flex:1,sortable: false,},
-        {
-            field: "is_at_office",
-            headerName: "Local",
-            flex: 1,
-            sortable: false,
-            renderCell: (params) =>
-              params.value ? params.row.sector : "Fora do escritório",
-        },
-        { field: 'created_at', headerName: 'Data de retirada', flex:1,},
-        { field: 'returned_at', headerName: 'Data de devolucao', flex:1,},
-    ];
-*/
-
-    var rowsEquipAvailable = [];
-    
-    if (equipAvailable.length > 0) {
-        rowsEquipAvailable = equipAvailable.map((row) => {
-            const { user, equipment } = row;
-            if (equipment && equipment.length > 0) {
-                const { name, equipment_brand, equipment_type, is_at_office, sector } = equipment[0];
-                
-                return {
-                    id: user.user_id,
-                    name: name,
-                    brand: equipment_brand,
-                    type: equipment_type,
-                    is_at_office: is_at_office ? "Fora do escritório" : sector ,
-                };
-            } else {
-                return {};
-            }
-        });  
-    }
-    
-
-    var rowsEquipUnavailable = [];
-
-    if (equipUnavailable.length > 0) {
-        rowsEquipUnavailable = equipUnavailable.map((row) => {
-            const { user, equipment,created_at,returned_at } = row;
-            if (equipment && equipment.length > 0) {
-                const { name, equipment_brand, equipment_type, is_at_office, sector } = equipment[0];
-                
-                return {
-                    id: user.user_id,
-                    name: name,
-                    brand: equipment_brand,
-                    type: equipment_type,
-                    is_at_office: is_at_office ? "Fora do escritório" : sector ,
-                    created_at: created_at,
-                    returned_at: returned_at,
-                };
-            } else {
-                return {};
-            }
-        });  
-    }
-
+ 
     return(<>
         <Container sx={{mt: 5}}>
             <Typography component="h1" variant="h4">
@@ -165,9 +90,10 @@ export default function MyEquipmentsPage() {
             <>
             {rowCountEquipAva > 0 ? (
                 <BaseTable
-                rows={rowsEquipAvailable}
+                rows={equipAvailable}
                 columns={columnsEquipAvailable}
                 checkBox={false}
+                getRowId={(row) => row.user_equipment_id}
                 rowCount={rowCountEquipAva}
                 paginationModel={paginationModelEquipAva}
                 setPaginationModel={setPaginationModelEquipAva}
@@ -193,9 +119,10 @@ export default function MyEquipmentsPage() {
             <>
             {rowCountEquipUna > 0 ? (
                 <BaseTable
-                rows={rowsEquipUnavailable}
+                rows={equipUnavailable}
                 columns={columnsEquipUnavailable}
                 checkBox={false}
+                getRowId={(row) => row.user_equipment_id}
                 rowCount={rowCountEquipUna}
                 paginationModel={paginationModelEquipUna}
                 setPaginationModel={setPaginationModelEquipUna}

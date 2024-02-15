@@ -14,6 +14,7 @@ class HistoryResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'user_equipment_id' => $this->user_equipment_id,
             'user' => User::withoutGlobalScope('sectorScope')->auth()->select('user_id', 'name')->first(),
             'equipment_code' => $this->equipment()->value('equipment_id'),
             'created_at' => $this->created_at,
