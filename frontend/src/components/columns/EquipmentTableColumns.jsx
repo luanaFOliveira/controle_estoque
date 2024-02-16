@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function EquipmentTableColumns({user_admin}) {
+export default function EquipmentTableColumns({user_admin}{user_admin}) {
   const navigate = useNavigate();
 
   return [

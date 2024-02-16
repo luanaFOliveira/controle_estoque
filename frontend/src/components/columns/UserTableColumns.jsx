@@ -45,6 +45,20 @@ export default function UserTableColumns({user_admin}) {
   }
 
   let newColumns = [
+    })
+  }else if(user_admin == false){
+    columns.push({
+      field: "name",
+      headerName: "Nome",
+      flex: 1,
+      sortable: false,
+      renderCell: (params) => (
+        <span>{params.row.name}</span>
+      ),
+    })
+  }
+
+  let newColumns = [
     {
       field: "email",
       headerName: "Email",
@@ -61,6 +75,9 @@ export default function UserTableColumns({user_admin}) {
       sortable: false,
     },
   ];
+
+  columns.push(...newColumns);
+  return columns;
 
   columns.push(...newColumns);
   return columns;
