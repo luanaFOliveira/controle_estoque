@@ -29,7 +29,7 @@ class EquipRequestController extends Controller
     public function equipmentsAvailable(Request $request): AnonymousResourceCollection
     {
         $query = Equipment::query();
-        
+
         $query->where('is_available', true);
         if ($request->has('sector')) {
             $sector = $request->input('sector');
@@ -37,7 +37,7 @@ class EquipRequestController extends Controller
             $query->where('sector_id', 'ilike', "%$sector%");
         }
 
-        
+
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
@@ -47,7 +47,7 @@ class EquipRequestController extends Controller
         return RequestMotiveResource::collection($query);
     }
 
-    
+
 
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -67,7 +67,7 @@ class EquipRequestController extends Controller
             }
         }
 
-        return EquipRequestResource::collection($query->orderBy('request_status_id','asc')->paginate(10));
+        return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id','asc')->paginate(10));
     }
 
     public function show(EquipmentRequest $equipmentRequest): JsonResource
