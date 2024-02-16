@@ -22,7 +22,7 @@ export default function HistoryTableColumns(type) {
     }, {
         field: "created_at", headerName: "Criado em", flex: 1, minWidth: 150, valueFormatter: (params) => {
             const date = new Date(params.value);
-            return date.toLocaleDateString("pt-BR");
+            return date.toLocaleString("pt-BR");
         },
     }, {
         field: "returned_at", headerName: "Data de Devolução", flex: 1, minWidth: 200, valueFormatter: (params) => {
@@ -30,7 +30,7 @@ export default function HistoryTableColumns(type) {
                 return "Em uso";
             }
             const date = new Date(params.value);
-            return date.toLocaleDateString("pt-BR");
+            return date.toLocaleString("pt-BR");
         },
     },];
 }

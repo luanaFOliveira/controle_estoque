@@ -22,31 +22,31 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
           errorToast(error);
         }
     }
-    
 
-  return [  
-    { 
-        field: 'equipment_code', 
+
+  return [
+    {
+        field: 'equipment_code',
         headerName: 'Codigo',
         flex:1,
     },
-    { 
-        field: 'name', 
-        headerName: 'Nome', 
+    {
+        field: 'name',
+        headerName: 'Nome',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.name).join(","),
     },
-    { 
-        field: 'brand', 
-        headerName: 'Marca', 
+    {
+        field: 'brand',
+        headerName: 'Marca',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_brand).join(","),
     },
-    { 
-        field: 'type', 
-        headerName: 'Tipo', 
+    {
+        field: 'type',
+        headerName: 'Tipo',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_type).join(","),
@@ -79,34 +79,34 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
           </>
         ),
     },
-    
+
 ];
 }
 
 export function MyEquipmentUnavailableTableColumns() {
-    return [  
-    { 
-        field: 'equipment_code', 
+    return [
+    {
+        field: 'equipment_code',
         headerName: 'Codigo',
-        flex:1, 
+        flex:1,
     },
-    { 
-        field: 'name', 
-        headerName: 'Nome', 
+    {
+        field: 'name',
+        headerName: 'Nome',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.name).join(","),
     },
-    { 
-        field: 'brand', 
-        headerName: 'Marca', 
+    {
+        field: 'brand',
+        headerName: 'Marca',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_brand).join(","),
     },
-    { 
-        field: 'type', 
-        headerName: 'Tipo', 
+    {
+        field: 'type',
+        headerName: 'Tipo',
         flex:1,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_type).join(","),
@@ -124,7 +124,7 @@ export function MyEquipmentUnavailableTableColumns() {
         flex:1,
         valueFormatter: (params) => {
             const date = new Date(params.value);
-            return date.toLocaleDateString("pt-BR");
+            return date.toLocaleString("pt-BR");
         },
     },
     {
@@ -136,9 +136,9 @@ export function MyEquipmentUnavailableTableColumns() {
             return "Em uso";
           }
           const date = new Date(params.value);
-          return date.toLocaleDateString("pt-BR");
+          return date.toLocaleString("pt-BR");
         },
     },
-      
+
   ];
   }
