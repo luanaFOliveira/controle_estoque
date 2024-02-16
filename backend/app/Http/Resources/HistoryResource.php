@@ -15,7 +15,7 @@ class HistoryResource extends JsonResource
     {
         return [
             'user_equipment_id' => $this->user_equipment_id,
-            'user' => User::withoutGlobalScope('sectorScope')->auth()->select('user_id', 'name')->first(),
+            'user' => User::withoutGlobalScope('sectorScope')->auth()->where('user_id', $this->user_id)->select('user_id', 'name')->first(),
             'created_at' => $this->created_at,
             'returned_at' => $this->returned_at,
             'deleted_at' => $this->deleted_at,

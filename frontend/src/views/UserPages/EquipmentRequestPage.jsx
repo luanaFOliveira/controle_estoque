@@ -146,7 +146,8 @@ export default function EquipmentRequestPage() {
                 <Grid item container justifyContent="center">
                     <CircularProgress />
                 </Grid>
-                ) : (<>
+                ) : (
+                <>
                     <Typography component="h1" variant="h4">
                         Equipamentos disponiveis
                     </Typography>
