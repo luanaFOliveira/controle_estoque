@@ -4,25 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Http\Resources\EquipmentResource;
-use App\Http\Resources\SectorResource;
 use App\Http\Resources\UserDetailedResource;
 use App\Http\Resources\UserResource;
-use App\Models\Equipment;
-use App\Models\Sector;
 use App\Models\User;
-use App\Models\UserSector;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
     private $userService;
 
-    public function __construct(UserService $userService) {
+    public function __construct(UserService $userService)
+    {
         $this->userService = $userService;
     }
 
@@ -59,15 +55,24 @@ class UserController extends Controller
         ], 200);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
         $userResource = $this->userService->updateUser($request, $user);
         return response()->json(['message' => 'User updated successfully', 'data' => $userResource]);
     }
 
+    public function changePassword(Request $request): JsonResponse
+    {
+        $userResource = $this->userService->changePasswordUser($request);
+        return response()->json(['message' => 'Password updated successfully', 'data' => $userResource]);
+    }
+
     public function destroy(User $user): JsonResponse
     {
         $this->userService->deleteUser($user);
-        return response()->json(['message' => 'User deleted successfully','data' => $user]);
+        return response()->json(['message' => 'User deleted successfully', 'data' => $user]);
     }
 }

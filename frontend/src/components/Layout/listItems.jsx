@@ -6,6 +6,7 @@ import DevicesIcon from "@mui/icons-material/Devices";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import BusinessIcon from "@mui/icons-material/Business";
 import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link } from "react-router-dom";
 
 const ListItemLink = ({ to, icon: Icon, primary }) => (
@@ -34,6 +35,11 @@ export const userListItems = (
       icon={DevicesIcon}
       primary="Meus equipamentos"
     />
+      <ListItemLink
+          to="/my-account"
+          icon={AccountCircleIcon}
+          primary="Minha conta"
+      />
   </React.Fragment>
 );
 

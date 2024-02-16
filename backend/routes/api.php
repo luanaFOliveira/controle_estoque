@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('sectors',SectorController::class)->only(['show', 'index']);
     Route::apiResource('equipments', EquipmentController::class)->only(['show', 'index']);
     Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store', 'index']);
+    Route::put('change-password', [UserController::class, 'changePassword']);
     Route::get('equipments-available', [EquipRequestController::class, 'equipmentsAvailable']);
     Route::get('request-motives', [EquipRequestController::class, 'getRequestMotives']);
     Route::post('equipment/return/{equipment}', [EquipmentController::class, 'returnEquipment']);
@@ -59,6 +60,5 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::post('/login',[AuthController::class, 'login']);
-Route::post('/login-google',[AuthController::class, 'googleLogin']);;
-Route::post('/recovery-password',[AuthController::class, 'recoveryPassword']);
+Route::post('/login-google',[AuthController::class, 'googleLogin']);
 

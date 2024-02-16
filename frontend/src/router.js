@@ -22,6 +22,8 @@ import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 import Forbidden from './views/shared/Forbidden';
 import { toast } from 'react-toastify';
+import UserChangePassword from "./views/UserPages/UserChangePassword";
+import MyAccount from "./views/UserPages/MyAccount";
 
 const PrivateRoute = ({ element, adminOnly, isHomePage }) => {
   const { user, loadingUser } = useAuth();
@@ -131,6 +133,14 @@ const router = createBrowserRouter([
       {
         path: "/view-sector",
         element: <PrivateRoute element={<SectorPage />} adminOnly={false} />,
+      },
+      {
+        path: "/my-account",
+        element: <PrivateRoute element={<MyAccount />} adminOnly={false} />,
+      },
+      {
+        path: "/edit-password",
+        element: <PrivateRoute element={<UserChangePassword />} adminOnly={false} />,
       },
     ],
   },

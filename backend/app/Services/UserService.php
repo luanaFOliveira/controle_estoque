@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserEquipment;
 use App\Models\UserSector;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 
@@ -50,6 +51,22 @@ class UserService
         }
 
         $this->updateUserRelations($request, $user);
+
+        return UserResource::make($user);
+    }
+
+    public function changePasswordUser(Request $request): UserResource
+    {
+        $user_id = $request->input('user_id');
+        $user = User::where('user.user_id', $user_id)->first();
+
+        $data = $request->validate([
+            'password' => 'required|min:5',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($data['password']),
+        ]);
 
         return UserResource::make($user);
     }
