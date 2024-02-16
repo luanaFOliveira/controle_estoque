@@ -29,6 +29,8 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: 'equipment_code',
         headerName: 'Codigo',
         flex:1,
+        valueGetter: (params) =>
+            params.row.equipment.map((equip) => equip.equipment_code).join(","),
     },
     {
         field: 'name',
@@ -88,7 +90,9 @@ export function MyEquipmentUnavailableTableColumns() {
     {
         field: 'equipment_code',
         headerName: 'Codigo',
-        flex:1,
+        flex:1, 
+        valueGetter: (params) =>
+            params.row.equipment.map((equip) => equip.equipment_code).join(","),
     },
     {
         field: 'name',
