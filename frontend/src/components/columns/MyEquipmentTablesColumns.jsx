@@ -128,7 +128,7 @@ export function MyEquipmentUnavailableTableColumns() {
         flex:1,
         valueFormatter: (params) => {
             const date = new Date(params.value);
-            return date.toLocaleDateString("pt-BR");
+            return date.toLocaleString("pt-BR");
         },
     },
     {
@@ -140,7 +140,7 @@ export function MyEquipmentUnavailableTableColumns() {
             return "Em uso";
           }
           const date = new Date(params.value);
-          return date.toLocaleDateString("pt-BR");
+          return date.toLocaleString("pt-BR");
         },
     },
       

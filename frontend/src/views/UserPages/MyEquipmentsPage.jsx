@@ -14,7 +14,7 @@ export default function MyEquipmentsPage() {
 
     const [firstLoading, setFirstLoading] = useState(true);
 
-    const [equipAvailable, setEquipAvailable] = useState([{}]);
+    const [equipAvailable, setEquipAvailable] = useState([]);
     const [equipUnavailable, setEquipUnavailable] = useState([]);
 
     const [isLoadingEquipAva, setIsLoadingEquipAva] = useState(true);
@@ -79,7 +79,7 @@ export default function MyEquipmentsPage() {
 
     
     const columnsEquipAvailable = MyEquipmentAvailableTableColumns({setReload:setReload});
-    const columnsEquipUnavailable = MyEquipmentUnavailableTableColumns();
+    const columnsEquipUnavailable = MyEquipmentUnavailableTableColumns({setReload:setReload});
  
     return(<>
         <Container sx={{mt: 5}}>
