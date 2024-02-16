@@ -40,10 +40,14 @@ export default function BaseTable({
       }}
       localeText={{
         toolbarColumns: "Colunas",
+        columnsPanelTextFieldPlaceholder: "Título da coluna",
+        columnsPanelTextFieldLabel: "Encontrar coluna",
+        columnsPanelHideAllButton: "Esconder todos",
+        columnsPanelShowAllButton: "Mostrar todos",
         toolbarDensity: "Densidade",
-        toolbarDensityCompact: "Pequeno",
-        toolbarDensityStandard: "Médio",
-        toolbarDensityComfortable: "Grande",
+        toolbarDensityCompact: "Compacto",
+        toolbarDensityStandard: "Padrão",
+        toolbarDensityComfortable: "Confortável",
         toolbarExport: "Exportar",
         toolbarExportCSV: "Baixar como CSV",
         toolbarExportPrint: "Printar",
