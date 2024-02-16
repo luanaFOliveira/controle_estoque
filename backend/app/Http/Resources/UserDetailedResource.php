@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 /**
- * @mixin \App\Models\User
+ * @mixin User
  */
 class UserDetailedResource extends JsonResource
 {
@@ -18,24 +19,8 @@ class UserDetailedResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'is_admin' => $this->is_admin,
-            'equipments' => $this->getEquipments(),
             'sectors' => $this->getSectors(),
         ];
-    }
-
-    protected function getEquipments():array
-    {
-        return $this->equipment->map(function ($equipment) {
-            return [
-                'equipment_id' => $equipment->equipment_id,
-                'equipment_code' => $equipment->equipment_code,
-                'name' => $equipment->name,
-                'equipment_type_id' => $equipment->equipment_type_id,
-                'equipment_brand_id' => $equipment->equipment_brand_id,
-                'sector_id' => $equipment->sector_id,
-                'is_at_office' => $equipment->is_at_office,
-            ];
-        })->toArray();
     }
 
     protected function getSectors():array

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Card, CardContent, CircularProgress, Container, Grid, Typography,} from "@mui/material";
+import {Button, Card, CardContent, CircularProgress, Container, Grid, Link, Typography,} from "@mui/material";
 import {toast} from "react-toastify";
 import {toastDelete} from "../../../components/shared/ToastComponents";
 import BaseTable from "../../../components/shared/BaseTable";
@@ -63,6 +63,10 @@ const ViewUser = () => {
 
         fetchUserHistory();
     }, [paginationModel.page]);
+
+    useEffect(() => {
+        console.log(userDetail);
+    }, []);
 
     const handleDestroy = async () => {
         try {
@@ -138,6 +142,38 @@ const ViewUser = () => {
                         <Grid>
                             <UserCard label="Nome do Usuário" value={userDetail.name}/>
                             <UserCard label="Email do Usuário" value={userDetail.email}/>
+                            <Card
+                                sx={{
+                                    mb: 2,
+                                    maxWidth: "700px",
+                                }}
+                            >
+                                <CardContent>
+                                    <Grid container sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "start",
+                                    }}>
+                                        <Typography variant="body2" width="250px">
+                                            Setores do Usuário:
+                                        </Typography>
+                                        {userDetail.sectors.map((sector) => {
+                                            return (
+                                                <Link
+                                                    component="button"
+                                                    onClick={() => {
+                                                        navigate(`/sectors/${sector.sector_id}`);
+                                                    }}
+                                                    underline="hover"
+                                                    sx={{cursor: "pointer", marginLeft: "20px", marginTop: "5px",justifyContent: 'start', display: "flex"}}
+                                                >
+                                                    {sector.name}
+                                                </Link>
+                                            );
+                                        })}
+                                    </Grid>
+                                </CardContent>
+                            </Card>
                         </Grid>
                         <Typography
                             variant="h4"
