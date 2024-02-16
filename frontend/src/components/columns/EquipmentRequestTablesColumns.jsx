@@ -4,9 +4,12 @@ import { StatusField,RequestEquipButtonCell } from '../CustomColumns';
 export function EquipmentRequestHistoryTableColumns() {
     return [
       {
-        field: "equipment_request_id",
+        field: "equipment_code",
         headerName: "Codigo",
         flex: 1,
+        renderCell: (params) => (
+          <span>{params.row.equipment.equipment_code}</span>
+        ),
       },
       {
         field: "name",
@@ -32,7 +35,13 @@ export function EquipmentRequestHistoryTableColumns() {
         headerName: 'Status', 
         flex:1, 
         renderCell: (params) => <StatusField value={params.row.request_status} />, 
-    },
+      },
+      {
+        field:'deleted_at',
+        headerName: 'Data de devolução',
+        flex:1,
+        renderCell: (params) => (params.value ? new Date(params.value).toLocaleString() : 'Não devolvido'),
+      }
     ];
 }
 
@@ -40,7 +49,7 @@ export function EquipmentRequestHistoryTableColumns() {
 export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
   return [
     {
-      field: "equipment_id",
+      field: "equipment_code",
       headerName: "Codigo",
       flex: 1,
     },
