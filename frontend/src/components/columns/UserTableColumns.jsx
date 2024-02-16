@@ -7,36 +7,42 @@ import { useNavigate } from "react-router-dom";
 export default function UserTableColumns({user_admin}) {
   const navigate = useNavigate();
 
-  return [
-    {
-      field: "user_id",
-      headerName: "ID de usuário",
-      width: 150,
-    },
-    {
+  let columns = [
+    { field: "user_id", headerName: "ID de usuário", width: 150 },
+  ];
+
+  if(user_admin == true) {
+    columns.push({
       field: "name",
       headerName: "Nome",
-      width: 250,
+      flex: 1,
       sortable: false,
-      renderCell: (params) => {
-        if (user_admin) {
-          return (
-            <Link
-              component="button"
-              onClick={() => {
-                navigate(`/users/${params.row.user_id}`);
-              }}
-              underline="hover"
-              sx={{ cursor: "pointer" }}
-            >
-              {params.row.name}
-            </Link>
-          );
-        } else {
-          return <span>{params.row.name}</span>;
-        }
-      },
-    },
+      renderCell: (params) => (
+        <Link
+          component="button"
+          onClick={() => {
+            navigate(`/users/${params.row.user_id}`);
+          }}
+          underline="hover"
+          sx={{ cursor: "pointer" }}
+        >
+          {params.row.name}
+        </Link>
+      ),
+    })
+  }else if(user_admin == false){
+    columns.push({
+      field: "name",
+      headerName: "Nome",
+      flex: 1,
+      sortable: false,
+      renderCell: (params) => (
+        <span>{params.row.name}</span>
+      ),
+    })
+  }
+
+  let newColumns = [
     {
       field: "email",
       headerName: "Email",
@@ -51,4 +57,7 @@ export default function UserTableColumns({user_admin}) {
       sortable: false,
     },
   ];
+
+  columns.push(...newColumns);
+  return columns;
 }

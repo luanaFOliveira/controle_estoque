@@ -18,7 +18,7 @@ export default function EquipmentList() {
     pageSize: 10,
   });
 
-  const columnsEquip = EquipmentTableColumns();
+  const columnsEquip = EquipmentTableColumns({ user_admin: true });
 
   useEffect(() => {
     const fetchEquipments = async () => {

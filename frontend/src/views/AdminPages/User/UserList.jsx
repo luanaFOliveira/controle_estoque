@@ -17,7 +17,7 @@ function UserList() {
     pageSize: 10,
   });
 
-  const columnsUser = UserTableColumns();
+  const columnsUser = UserTableColumns({ user_admin: true });
 
   const fetchUsers = async () => {
     setLoading(true);
