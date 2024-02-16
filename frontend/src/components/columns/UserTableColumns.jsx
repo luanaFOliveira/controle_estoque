@@ -43,6 +43,7 @@ export default function UserTableColumns({user_admin}) {
     })
   }
 
+
   let newColumns = [
     {
       field: "email",
@@ -61,5 +62,7 @@ export default function UserTableColumns({user_admin}) {
     },
   ];
 
-  
+  columns.push(...newColumns);
+  return columns;
+
 }
