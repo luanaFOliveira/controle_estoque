@@ -102,7 +102,14 @@ const ManageEquipment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
+
+    const trimmedName = formData.name.trim();
+    if (trimmedName.length < 4 || trimmedName.length > 20) {
+      toast.error("O nome do equipamento deve ter entre 4 e 20 caracteres.");
+      return;
+    }
+
+
     if (params.equipment_id) {
       try {
         const response = await updateEquipment({

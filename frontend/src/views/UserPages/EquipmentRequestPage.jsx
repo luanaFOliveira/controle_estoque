@@ -33,7 +33,7 @@ export default function EquipmentRequestPage() {
     const [isLoadingHist, setIsLoadingHist] = useState(true);
     const [rowCountHist, setRowCountHist] = useState(0);
     const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
-    
+
     useEffect(() => {
         const fetchEquipments = async () => {
             setIsLoadingEquip(true);
@@ -42,7 +42,7 @@ export default function EquipmentRequestPage() {
                 const response = await indexEquipmentsAvailable({ page, sector});
                 setEquipments(response.data);
                 setRowCountEquip((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -56,7 +56,7 @@ export default function EquipmentRequestPage() {
 
     },[paginationModelEquip.page,reload]);
 
-  
+
     useEffect(() => {
         const fetchHistory = async () => {
             setIsLoadingHist(true);
@@ -67,7 +67,7 @@ export default function EquipmentRequestPage() {
                 });
                 setHistory(response.data);
                 setRowCountHist((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -86,7 +86,7 @@ export default function EquipmentRequestPage() {
             try{
                 const response = await getRequestMotives();
                 setRequestMotives(response.data);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -96,14 +96,14 @@ export default function EquipmentRequestPage() {
         });
 
     },[]);
-    
+
 
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
-        setFormData({ observation: '',motive:'', rowData: row}); 
+        setFormData({ observation: '',motive:'', rowData: row});
     };
 
     const handleClose = () => {
@@ -118,6 +118,12 @@ export default function EquipmentRequestPage() {
             request_motive_id: formData.motive,
             user_id: user?.user_id,
         };
+
+        if(payload.request_motive_id === null || payload.request_motive_id === ''){
+            toast.error('Insira um motivo para retirar o equipamento');
+            return;
+        }
+
         try {
             const response = await createEquipmentRequests({ formData: payload });
             if(response){
@@ -184,7 +190,7 @@ export default function EquipmentRequestPage() {
                             fullWidth
                             value={formData.rowData.name}
                             InputProps={{ readOnly: true }}
-                            sx={{ marginBottom: 2 }} 
+                            sx={{ marginBottom: 2 }}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -192,7 +198,7 @@ export default function EquipmentRequestPage() {
                             label="Motivo"
                             fullWidth
                             value={formData.motive}
-                            sx={{ marginBottom: 2 }} 
+                            sx={{ marginBottom: 2 }}
                             onChange={(e) => setFormData({ ...formData, motive: e.target.value })}
                         >
                             {requestMotives.map((motive) => (
@@ -207,10 +213,10 @@ export default function EquipmentRequestPage() {
                             label="Observação"
                             fullWidth
                             multiline
-                            rows={2} 
+                            rows={2}
                             value={formData.observation}
                             onChange={(e) => setFormData({ ...formData, observation: e.target.value })}
-                            sx={{ marginBottom: 2 }} 
+                            sx={{ marginBottom: 2 }}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -235,7 +241,7 @@ export default function EquipmentRequestPage() {
                 }
                 `}
             </style>
-        
+
     </>);
 
 };

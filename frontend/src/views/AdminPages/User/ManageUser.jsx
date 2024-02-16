@@ -86,6 +86,24 @@ const ManageUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const trimmedName = formData.name.trim();
+    if (trimmedName.length < 4 || trimmedName.length > 20) {
+      toast.error("O nome do usuário deve ter entre 4 e 20 caracteres.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Endereço de email inválido.");
+      return;
+    }
+
+    if ((formData.password.length > 0 || formData.password_confirmation.length > 0) &&
+      (formData.password.length < 5 || formData.password !== formData.password_confirmation)) {
+      toast.error("Por favor insira uma senha válida (pelo menos 5 caracteres) e que a confirmação de senha coincida.");
+      return;
+    }
+
     if (userId) {
       try {
         const response = await updateUser(userId, {

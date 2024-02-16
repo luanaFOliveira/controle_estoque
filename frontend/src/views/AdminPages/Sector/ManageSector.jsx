@@ -59,6 +59,12 @@ const ManageSector = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const trimmedName = formData.name.trim();
+    if (trimmedName.length < 4 || trimmedName.length > 20) {
+      toast.error("O nome do setor deve ter entre 4 e 20 caracteres.");
+      return;
+    }
+
     if (sectorId) {
       try {
         const response = await updateSector({
