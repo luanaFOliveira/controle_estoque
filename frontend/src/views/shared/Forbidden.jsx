@@ -22,7 +22,7 @@ const Forbidden = () => {
         Você não está autorizado a acessar essa rota.
       </Typography>
       <div style={{ textAlign: "center" }}>
-        <Button component={Link} to="/" variant="contained" color="primary">
+        <Button component={Link} to="/login" variant="contained" color="primary">
           Voltar
         </Button>
       </div>

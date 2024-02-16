@@ -61,7 +61,13 @@ export default function DefaultLayout() {
                 : theme.palette.grey[900],
             flexGrow: 1,
             height: "100vh",
-            overflow: "auto",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              width: "0.5em",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "transparent",
+            },
           }}
         >
           <Toolbar />

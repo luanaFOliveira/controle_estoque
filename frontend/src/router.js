@@ -21,6 +21,7 @@ import { Box, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentRequests";
 import Forbidden from './views/shared/Forbidden';
+import { toast } from 'react-toastify';
 
 const PrivateRoute = ({ element, adminOnly }) => {
   const { user, loadingUser } = useAuth();
@@ -33,7 +34,10 @@ const PrivateRoute = ({ element, adminOnly }) => {
     );
   }
 
-  if (adminOnly && !user?.is_admin) {
+  if(!user){
+    toast.warning('Usuário não autenticado, faça login para continuar')
+    return <Navigate to='/login'/>;
+  } else if (adminOnly && !user?.is_admin) {
     return <Navigate to="/forbidden" />;
   }
 

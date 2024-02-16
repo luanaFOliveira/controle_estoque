@@ -160,6 +160,16 @@ const ViewUser = () => {
                             isLoading={loading}
                             maxWidth={700}
                         />
+                        <Button
+                          variant="contained"
+                          sx={{
+                              mt: 3,
+                              mb: 2,
+                          }}
+                          onClick={() => navigate("/users")}
+                        >
+                            Voltar para a Lista de Usuários
+                        </Button>
                     </>
                 ) : (
                     <Grid item container justifyContent="center" marginTop={3}>

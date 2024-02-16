@@ -65,7 +65,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
 
     useEffect(() => {
         if (!loadingUser) {
-            if (!user.is_admin) {
+            if (user && !user.is_admin) {
                 axiosClient.get(`/sectors`).then(({data}) => {
                     setSectors(data.data);
                 });

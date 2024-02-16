@@ -163,6 +163,16 @@ const ViewEquipment = () => {
                         isLoading={isLoading}
                         maxWidth={700}
                     />
+                    <Button
+                      variant="contained"
+                      sx={{
+                          mt: 3,
+                          mb: 2,
+                      }}
+                      onClick={() => navigate("/equipments")}
+                    >
+                        Voltar para a Lista de Equipamentos
+                    </Button>
                 </Container>
             ) : (
                 <Grid item container justifyContent="center">
