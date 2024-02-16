@@ -18,8 +18,6 @@ class UserDetailedResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'is_admin' => $this->is_admin,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'equipments' => $this->getEquipments(),
             'sectors' => $this->getSectors(),
         ];
