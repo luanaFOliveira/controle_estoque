@@ -7,8 +7,10 @@ import { useNavigate } from "react-router-dom";
 export default function EquipmentTableColumns({user_admin}) {
   const navigate = useNavigate();
 
-  return [
-    {
+  let columns = [];
+
+  if(user_admin == true) {
+    columns.push({
       field: "equipment_code",
       headerName: "Código",
       flex: 1,
@@ -25,7 +27,18 @@ export default function EquipmentTableColumns({user_admin}) {
           {params.row.equipment_code}
         </Link>
       ),
-    },
+    });
+
+  }else if(user_admin == false){
+    columns.push({
+      field: "equipment_code",
+      headerName: "Código",
+      flex: 1,
+      minWidth: 100,
+    });
+  }
+
+  let newColumns = [
     {
       field: "name",
       headerName: "Nome",
@@ -72,7 +85,8 @@ export default function EquipmentTableColumns({user_admin}) {
           </Box>
         ),
     },
-  ]
+  ];
 
- 
+  columns.push(...newColumns);
+  return columns;
 }
