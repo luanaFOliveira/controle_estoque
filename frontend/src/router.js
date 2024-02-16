@@ -23,7 +23,7 @@ import EquipmentRequests from "./views/AdminPages/equipmentRequests/EquipmentReq
 import Forbidden from './views/shared/Forbidden';
 import { toast } from 'react-toastify';
 
-const PrivateRoute = ({ element, adminOnly }) => {
+const PrivateRoute = ({ element, adminOnly, isHomePage }) => {
   const { user, loadingUser } = useAuth();
 
   if (loadingUser) {
@@ -41,6 +41,10 @@ const PrivateRoute = ({ element, adminOnly }) => {
     return <Navigate to="/forbidden" />;
   }
 
+  if (isHomePage) {
+    return user?.is_admin ? <SectorList /> : <SectorPage />;
+  }
+
   return element;
 };
 
@@ -52,7 +56,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Navigate to="/home" /> },
       {
         path: "/home",
-        element: <PrivateRoute element={<SectorPage />} adminOnly={false} />,
+        element: <PrivateRoute element={<div />} adminOnly={false} isHomePage={true} />,
       },
       {
         path: "/sectors",
