@@ -72,5 +72,7 @@ export default function EquipmentTableColumns({user_admin}) {
           </Box>
         ),
     },
-  ];
+  ]
+
+ 
 }

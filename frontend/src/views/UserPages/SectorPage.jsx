@@ -17,8 +17,8 @@ export default function SectorPage() {
   const [sectorUsers, setSectorUsers] = useState([]);
   const [sectorEquipments, setSectorEquipments] = useState([]);
 
-  const columnsUsers = UserTableColumns(false);
-  const columnsEquipments = EquipmentTableColumns(false);
+  const columnsUsers = UserTableColumns({ user_admin: false });
+  const columnsEquipments = EquipmentTableColumns({ user_admin: false });
 
   useEffect(() => {
     const fetchSector = async () => {
