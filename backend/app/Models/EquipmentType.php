@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,4 +23,9 @@ class EquipmentType extends Model
     public $timestamps = false;
 
     protected $fillable = ['name'];
+
+    public function equipments(): HasMany
+    {
+        return $this->hasMany(Equipment::class, 'equipment_type_id', 'equipment_type_id');
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,4 +24,9 @@ class EquipmentBrand extends Model
     public $timestamps = false;
 
     protected $fillable = ['name'];
+
+    public function equipments(): HasMany
+    {
+        return $this->hasMany(Equipment::class, 'equipment_brand_id', 'equipment_brand_id');
+    }
 }
