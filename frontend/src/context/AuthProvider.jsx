@@ -10,8 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [token, _setToken] = useState(localStorage.getItem("ACCESS_TOKEN"));
   const [loadingUser, setLoadingUser] = useState(true);
 
-  const isAuthenticated = !!user;
-
   useEffect(() => {
     getUser();
   }, []);
@@ -58,7 +56,6 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout,
-        isAuthenticated,
         loadingUser,
       }}
     >

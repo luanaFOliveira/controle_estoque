@@ -25,7 +25,7 @@ export default function BaseTable({
     return (
       <Grid item container justifyContent="end">
         <GridToolbarColumnsButton />
-        <GridToolbarDensitySelector  />
+        <GridToolbarDensitySelector />
         <GridToolbarExport />
       </Grid>
     );
@@ -37,6 +37,21 @@ export default function BaseTable({
       columns={columns}
       slots={{
         toolbar: CustomToolbar,
+      }}
+      localeText={{
+        toolbarColumns: "Colunas",
+        columnsPanelTextFieldPlaceholder: "Título da coluna",
+        columnsPanelTextFieldLabel: "Encontrar coluna",
+        columnsPanelHideAllButton: "Esconder todos",
+        columnsPanelShowAllButton: "Mostrar todos",
+        toolbarDensity: "Densidade",
+        toolbarDensityCompact: "Compacto",
+        toolbarDensityStandard: "Padrão",
+        toolbarDensityComfortable: "Confortável",
+        toolbarExport: "Exportar",
+        toolbarExportCSV: "Baixar como CSV",
+        toolbarExportPrint: "Printar",
+        noRowsLabel: "Nenhum dado encontrado.",
       }}
       disableColumnMenu
       loading={isLoading}

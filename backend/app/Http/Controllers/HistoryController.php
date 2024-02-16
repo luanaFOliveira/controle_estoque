@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\HistoryResource;
+use App\Http\Resources\EquipmentHistoryResource;
 use App\Models\Equipment;
 use App\Models\User;
 use App\Models\UserEquipment;
@@ -23,7 +24,7 @@ class HistoryController extends Controller
 
         if ($request->has('availability')) {
             $status = $request->input('availability');
-            
+
             if($status === 'available') {
                 $query->whereNull('returned_at');
             } else if($status === 'unavailable') {
@@ -47,6 +48,6 @@ class HistoryController extends Controller
 
         $query = UserEquipment::where('equipment_id', $equipment_id);
 
-        return HistoryResource::collection($query->orderBy('created_at','desc')->paginate(10));
+        return EquipmentHistoryResource::collection($query->orderBy('created_at','desc')->paginate(10));
     }
 }
