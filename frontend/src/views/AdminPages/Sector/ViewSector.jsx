@@ -21,8 +21,8 @@ function ViewSector() {
   const [sectorDetail, setSectorDetail] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const columnsEquip = EquipmentTableColumns();
-  const columnsUser = UserTableColumns();
+  const columnsEquip = EquipmentTableColumns({ user_admin: true});
+  const columnsUser = UserTableColumns({ user_admin: true});
 
   const fetchSectorDetail = async () => {
     setLoading(true);
