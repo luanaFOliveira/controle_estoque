@@ -12,6 +12,8 @@ import { errorToast } from "../../services/api";
 export default function MyEquipmentsPage() {
     const { user} = useAuth();
 
+    const [firstLoading, setFirstLoading] = useState(true);
+
     const [equipAvailable, setEquipAvailable] = useState([{}]);
     const [equipUnavailable, setEquipUnavailable] = useState([]);
 
@@ -41,6 +43,7 @@ export default function MyEquipmentsPage() {
                 console.error(error);
             }finally{
                 setIsLoadingEquipAva(false);
+                setFirstLoading(false);
             }
 
         };
@@ -65,6 +68,7 @@ export default function MyEquipmentsPage() {
                 console.error(error);
             }finally{
                 setIsLoadingEquipUna(false);
+                setFirstLoading(false);
             }
 
         };
@@ -79,64 +83,43 @@ export default function MyEquipmentsPage() {
  
     return(<>
         <Container sx={{mt: 5}}>
-            <Typography component="h1" variant="h4">
-                Equipamentos ativos
-            </Typography>
-            {isLoadingEquipAva ? (
-                <Grid item container justifyContent="center">
-                    <CircularProgress />
-                </Grid>
+            {firstLoading ? (
+            <Grid item container justifyContent="center">
+                <CircularProgress />
+            </Grid>
             ) : (
             <>
-            {rowCountEquipAva > 0 ? (
-                <BaseTable
-                rows={equipAvailable}
-                columns={columnsEquipAvailable}
-                checkBox={false}
-                getRowId={(row) => row.user_equipment_id}
-                rowCount={rowCountEquipAva}
-                paginationModel={paginationModelEquipAva}
-                setPaginationModel={setPaginationModelEquipAva}
-                isLoading={isLoadingEquipAva}
-                />
-            ) : (
-                <Typography variant="body1" color="textSecondary">
-                Nenhum dado encontrado.
+                <Typography component="h1" variant="h4">
+                    Equipamentos ativos
                 </Typography>
-            )}
-            </>
-        )}
-        </Container>
-        <Container sx={{mt: 10}}>
-            <Typography component="h1" variant="h4">
-                Historico de equipamentos
-            </Typography>
-            {isLoadingEquipUna ? (
-                <Grid item container justifyContent="center">
-                    <CircularProgress />
-                </Grid>
-            ) : (
-            <>
-            {rowCountEquipUna > 0 ? (
                 <BaseTable
-                rows={equipUnavailable}
-                columns={columnsEquipUnavailable}
-                checkBox={false}
-                getRowId={(row) => row.user_equipment_id}
-                rowCount={rowCountEquipUna}
-                paginationModel={paginationModelEquipUna}
-                setPaginationModel={setPaginationModelEquipUna}
-                isLoading={isLoadingEquipUna}
+                    rows={equipAvailable}
+                    columns={columnsEquipAvailable}
+                    checkBox={false}
+                    getRowId={(row) => row.user_equipment_id}
+                    rowCount={rowCountEquipAva}
+                    paginationModel={paginationModelEquipAva}
+                    setPaginationModel={setPaginationModelEquipAva}
+                    isLoading={isLoadingEquipAva}
+                    maxHeight={620}
                 />
-            ) : (
-                <Typography variant="body1" color="textSecondary">
-                Nenhum dado encontrado.
+                <Typography component="h1" variant="h4">
+                    Historico de equipamentos
                 </Typography>
-            )}
+                <BaseTable
+                    rows={equipUnavailable}
+                    columns={columnsEquipUnavailable}
+                    checkBox={false}
+                    getRowId={(row) => row.user_equipment_id}
+                    rowCount={rowCountEquipUna}
+                    paginationModel={paginationModelEquipUna}
+                    setPaginationModel={setPaginationModelEquipUna}
+                    isLoading={isLoadingEquipUna}
+                    maxHeight={620}
+                />
             </>
-        )}
+            )}
         </Container>
-    
 </>);
 
 };
