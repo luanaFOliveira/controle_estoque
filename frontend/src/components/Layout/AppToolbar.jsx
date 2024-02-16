@@ -53,6 +53,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
     const location = useLocation();
     const pathNames = {
         "/home": "Início",
+        "/my-account": "Gerenciar conta",
         "/equipments": "Equipamentos",
         "/users": "Usuários",
         "/sectors": "Setores",
