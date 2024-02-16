@@ -21,14 +21,9 @@ const defaultTheme = createTheme({
 });
 
 export default function DefaultLayout() {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const { themeMode } = useTheme();
   const [open, setOpen] = useState(true);
-  const [loading, setLoading] = useState(true);
-
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/login"/>;
-  // }
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -56,7 +51,6 @@ export default function DefaultLayout() {
           open={open}
           toggleDrawer={toggleDrawer}
           is_admin={user?.is_admin}
-          loading={loading}
         />
         <Box
           component="main"
