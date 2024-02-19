@@ -87,6 +87,7 @@ it('can retrieve a list of the request motives', function () {
 it('can retrieve a specific equipment request using the show method', function () {
     /* @var EquipmentRequest $equipmentRequest */
     actingAs($this->user, 'sanctum');
+    
     $equipmentRequest = EquipmentRequest::factory()->create();
     get("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk()->assertJson([
         'data' => [
@@ -94,8 +95,15 @@ it('can retrieve a specific equipment request using the show method', function (
             'observation' => $equipmentRequest->observation,
             'request_status' => $equipmentRequest->status()->value('status'),
             'request_motive' => $equipmentRequest->motive()->value('name'),
-            'user' => $equipmentRequest->user()->value('name'),
-            'equipment' => $equipmentRequest->equipment()->value('name'),
+            'user' => [
+                'user_id' => $equipmentRequest->user()->value('user.user_id'),
+                'name' => $equipmentRequest->user()->value('name'),
+            ],
+            'equipment' => [
+                'equipment_id' => $equipmentRequest->equipment()->value('equipment_id'),
+                'name' => $equipmentRequest->equipment()->value('name'),
+                'equipment_code' => $equipmentRequest->equipment()->value('equipment_code'),
+            ],
         ]
     ]);
 

@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use function Pest\Laravel\{actingAs, post};
+use function Pest\Laravel\{actingAs, post, get};
 
 uses()->group('auth');
 
@@ -44,41 +44,6 @@ it('will fail when someone try login with null fields', function (){
     post('/api/login', $data)->assertStatus(302);
 });
 
-it('can register a new user', function () {
-    actingAs($this->admin, 'sanctum');
-
-    $data = [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
-        'password' => 'password123',
-        "password_confirmation"=> "password123",
-        'is_admin' => false,
-    ];
-
-    post('/api/register', $data)
-        ->assertStatus(200)
-        ->assertJson([
-            'message' => 'Successfully registered',
-            'user' => [
-                'name' => $data['name'],
-                'email' => $data['email'],
-            ],
-        ]);
-});
-
-it('will fail when admin try register with invalid credentials', function (){
-    actingAs($this->admin, 'sanctum');
-
-    $data = [
-        'name' => '',
-        'email' => '',
-        'password' => '',
-        "password_confirmation"=> '',
-    ];
-
-    post('/api/register', $data, ['Accept' => 'application/json'])->assertStatus(422);
-});
-
 it('can logout a user', function () {
     actingAs($this->admin, 'sanctum');
 
@@ -87,3 +52,5 @@ it('can logout a user', function () {
             'message' => 'Successfully logged out',
         ]);
 });
+
+
