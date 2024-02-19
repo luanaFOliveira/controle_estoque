@@ -21,7 +21,12 @@ class UserService
     {
         $data = $request->validated();
 
-        $user = User::create(['name' => $data['name'], 'email' => $data['email'], 'password' => Hash::make($data['password']), 'is_admin' => $data['is_admin']]);
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'is_admin' => $data['is_admin']
+        ]);
 
         $this->createUserRelations($request, $user);
 
@@ -40,7 +45,12 @@ class UserService
     {
         $data = $request->validated();
 
-        $user->update($data);
+        $user->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'is_admin' => $data['is_admin']
+        ]);
 
         if (isset($data['email'])) {
             $existingUser = User::where('email', $data['email'])->where('user_id', '<>', $user->user_id)->first();
@@ -51,22 +61,6 @@ class UserService
         }
 
         $this->updateUserRelations($request, $user);
-
-        return UserResource::make($user);
-    }
-
-    public function changePasswordUser(Request $request): UserResource
-    {
-        $user_id = $request->input('user_id');
-        $user = User::where('user.user_id', $user_id)->first();
-
-        $data = $request->validate([
-            'password' => 'required|min:5',
-        ]);
-
-        $user->update([
-            'password' => Hash::make($data['password']),
-        ]);
 
         return UserResource::make($user);
     }
@@ -90,6 +84,22 @@ class UserService
         } else {
             UserSector::where('user_id', $user->user_id)->delete();
         }
+    }
+
+    public function changePasswordUser(Request $request): UserResource
+    {
+        $user_id = $request->input('user_id');
+        $user = User::where('user.user_id', $user_id)->first();
+
+        $data = $request->validate([
+            'password' => 'required|min:5',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($data['password']),
+        ]);
+
+        return UserResource::make($user);
     }
 
     public function deleteUser(User $user): void

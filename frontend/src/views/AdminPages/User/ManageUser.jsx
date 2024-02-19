@@ -87,8 +87,8 @@ const ManageUser = () => {
     e.preventDefault();
 
     const trimmedName = formData.name.trim();
-    if (trimmedName.length < 4 || trimmedName.length > 20) {
-      toast.error("O nome do usuário deve ter entre 4 e 20 caracteres.");
+    if (trimmedName.length < 4 || trimmedName.length > 30) {
+      toast.error("O nome do usuário deve ter entre 4 e 30 caracteres.");
       return;
     }
 
