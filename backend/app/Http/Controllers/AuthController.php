@@ -49,22 +49,6 @@ class AuthController extends Controller
         }
     }
 
-    public function recoveryPassword(Request $request): JsonResponse
-    {
-        $email = $request->input('email');
-        $user = User::where('email', $email)->first();
-        if($user) {
-            //implementar
-            return response()->json([
-                'message' => 'Email send with sucess',
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Email not found',
-            ], 404);
-        }
-    }
-
     public function login(LoginUserRequest $request): JsonResponse
     {
         $credencials = $request->only('email', 'password');
