@@ -77,10 +77,8 @@ class UserService
 
         $sectors = $request->input('sectors');
 
-        $user->sector()->detach();
         if (is_array($sectors) && count($sectors) > 0) {
-            $sectorIds = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
-            $user->sector()->sync($sectorIds);
+            $user->sector()->sync($sectors);
         } else {
             UserSector::where('user_id', $user->user_id)->delete();
         }

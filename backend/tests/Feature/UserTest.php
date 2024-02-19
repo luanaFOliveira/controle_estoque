@@ -115,13 +115,31 @@ it('should update a user', function () {
             ],
         ]);
 
-    $user->refresh();
+    $this->assertDatabaseHas('user', [
+        'user_id' => $user->user_id,
+        'name' => $updateData['name'],
+        'email' => $updateData['email'],
+    ]);
 
-    expect($user->exists())->toBe(true)
-        ->and($user->equipment()->where('user_equipment.equipment_id', $equipment1->equipment_id)->exists())->toBe(true)
-        ->and($user->equipment()->where('user_equipment.equipment_id', $equipment2->equipment_id)->exists())->toBe(true)
-        ->and($user->sector()->where('user_sector.sector_id', $sector1->sector_id)->exists())->toBe(true)
-        ->and($user->sector()->where('user_sector.sector_id', $sector2->sector_id)->exists())->toBe(true);
+    $this->assertDatabaseHas('user_equipment', [
+        'user_id' => $user->user_id,
+        'equipment_id' => $equipment1->getKey(),
+    ]);
+    
+    $this->assertDatabaseHas('user_sector', [
+        'user_id' => $user->user_id,
+        'sector_id' => $sector1->getKey(),
+    ]);
+
+    $this->assertDatabaseHas('user_sector', [
+        'user_id' => $user->user_id,
+        'sector_id' => $sector2->getKey(),
+    ]);
+
+    $this->assertDatabaseHas('user_equipment', [
+        'user_id' => $user->user_id,
+        'equipment_id' => $equipment2->getKey(),
+    ]);
 });
 
 it('should delete a user', function () {
