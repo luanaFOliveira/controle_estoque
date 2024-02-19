@@ -6,7 +6,7 @@ import { returnEquipment } from "../../services/equipmentRequestService";
 import { errorToast } from "../../services/api";
 
 
-export function MyEquipmentAvailableTableColumns({setReload}) {
+export function MyEquipmentTableColumns({setReload,availability}) {
 
     const handleClick = async (row) => {
         try {
@@ -23,9 +23,8 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         }
     }
 
-
-  return [
-    {
+    let columns = [
+      {
         field: 'equipment_code',
         headerName: 'Codigo',
         flex:1,
@@ -60,7 +59,10 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         renderCell: (params) =>
             params.value ? params.row.equipment.map((equip) => equip.sector).join(",") : "Fora do escritório",
     },
-    {
+    ]
+
+    if(availability){
+      columns.push({
         field: "return_equipment",
         headerName: "Devolver Equipamento",
         flex:1,
@@ -79,70 +81,37 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
               <UndoIcon />
             </Button>
           </>
-        ),
-    },
+            ),
+        },
+      );
+    }else if(!availability){
+      let newColumns = [
+        {
+          field: "created_at",
+          headerName: "Criado em",
+          flex:1,
+          valueFormatter: (params) => {
+              const date = new Date(params.value);
+              return date.toLocaleString("pt-BR");
+          },
+        },
+        {
+            field: "returned_at",
+            headerName: "Data de Devolução",
+            flex:1,
+            valueFormatter: (params) => {
+              if (params.value === null) {
+                return "Em uso";
+              }
+              const date = new Date(params.value);
+              return date.toLocaleString("pt-BR");
+            },
+        },
+      ];
+      columns.push(...newColumns);
+    }
 
-];
+    return columns;
+
+  
 }
-
-export function MyEquipmentUnavailableTableColumns() {
-    return [
-    {
-        field: 'equipment_code',
-        headerName: 'Codigo',
-        flex:1, 
-        valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_code).join(","),
-    },
-    {
-        field: 'name',
-        headerName: 'Nome',
-        flex:1,
-        valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.name).join(","),
-    },
-    {
-        field: 'brand',
-        headerName: 'Marca',
-        flex:1,
-        valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_brand).join(","),
-    },
-    {
-        field: 'type',
-        headerName: 'Tipo',
-        flex:1,
-        valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_type).join(","),
-    },
-    {
-        field: "is_at_office",
-        headerName: "Local",
-        flex:1,
-        renderCell: (params) =>
-            params.value ? params.row.equipment.map((equip) => equip.sector).join(",") : "Fora do escritório",
-    },
-    {
-        field: "created_at",
-        headerName: "Criado em",
-        flex:1,
-        valueFormatter: (params) => {
-            const date = new Date(params.value);
-            return date.toLocaleString("pt-BR");
-        },
-    },
-    {
-        field: "returned_at",
-        headerName: "Data de Devolução",
-        flex:1,
-        valueFormatter: (params) => {
-          if (params.value === null) {
-            return "Em uso";
-          }
-          const date = new Date(params.value);
-          return date.toLocaleString("pt-BR");
-        },
-    },
-
-  ];
-  }

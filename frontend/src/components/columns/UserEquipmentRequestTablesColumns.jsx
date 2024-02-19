@@ -21,6 +21,11 @@ export function EquipmentRequestHistoryTableColumns() {
 
       },
       {
+        field: "sector",
+        headerName: "Setor",
+        flex: 1,
+      },
+      {
         field: "observation",
         headerName: "Observação",
         flex: 1,

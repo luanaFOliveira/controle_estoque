@@ -1,12 +1,7 @@
 import React ,{ useState,useEffect }from 'react';
 import BaseTable from '../../components/shared/BaseTable';
 import { StatusField,RequestEquipButtonCell } from '../../components/CustomColumns';
-import Box from '@mui/material/Box';
-import Popover from '@mui/material/Popover';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import {CircularProgress, Container, MenuItem, Select} from "@mui/material";
+import {Box,Popover,Button,TextField,Grid,InputLabel,Select,CircularProgress,Container,MenuItem} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
@@ -67,6 +62,7 @@ export default function EquipmentRequestPage() {
                 const response = await indexEquipmentRequests({
                     page: page,
                 });
+                console.log(response.data);
                 setHistory(response.data);
                 setRowCountHist((prevRowCountState) => response.meta.total ?? prevRowCountState,);
 
@@ -104,6 +100,9 @@ export default function EquipmentRequestPage() {
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
         setFormData({ observation: '',motive:'', rowData: row});
@@ -114,7 +113,10 @@ export default function EquipmentRequestPage() {
     };
 
     const handleRequestSubmit = async () => {
-
+        if(!formData.motive){
+            toast.error(`Selecione um motivo`);
+            return;
+        }
         const payload = {
             observation: formData.observation,
             equipment_id: formData.rowData.equipment_id,
@@ -134,8 +136,7 @@ export default function EquipmentRequestPage() {
         handleClose();
     };
 
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    
 
     const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
@@ -193,7 +194,7 @@ export default function EquipmentRequestPage() {
                 horizontal: 'right',
             }}
         >
-        <Box p={2}>
+        <Box p={2} component="form">
             <Grid container spacing={1} justifyContent="center" alignItems="center">
                 <Grid item xs={12}>
                     <TextField
@@ -205,10 +206,12 @@ export default function EquipmentRequestPage() {
                     />
                 </Grid>
                 <Grid item xs={12}>
+                    <InputLabel id="motivo">Motivo*</InputLabel>
                     <Select
                         label="Motivo"
                         fullWidth
                         value={formData.motive}
+                        required
                         sx={{ marginBottom: 2 }}
                         onChange={(e) => setFormData({ ...formData, motive: e.target.value })}
                     >
@@ -220,8 +223,9 @@ export default function EquipmentRequestPage() {
                     </Select>
                 </Grid>
                 <Grid item xs={12}>
+                    <InputLabel id="observacao">Observação</InputLabel>
                     <TextField
-                        label="Observação"
+                        label="Adicione uma observação (opcional)"
                         fullWidth
                         multiline
                         rows={2}
