@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class EquipRequestService
 {
-
     public function upsertEquipmentRequest(StoreEquipRequestRequest $request, ?EquipmentRequest $equipmentRequest = null): EquipRequestResource
     {
         return DB::transaction(function () use ($request, $equipmentRequest) {

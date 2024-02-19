@@ -9,8 +9,6 @@ use App\Http\Resources\RequestMotiveResource;
 use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\RequestMotive;
-use App\Models\RequestStatus;
-use App\Models\UserEquipment;
 use App\Services\EquipRequestService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,7 +35,6 @@ class EquipRequestController extends Controller
             $query->where('sector_id', 'ilike', "%$sector%");
         }
 
-
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
@@ -46,8 +43,6 @@ class EquipRequestController extends Controller
         $query = RequestMotive::all();
         return RequestMotiveResource::collection($query);
     }
-
-
 
     public function index(Request $request): AnonymousResourceCollection
     {

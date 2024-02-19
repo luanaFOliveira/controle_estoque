@@ -12,7 +12,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
-use function Pest\Laravel\json;
 
 class SectorController extends Controller
 {
@@ -33,22 +32,6 @@ class SectorController extends Controller
         }
 
         return SectorResource::collection($query->orderBy('sector_id')->paginate(10));
-    }
-
-    public function indexByUser(Request $request): AnonymousResourceCollection
-    {
-        if($request->has('user_id')){
-
-            $userId = $request->input('user_id');
-            $sectorsId = UserSector::where('user_id',$userId)->pluck('sector_id');
-
-            $sectors = Sector::whereIn('sector_id', $sectorsId)->orderBy('sector_id')->paginate(10);
-        }else{
-
-            $sectors = Sector::orderBy('sector_id')->paginate(10);
-        }
-
-        return SectorResource::collection($sectors);
     }
 
     public function sectorNames():JsonResponse

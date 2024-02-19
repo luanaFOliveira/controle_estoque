@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -26,6 +25,4 @@ class UserSector extends Pivot
         'sector_id',
         'user_id',
     ];
-
-
 }

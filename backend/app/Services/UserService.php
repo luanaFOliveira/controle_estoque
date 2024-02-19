@@ -13,10 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-
 class UserService
 {
-
     public function createUser(StoreUserRequest $request): UserResource
     {
         $data = $request->validated();
@@ -105,8 +103,6 @@ class UserService
 
         return UserResource::make($user);
     }
-
-
 
     public function deleteUser(User $user): void
     {

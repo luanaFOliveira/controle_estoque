@@ -9,10 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserDetailedResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'user_id' => $this->user_id,

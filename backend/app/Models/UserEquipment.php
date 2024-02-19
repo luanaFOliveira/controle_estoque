@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -33,7 +32,6 @@ class UserEquipment extends Pivot
         'returned_at'
     ];
 
-
     public function user(): HasMany
     {
         return $this->hasMany(User::class, 'user_id', 'user_id');
@@ -43,5 +41,5 @@ class UserEquipment extends Pivot
     {
         return $this->hasMany(Equipment::class, 'equipment_id', 'equipment_id');
     }
-    
+
 }

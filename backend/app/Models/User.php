@@ -33,26 +33,6 @@ class User extends Authenticatable
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('sectorScope', function (Builder $builder) {
-            if (Auth::check()) {
-                $user = Auth::user();
-
-                if (!$user->is_admin) {
-                    $hasUserSectorJoin = collect($builder->getQuery()->joins)->first(function ($join) {
-                        return $join->table === 'user_sector';
-                    });
-
-                    if (!$hasUserSectorJoin) {
-                        $builder->join('user_sector', 'user_sector.user_id', '=', 'user.user_id');
-                    }
-                }
-            }
-        });
-    }
 
     public function scopeAuth(Builder $query): void
     {

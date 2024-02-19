@@ -11,7 +11,7 @@ use App\Models\UserEquipment;
  */
 class EquipmentHistoryResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'user_equipment_id' => $this->user_equipment_id,

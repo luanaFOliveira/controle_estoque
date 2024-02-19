@@ -11,9 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SectorScope implements Scope
 {
-    /*
-     * Apply the scope to a given Eloquent query builder.
-     */
     public function apply(Builder $builder, Model $model)
     {
         /* @var User $user
@@ -28,6 +25,6 @@ class SectorScope implements Scope
                 $builder->whereIn('sector_id', $userSectorIds);
             }
         }
-           
+
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @property int $request_status_id
@@ -23,5 +24,8 @@ class RequestStatus extends Model
 
     protected $fillable = ['name'];
 
-
+    public function equipmentRequest(): HasMany
+    {
+        return $this->hasMany(EquipmentRequest::class, 'request_status_id', 'request_status_id');
+    }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginUserRequest;
-use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Google_Client;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    private function verifyGoogleToken($id_token) {
+    private function verifyGoogleToken($id_token): ?array
+    {
         $client = new Google_Client(['client_id' => env('GOOGLE_CLIENT_ID')]);
         $payload = $client->verifyIdToken($id_token);
         if ($payload) {
@@ -51,9 +51,9 @@ class AuthController extends Controller
 
     public function login(LoginUserRequest $request): JsonResponse
     {
-        $credencials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
 
-        if(Auth::attempt($credencials)){
+        if(Auth::attempt($credentials)){
             $user = Auth::user();
             $token = $user->createToken('ApiToken')->plainTextToken;
 
@@ -66,7 +66,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Invalid credentials',
-            'credencials' => $credencials,
+            'credentials' => $credentials,
         ], 401);
     }
 

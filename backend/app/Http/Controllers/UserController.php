@@ -33,9 +33,7 @@ class UserController extends Controller
         }
 
         return UserResource::collection($query->orderBy('user_id')->paginate(10));
-
     }
-
 
     public function show(User $user): JsonResponse
     {

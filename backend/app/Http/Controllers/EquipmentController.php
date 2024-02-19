@@ -32,7 +32,6 @@ class EquipmentController extends Controller
             $query->where('sector_id', 'ilike', "%$sector%");
         }
 
-
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 

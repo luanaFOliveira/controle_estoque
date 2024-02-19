@@ -10,9 +10,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class SectorDetailResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     */
     public function toArray($request): array
     {
         return [

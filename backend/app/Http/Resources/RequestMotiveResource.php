@@ -2,13 +2,15 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
+use App\Models\RequestMotive;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Models\UserEquipment;
 
+/**
+ * @mixin RequestMotive
+ */
 class RequestMotiveResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'request_motive_id' => $this->request_motive_id,
@@ -16,5 +18,5 @@ class RequestMotiveResource extends JsonResource
         ];
     }
 
-    
+
 }
