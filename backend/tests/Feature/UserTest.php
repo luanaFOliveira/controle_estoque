@@ -105,14 +105,14 @@ it('should update a user', function () {
         'email' => $updateData['email'],
     ]);
 
-    $this->assertDatabaseHas('user_sector', [
-        'user_id' => $user->user_id,
-        'sector_id' => $sector1->getKey(),
-    ]);
-
     $this->assertDatabaseHas('user_equipment', [
         'user_id' => $user->user_id,
         'equipment_id' => $equipment1->getKey(),
+    ]);
+    
+    $this->assertDatabaseHas('user_sector', [
+        'user_id' => $user->user_id,
+        'sector_id' => $sector1->getKey(),
     ]);
 
     $this->assertDatabaseHas('user_sector', [
