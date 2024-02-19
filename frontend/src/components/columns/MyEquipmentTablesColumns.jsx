@@ -29,6 +29,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: 'equipment_code',
         headerName: 'Codigo',
         flex:1,
+        minWidth: 100,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_code).join(","),
     },
@@ -36,6 +37,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: 'name',
         headerName: 'Nome',
         flex:1,
+        minWidth: 150,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.name).join(","),
     },
@@ -43,6 +45,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: 'brand',
         headerName: 'Marca',
         flex:1,
+        minWidth: 120,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_brand).join(","),
     },
@@ -50,6 +53,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: 'type',
         headerName: 'Tipo',
         flex:1,
+        minWidth: 150,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_type).join(","),
     },
@@ -57,6 +61,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: "is_at_office",
         headerName: "Local",
         flex:1,
+        minWidth: 150,
         renderCell: (params) =>
             params.value ? params.row.equipment.map((equip) => equip.sector).join(",") : "Fora do escritório",
     },
@@ -64,6 +69,7 @@ export function MyEquipmentAvailableTableColumns({setReload}) {
         field: "return_equipment",
         headerName: "Devolver Equipamento",
         flex:1,
+        minWidth: 200,
         align: 'center',
         renderCell: (params) => (
           <>
@@ -90,7 +96,8 @@ export function MyEquipmentUnavailableTableColumns() {
     {
         field: 'equipment_code',
         headerName: 'Codigo',
-        flex:1, 
+        flex:1,
+        minWidth: 100,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_code).join(","),
     },
@@ -98,6 +105,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: 'name',
         headerName: 'Nome',
         flex:1,
+        minWidth: 150,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.name).join(","),
     },
@@ -105,6 +113,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: 'brand',
         headerName: 'Marca',
         flex:1,
+        minWidth: 150,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_brand).join(","),
     },
@@ -112,6 +121,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: 'type',
         headerName: 'Tipo',
         flex:1,
+        minWidth: 150,
         valueGetter: (params) =>
             params.row.equipment.map((equip) => equip.equipment_type).join(","),
     },
@@ -119,6 +129,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: "is_at_office",
         headerName: "Local",
         flex:1,
+        minWidth: 150,
         renderCell: (params) =>
             params.value ? params.row.equipment.map((equip) => equip.sector).join(",") : "Fora do escritório",
     },
@@ -126,6 +137,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: "created_at",
         headerName: "Criado em",
         flex:1,
+        minWidth: 150,
         valueFormatter: (params) => {
             const date = new Date(params.value);
             return date.toLocaleString("pt-BR");
@@ -135,6 +147,7 @@ export function MyEquipmentUnavailableTableColumns() {
         field: "returned_at",
         headerName: "Data de Devolução",
         flex:1,
+        minWidth: 200,
         valueFormatter: (params) => {
           if (params.value === null) {
             return "Em uso";
