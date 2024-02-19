@@ -1,4 +1,3 @@
-// AppToolbar.js
 import React, {useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
@@ -19,10 +18,11 @@ import {
     Menu as MenuIcon,
 } from "@mui/icons-material";
 import {useTheme} from "../../context/ThemeProvider";
-import axiosClient from "../../axios-client";
 import {useStateContext} from "../../context/GlobalContext";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthProvider";
+import {indexSectors} from "../../services/sectorService";
+import {errorToast} from "../../services/api";
 
 const drawerWidth = 240;
 
@@ -67,9 +67,19 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
     useEffect(() => {
         if (!loadingUser) {
             if (user && !user.is_admin) {
-                axiosClient.get(`/sectors`).then(({data}) => {
-                    setSectors(data.data);
-                });
+                const getSectors = async () => {
+                    try {
+                        const response = await indexSectors();
+                        if (response) {
+                            setSectors(response.data);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        errorToast(error);
+                    }
+                }
+
+                getSectors();
             }
         }
     }, [loadingUser]);
