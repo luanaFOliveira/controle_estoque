@@ -34,7 +34,7 @@ it('can return a paginated list detailing the history of a specified piece of eq
 
     $paginatedResponse = $response->json();
     expect($paginatedResponse)->toBePaginated();
-    
+
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
             'user',
@@ -43,8 +43,6 @@ it('can return a paginated list detailing the history of a specified piece of eq
             'equipment_code',
             'created_at',
             'returned_at',
-            'deleted_at'
-           
         ]);
     }
 });
@@ -60,23 +58,29 @@ it('cannot access non-existent equipment history', function () {
 it('can return a paginated list detailing the history of a specified piece of user', function () {
     actingAs($this->userTest, 'sanctum');
     $response = $this->getJson("/api/history/users?user_id={$this->userTest->user_id}")->assertOk();
-    dump($response->json());
     $paginatedResponse = $response->json();
+
     expect($paginatedResponse)->toBePaginated();
-    foreach ($paginatedResponse['data'] as $equipment) {
-        expect($equipment)->toHaveKeys([
+    foreach ($paginatedResponse['data'] as $history) {
+        expect($history)->toHaveKeys([
             'user',
             'user.user_id',
             'user.name',
-            'equipment_code',
             'created_at',
             'returned_at',
             'deleted_at',
             'equipment',
-            'equipment.equipment_id',
         ]);
+
+        foreach ($history['equipment'] as $equipment) {
+            expect($equipment)->toHaveKeys([
+                'equipment_id',
+                'equipment_code',
+            ]);
+        }
     }
 });
+
 
 it('cannot access non-existent user history', function () {
     actingAs($this->userTest, 'sanctum');

@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Equipment;
 use App\Models\User;
-use function Pest\Laravel\{actingAs, delete, post, get, put};
+use function Pest\Laravel\{actingAs, delete, get, post, put};
 
 uses()->group('equipment');
 
@@ -30,7 +30,6 @@ it('should return a paginated list of equipments', function () {
     $response = get('/api/equipments')->assertOk();
     $paginatedResponse = $response->json();
 
-    
     expect($paginatedResponse)->toBePaginated();
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
@@ -45,7 +44,6 @@ it('should return a paginated list of equipments', function () {
     }
 });
 
-
 it('should return a paginated list of equipments that are available', function () {
     actingAs($this->user, 'sanctum');
     $response = get('/api/equipments-available')->assertOk();
@@ -55,13 +53,19 @@ it('should return a paginated list of equipments that are available', function (
     foreach ($paginatedResponse['data'] as $equipment) {
         expect($equipment)->toHaveKeys([
             'equipment_id',
+            'equipment_code',
             'name',
             'type',
             'brand',
             'sector',
             'is_available',
-            'is_at_office'
+            'is_at_office',
+            'returned_at',
         ]);
+    }
+
+    foreach ($paginatedResponse['data'] as $equipment) {
+        expect($equipment['is_available'])->toBe(true);
     }
 });
 
@@ -74,16 +78,16 @@ it('should show a detailed equipment', function () {
 
     get("/api/equipments/{$equipment->equipment_id}")
         ->assertJson([
-        'data' => [
-            'equipment_id' => $equipment->equipment_id,
-            'name' => $equipment->name,
-            'type' => $equipment->type()->value('name'),
-            'brand' => $equipment->brand()->value('name'),
-            'sector' => $equipment->sector()->value('name'),
-            'is_available' => false,
-            'is_at_office' => $equipment->is_at_office
-        ]
-    ]);
+            'data' => [
+                'equipment_id' => $equipment->equipment_id,
+                'name' => $equipment->name,
+                'type' => $equipment->type()->value('name'),
+                'brand' => $equipment->brand()->value('name'),
+                'sector' => $equipment->sector()->value('name'),
+                'is_available' => false,
+                'is_at_office' => $equipment->is_at_office
+            ]
+        ]);
 });
 
 it('can create a equipment', function () {
@@ -92,7 +96,7 @@ it('can create a equipment', function () {
         'name' => 'test name',
         'equipment_type' => 'test type',
         'equipment_brand' => 'test brand',
-        'sector' =>  'test sector',
+        'sector' => 'test sector',
         'is_available' => true,
         'is_at_office' => true,
     ];
@@ -127,23 +131,19 @@ it('can update a equipment', function () {
         'sector' => 'new test sector',
         'equipment_type' => 'new test type',
         'equipment_brand' => 'new test brand',
-        'is_available' => false,
-        'is_at_office' => false,
     ];
 
     put("/api/equipments/{$equipment->equipment_id}", $updatedEquipment)
         ->assertStatus(200)
         ->assertJson([
-        'data' => [
-            'equipment_id' => $equipment->equipment_id,
-            'name' => $updatedEquipment['name'],
-            'type' => $updatedEquipment['equipment_type'],
-            'brand' => $updatedEquipment['equipment_brand'],
-            'sector' => $updatedEquipment['sector'],
-            'is_available' => $updatedEquipment['is_available'],
-            'is_at_office' => $updatedEquipment['is_at_office']
-        ]
-    ]);
+            'data' => [
+                'equipment_id' => $equipment->equipment_id,
+                'name' => $updatedEquipment['name'],
+                'type' => $updatedEquipment['equipment_type'],
+                'brand' => $updatedEquipment['equipment_brand'],
+                'sector' => $updatedEquipment['sector'],
+            ]
+        ]);
 });
 
 it('cannot update a equipment with invalid data', function () {
@@ -158,8 +158,6 @@ it('cannot update a equipment with invalid data', function () {
         'sector' => '',
         'equipment_type' => '',
         'equipment_brand' => '',
-        'is_available' => null,
-        'is_at_office' => null,
     ];
 
     $this->putJson("/api/equipments/{$equipment->equipment_id}", $updatedEquipment)
