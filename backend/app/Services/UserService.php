@@ -40,7 +40,6 @@ class UserService
         $user->sector()->attach($sectorIds);
     }
 
-
     public function updateUser(UpdateUserRequest $request, User $user): UserResource
     {
         $data = $request->validated();
@@ -48,9 +47,14 @@ class UserService
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
             'is_admin' => $data['is_admin']
         ]);
+
+        if($data['password']){
+            $user->update([
+                'password' => Hash::make($data['password']),
+            ]);
+        }
 
         if (isset($data['email'])) {
             $existingUser = User::where('email', $data['email'])->where('user_id', '<>', $user->user_id)->first();
