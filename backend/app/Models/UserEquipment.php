@@ -33,6 +33,7 @@ class UserEquipment extends Pivot
         'returned_at'
     ];
 
+
     public function user(): HasMany
     {
         return $this->hasMany(User::class, 'user_id', 'user_id');
