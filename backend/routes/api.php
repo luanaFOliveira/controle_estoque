@@ -20,22 +20,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:sanctum')->group(function () {
-
     Route::group(['middleware' => 'admin'], function () {
-        Route::post('register', [AuthController::class, 'register']);
+        Route::apiResource('users',UserController::class);
         Route::apiResource('equipments', EquipmentController::class);
-        Route::post('handle-equipment-request/{action}', [EquipRequestController::class, 'handleRequest']);
-        Route::apiResource('equipments', EquipmentController::class);
-        Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::apiResource('sectors',SectorController::class);
+        Route::post('handle-equipment-request/{action}', [EquipRequestController::class, 'handleRequest']);
+        Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::get('/sector-names', [SectorController::class, 'sectorNames']);
         Route::apiResource('equipment-requests', EquipRequestController::class);
-        Route::apiResource('users',UserController::class);
         Route::group(['prefix' => 'history'], function () {
             Route::get('/equipments', [HistoryController::class, 'indexEquipment']);
             Route::get('/users', [HistoryController::class, 'indexUser']);

@@ -5,8 +5,7 @@ namespace Tests\Feature;
 use App\Models\Equipment;
 use App\Models\Sector;
 use App\Models\User;
-use Illuminate\Support\Facades\Artisan;
-use function Pest\Laravel\{actingAs, get, post, delete,put,assertSoftDeleted};
+use function Pest\Laravel\{actingAs, assertSoftDeleted, delete, get, post, put};
 
 uses()->group('user');
 
@@ -21,14 +20,14 @@ beforeEach(function () {
 });
 
 it('should return a list of users', function () {
-    actingAs($this->admin,'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     get('/api/users')
         ->assertStatus(200);
 });
 
 it('should return a user', function () {
-    actingAs($this->admin,'sanctum');
+    actingAs($this->admin, 'sanctum');
 
     $user = User::factory()->create();
 
@@ -44,27 +43,44 @@ it('should return a user', function () {
 
 it('can register a new user', function () {
     actingAs($this->admin, 'sanctum');
+    $sector = Sector::all()->first();
 
     $data = [
         'name' => 'Test User',
         'email' => 'test@example.com',
         'password' => 'password123',
-        "password_confirmation"=> "password123",
+        "password_confirmation" => "password123",
         'is_admin' => false,
+        'sectors' => [$sector]
     ];
 
-    post('/api/register', $data)
+    post('/api/users', $data)
         ->assertStatus(200)
         ->assertJson([
             'message' => 'Successfully registered',
             'user' => [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
+                'name' => $data['name'],
+                'email' => $data['email'],
             ],
         ]);
 });
 
+it('will fail when admin try register with invalid credentials', function () {
+    actingAs($this->admin, 'sanctum');
+
+    $data = [
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        "password_confirmation" => '',
+    ];
+
+    post('/api/users', $data, ['Accept' => 'application/json'])->assertStatus(422);
+});
+
 it('should update a user', function () {
+    /* @var User $user
+     */
     actingAs($this->admin, 'sanctum');
 
     $user = User::factory()->create();
@@ -84,8 +100,8 @@ it('should update a user', function () {
         'is_admin' => $user->is_admin,
         'password' => $user->password,
         'password_confirmation' => $user->password,
-        'sectors' => [$sector1->getKey(),$sector2->getKey()],
-        'equipments' => [$equipment1->getKey(),$equipment2->getKey()],
+        'sectors' => [$sector1->getKey(), $sector2->getKey()],
+        'equipments' => [$equipment1->getKey(), $equipment2->getKey()],
     ];
 
     put('/api/users/' . $user->user_id, $updateData)
@@ -99,31 +115,13 @@ it('should update a user', function () {
             ],
         ]);
 
-    $this->assertDatabaseHas('user', [
-        'user_id' => $user->user_id,
-        'name' => $updateData['name'],
-        'email' => $updateData['email'],
-    ]);
+    $user->refresh();
 
-    $this->assertDatabaseHas('user_sector', [
-        'user_id' => $user->user_id,
-        'sector_id' => $sector1->getKey(),
-    ]);
-
-    $this->assertDatabaseHas('user_equipment', [
-        'user_id' => $user->user_id,
-        'equipment_id' => $equipment1->getKey(),
-    ]);
-
-    $this->assertDatabaseHas('user_sector', [
-        'user_id' => $user->user_id,
-        'sector_id' => $sector2->getKey(),
-    ]);
-
-    $this->assertDatabaseHas('user_equipment', [
-        'user_id' => $user->user_id,
-        'equipment_id' => $equipment2->getKey(),
-    ]);
+    expect($user->exists())->toBe(true)
+        ->and($user->equipment()->where('user_equipment.equipment_id', $equipment1->equipment_id)->exists())->toBe(true)
+        ->and($user->equipment()->where('user_equipment.equipment_id', $equipment2->equipment_id)->exists())->toBe(true)
+        ->and($user->sector()->where('user_sector.sector_id', $sector1->sector_id)->exists())->toBe(true)
+        ->and($user->sector()->where('user_sector.sector_id', $sector2->sector_id)->exists())->toBe(true);
 });
 
 it('should delete a user', function () {
@@ -145,7 +143,7 @@ it('should delete a user', function () {
 it('should detach a specific user sector relation', function () {
     actingAs($this->admin, 'sanctum');
 
-    delete('/api/users/1' )
+    delete('/api/users/1')
         ->assertStatus(200)
         ->assertJson(['message' => 'User deleted successfully']);
 
