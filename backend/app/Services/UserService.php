@@ -40,7 +40,6 @@ class UserService
         $user->sector()->attach($sectorIds);
     }
 
-
     public function updateUser(UpdateUserRequest $request, User $user): UserResource
     {
         $data = $request->validated();
@@ -48,9 +47,14 @@ class UserService
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
             'is_admin' => $data['is_admin']
         ]);
+
+        if($data['password']){
+            $user->update([
+                'password' => Hash::make($data['password']),
+            ]);
+        }
 
         if (isset($data['email'])) {
             $existingUser = User::where('email', $data['email'])->where('user_id', '<>', $user->user_id)->first();
@@ -77,8 +81,10 @@ class UserService
 
         $sectors = $request->input('sectors');
 
+        $user->sector()->detach();
         if (is_array($sectors) && count($sectors) > 0) {
-            $user->sector()->sync($sectors);
+            $sectorIds = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
+            $user->sector()->sync($sectorIds);
         } else {
             UserSector::where('user_id', $user->user_id)->delete();
         }
@@ -100,7 +106,7 @@ class UserService
         return UserResource::make($user);
     }
 
-   
+
 
     public function deleteUser(User $user): void
     {
