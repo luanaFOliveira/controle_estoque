@@ -8,7 +8,7 @@ import { updateEquipmentRequest } from "../../services/equipmentRequestService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export default function RequestTableColumns({ is_handled_table, setReload }) {
+export default function AdminEquipmentRequestTableColumns({ is_handled_table, setReload }) {
   const navigate = useNavigate();
 
   const handleClick = async (row, action, item) => {
@@ -32,7 +32,7 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
       field: "user",
       headerName: "Usuário",
       flex: 1,
-      minWidth: 200,
+      minWidth: 180,
       renderCell: (params) => (
         <Link
           component="button"
@@ -97,7 +97,7 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
       field: "accept_request",
       headerName: "Aceitar / Recusar",
       flex: 1,
-      minWidth: 200,
+      minWidth: 180,
       renderCell: (params) => (
         <>
           <Button
@@ -133,7 +133,7 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
       field: "request_status",
       headerName: "Status",
       flex: 1,
-      minWidth: 200,
+      minWidth: 180,
       renderCell: (params) =>
         params.row.request_status === "Não Aprovado" ? (
           <Typography
@@ -152,6 +152,19 @@ export default function RequestTableColumns({ is_handled_table, setReload }) {
         ),
     });
   }
+
+  columns.push(
+    {
+      field: "created_at",
+      headerName: "Criado em",
+      flex: 1,
+      minWidth: 150,
+      valueFormatter: (params) => {
+        const date = new Date(params.value);
+        return date.toLocaleString("pt-BR");
+      },
+    },
+  )
 
   return columns;
 }

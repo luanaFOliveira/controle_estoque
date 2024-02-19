@@ -18,7 +18,7 @@ export function EquipmentRequestHistoryTableColumns() {
         renderCell: (params) => (
           <span>{params.row.equipment.name}</span>
         ),
-  
+
       },
       {
         field: "observation",
@@ -30,11 +30,11 @@ export function EquipmentRequestHistoryTableColumns() {
         headerName: "Motivo",
         flex: 1,
       },
-      { 
+      {
         field: 'status',
-        headerName: 'Status', 
-        flex:1, 
-        renderCell: (params) => <StatusField value={params.row.request_status} />, 
+        headerName: 'Status',
+        flex:1,
+        renderCell: (params) => <StatusField value={params.row.request_status} />,
       },
       {
         field:'deleted_at',
@@ -46,7 +46,7 @@ export function EquipmentRequestHistoryTableColumns() {
 }
 
 
-export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
+export function EquipmentRequestEquipTableColumns({handleButtonClick}) {
   return [
     {
       field: "equipment_code",
@@ -74,7 +74,7 @@ export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
       flex: 1,
       renderCell: (params) => (params.value ? params.row.sector : 'Fora do escritório'),
     },
-    { 
+    {
       field: 'requestButton',
       headerName: 'Solicitar retirada',
       flex:1,
@@ -86,4 +86,3 @@ export function EquipmentRequesEquipTableColumns({handleButtonClick}) {
   ];
 }
 
-  

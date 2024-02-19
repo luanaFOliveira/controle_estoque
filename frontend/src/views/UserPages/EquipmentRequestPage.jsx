@@ -10,7 +10,7 @@ import {CircularProgress, Container, MenuItem, Select} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
-import {EquipmentRequestHistoryTableColumns, EquipmentRequesEquipTableColumns} from "../../components/columns/EquipmentRequestTablesColumns";
+import {EquipmentRequestHistoryTableColumns, EquipmentRequestEquipTableColumns} from "../../components/columns/UserEquipmentRequestTablesColumns";
 import { indexEquipmentsAvailable } from "../../services/equipmentService";
 import { createEquipmentRequests, getRequestMotives,indexEquipmentRequests} from "../../services/equipmentRequestService";
 import { errorToast } from "../../services/api";
@@ -34,7 +34,7 @@ export default function EquipmentRequestPage() {
     const [isLoadingHist, setIsLoadingHist] = useState(true);
     const [rowCountHist, setRowCountHist] = useState(0);
     const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
-    
+
     useEffect(() => {
         const fetchEquipments = async () => {
             setIsLoadingEquip(true);
@@ -43,7 +43,7 @@ export default function EquipmentRequestPage() {
                 const response = await indexEquipmentsAvailable({ page, sector});
                 setEquipments(response.data);
                 setRowCountEquip((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -58,7 +58,7 @@ export default function EquipmentRequestPage() {
 
     },[paginationModelEquip.page,reload]);
 
-  
+
     useEffect(() => {
         const fetchHistory = async () => {
             setIsLoadingHist(true);
@@ -69,7 +69,7 @@ export default function EquipmentRequestPage() {
                 });
                 setHistory(response.data);
                 setRowCountHist((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -89,7 +89,7 @@ export default function EquipmentRequestPage() {
             try{
                 const response = await getRequestMotives();
                 setRequestMotives(response.data);
-            
+
             }catch(error){
                 errorToast(error);
                 console.error(error);
@@ -99,14 +99,14 @@ export default function EquipmentRequestPage() {
         });
 
     },[]);
-    
+
 
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
-        setFormData({ observation: '',motive:'', rowData: row}); 
+        setFormData({ observation: '',motive:'', rowData: row});
     };
 
     const handleClose = () => {
@@ -137,7 +137,7 @@ export default function EquipmentRequestPage() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    const columnsEquip = EquipmentRequesEquipTableColumns({handleButtonClick});
+    const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
 
     return(<>
@@ -151,31 +151,31 @@ export default function EquipmentRequestPage() {
                     <Typography component="h1" variant="h4">
                         Equipamentos disponiveis
                     </Typography>
-                    <BaseTable 
-                        rows={equipments} 
-                        columns={columnsEquip} 
+                    <BaseTable
+                        rows={equipments}
+                        columns={columnsEquip}
                         checkBox={false}
-                        rowCount={rowCountEquip} 
+                        rowCount={rowCountEquip}
                         paginationModel={paginationModelEquip}
                         getRowId={(row) => row.equipment_id}
                         setPaginationModel={setPaginationModelEquip}
                         isLoading={isLoadingEquip}
                         maxHeight={620}
-                    /> 
+                    />
                     <Typography component="h1" variant="h4">
                         Historico de solicitações
                     </Typography>
-                    <BaseTable 
-                        rows={history} 
-                        columns={columnsHist} 
+                    <BaseTable
+                        rows={history}
+                        columns={columnsHist}
                         checkBox={false}
-                        rowCount={rowCountHist} 
+                        rowCount={rowCountHist}
                         paginationModel={paginationModelHist}
                         getRowId={(row) => row.equipment_request_id}
                         setPaginationModel={setPaginationModelHist}
                         isLoading={isLoadingHist}
                         maxHeight={620}
-                        /> 
+                        />
                 </>
             )}
         </Container>
@@ -201,7 +201,7 @@ export default function EquipmentRequestPage() {
                         fullWidth
                         value={formData.rowData.name}
                         InputProps={{ readOnly: true }}
-                        sx={{ marginBottom: 2 }} 
+                        sx={{ marginBottom: 2 }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -209,7 +209,7 @@ export default function EquipmentRequestPage() {
                         label="Motivo"
                         fullWidth
                         value={formData.motive}
-                        sx={{ marginBottom: 2 }} 
+                        sx={{ marginBottom: 2 }}
                         onChange={(e) => setFormData({ ...formData, motive: e.target.value })}
                     >
                         {requestMotives.map((motive) => (
@@ -224,10 +224,10 @@ export default function EquipmentRequestPage() {
                         label="Observação"
                         fullWidth
                         multiline
-                        rows={2} 
+                        rows={2}
                         value={formData.observation}
                         onChange={(e) => setFormData({ ...formData, observation: e.target.value })}
-                        sx={{ marginBottom: 2 }} 
+                        sx={{ marginBottom: 2 }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -252,7 +252,7 @@ export default function EquipmentRequestPage() {
             }
             `}
         </style>
-        
+
     </>);
 
 };

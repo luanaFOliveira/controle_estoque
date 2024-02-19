@@ -4,7 +4,7 @@ import { indexEquipmentRequests } from "../../../services/equipmentRequestServic
 import { CircularProgress, Container, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import BaseTable from "../../../components/shared/BaseTable";
-import RequestTableColumns from "../../../components/columns/RequestTableColumns";
+import AdminEquipmentRequestTableColumns from "../../../components/columns/AdminEquipmentRequestTableColumns";
 
 const EquipmentRequests = () => {
   const [firstLoading, setIFirstLoading] = useState(true);
@@ -26,11 +26,11 @@ const EquipmentRequests = () => {
     pageSize: 10,
   });
 
-  const pendingRequestsColumns = RequestTableColumns({
+  const pendingRequestsColumns = AdminEquipmentRequestTableColumns({
     is_handled_table: true,
     setReload: setReload,
   });
-  const processedRequestsColumns = RequestTableColumns({
+  const processedRequestsColumns = AdminEquipmentRequestTableColumns({
     is_handled_table: false,
   });
 
