@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import { useAuth } from "../../context/AuthProvider";
-import { MyEquipmentAvailableTableColumns,MyEquipmentUnavailableTableColumns } from '../../components/columns/MyEquipmentTablesColumns';
+import { MyEquipmentTableColumns } from '../../components/columns/MyEquipmentTablesColumns';
 import { getUserHistory } from "../../services/historyService";
 import { errorToast } from "../../services/api";
 
@@ -77,8 +77,15 @@ export default function MyEquipmentsPage() {
     },[paginationModelEquipUna.page,reload]);
 
     
-    const columnsEquipAvailable = MyEquipmentAvailableTableColumns({setReload:setReload});
-    const columnsEquipUnavailable = MyEquipmentUnavailableTableColumns({setReload:setReload});
+    const columnsEquipAvailable = MyEquipmentTableColumns({
+        setReload:setReload,
+        availability: true,
+    });
+    const columnsEquipUnavailable = MyEquipmentTableColumns({
+        setReload:setReload,
+        availability: false,
+    });
+    
  
     return(<>
         <Container sx={{mt: 5}}>
@@ -100,6 +107,7 @@ export default function MyEquipmentsPage() {
                     paginationModel={paginationModelEquipAva}
                     setPaginationModel={setPaginationModelEquipAva}
                     isLoading={isLoadingEquipAva}
+                    minHeight={200}
                     maxHeight={620}
                 />
                 <Typography component="h1" variant="h4">
@@ -114,6 +122,7 @@ export default function MyEquipmentsPage() {
                     paginationModel={paginationModelEquipUna}
                     setPaginationModel={setPaginationModelEquipUna}
                     isLoading={isLoadingEquipUna}
+                    minHeight={200}
                     maxHeight={620}
                 />
             </>

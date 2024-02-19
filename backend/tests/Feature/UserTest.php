@@ -100,7 +100,7 @@ it('should update a user', function () {
         'is_admin' => $user->is_admin,
         'password' => $user->password,
         'password_confirmation' => $user->password,
-        'sectors' => [$sector1->getKey(), $sector2->getKey()],
+        'sectors' => [$sector1->name, $sector2->name],
         'equipments' => [$equipment1->getKey(), $equipment2->getKey()],
     ];
 

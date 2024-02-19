@@ -19,6 +19,7 @@ export default function BaseTable({
   getRowId,
   maxWidth,
   maxHeight,
+  minHeight,
   initialState,
 }) {
   function CustomToolbar() {
@@ -63,7 +64,7 @@ export default function BaseTable({
       onPaginationModelChange={setPaginationModel}
       //pageSizeOptions={[5, 10]}
       {...(checkBox ? { checkboxSelection: true } : {})}
-      sx={{ boxShadow: 2, maxWidth: maxWidth, maxHeight: maxHeight }}
+      sx={{ boxShadow: 2, maxWidth: maxWidth, maxHeight: maxHeight, minHeight: minHeight}}
     />
   );
 }

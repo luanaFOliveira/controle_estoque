@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\EquipmentRequest;
+use App\Models\Sector;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -23,6 +24,7 @@ class EquipRequestResource extends JsonResource
             'created_at' => $this->created_at,
             'user' => $this->user()->select('user.user_id', 'user.name')->first()->toArray(),
             'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name', 'equipment.equipment_code')->first()->toArray(),
+            'sector' => Sector::find($this->equipment()->value('sector_id'))->value('name'),
         ];
     }
 
