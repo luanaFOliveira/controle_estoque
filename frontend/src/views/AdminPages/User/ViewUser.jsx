@@ -12,6 +12,8 @@ import {getUserHistory} from "../../../services/historyService";
 const ViewUser = () => {
     const {userId} = useParams();
     const navigate = useNavigate();
+    const [firstLoading, setFirstLoading] = useState(true);
+
     const [userDetail, setUserDetail] = useState({});
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ const ViewUser = () => {
                 errorToast(error);
             } finally {
                 setLoading(false);
+                setFirstLoading(false);
             }
         };
 
@@ -46,7 +49,10 @@ const ViewUser = () => {
         const fetchUserHistory = async () => {
             setLoading(true);
             try {
-                const response = await getUserHistory(userId);
+                const response = await getUserHistory({
+                    user_id: userId,
+                });
+                console.log(userId);
                 if (response) {
                     setHistory(response.data);
                     setRowCount(
@@ -58,6 +64,7 @@ const ViewUser = () => {
                 errorToast(error);
             } finally {
                 setLoading(false);
+                setFirstLoading(false);
             }
         };
 
@@ -108,7 +115,11 @@ const ViewUser = () => {
     return (
         <>
             <Container component="main" maxWidth="sx">
-                {!loading ? (
+                {firstLoading ? (
+                    <Grid item container justifyContent="center">
+                        <CircularProgress />
+                    </Grid>
+                    ) : (
                     <>
                         <Grid container justifyContent="space-between" marginTop={4}>
                             <Grid>
@@ -157,20 +168,31 @@ const ViewUser = () => {
                                         <Typography variant="body2" width="250px">
                                             Setores do Usuário:
                                         </Typography>
-                                        {userDetail.sectors.map((sector) => {
-                                            return (
-                                                <Link
-                                                    component="button"
-                                                    onClick={() => {
-                                                        navigate(`/sectors/${sector.sector_id}`);
-                                                    }}
-                                                    underline="hover"
-                                                    sx={{cursor: "pointer", marginLeft: "20px", marginTop: "5px",justifyContent: 'start', display: "flex"}}
-                                                >
-                                                    {sector.name}
-                                                </Link>
-                                            );
-                                        })}
+                                        {userDetail.sectors && userDetail.sectors.length > 0 ? 
+                                        (
+                                            <>
+                                            {userDetail.sectors.map((sector) => {
+                                                return (
+                                                    <Link
+                                                        key={sector.sector_id}
+                                                        component="button"
+                                                        onClick={() => {
+                                                            navigate(`/sectors/${sector.sector_id}`);
+                                                        }}
+                                                        underline="hover"
+                                                        sx={{cursor: "pointer", marginLeft: "20px", marginTop: "5px",justifyContent: 'start', display: "flex"}}
+                                                    >
+                                                        {sector.name}
+                                                    </Link>
+                                                );
+                                            })}
+                                        </>):(
+                                            <Typography variant="body2">
+                                                Nenhum setor encontrado.
+                                            </Typography>
+                                        )}
+
+                                        
                                     </Grid>
                                 </CardContent>
                             </Card>
@@ -207,10 +229,6 @@ const ViewUser = () => {
                             Voltar para a Lista de Usuários
                         </Button>
                     </>
-                ) : (
-                    <Grid item container justifyContent="center" marginTop={3}>
-                        <CircularProgress/>
-                    </Grid>
                 )}
             </Container>
         </>

@@ -12,6 +12,9 @@ import { errorToast } from "../../services/api";
 
 export default function SectorPage() {
   const { sector } = useStateContext();
+  const [firstLoading, setFirstLoading] = useState(true);
+
+
   const [sectorInfo, setSectorInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sectorUsers, setSectorUsers] = useState([]);
@@ -35,6 +38,7 @@ export default function SectorPage() {
         errorToast(error);
       } finally {
         setIsLoading(false);
+        setFirstLoading(false);
       }
     };
     fetchSector().then((r) => {});
@@ -43,72 +47,62 @@ export default function SectorPage() {
   return (
     <>
       <Container sx={{ mt: 5 }}>
-        <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
-          {sectorInfo.name}
-        </Typography>
-        {!isLoading ? (
-          <>
-            <Grid container spacing={2} mb={6}>
-              <Grid item xs={12}>
-                <Typography variant="h5" sx={{ mb: 2 }}>
-                  Usuários do Setor
-                </Typography>
-                {sectorUsers.length > 0 ? (
-                  <BaseTable
-                    rows={sectorUsers}
-                    columns={columnsUsers}
-                    getRowId={(row) => row.user_id}
-                    checkBox={false}
-                    paginationMode="client"
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 10,
-                        },
-                      },
-                    }}
-                    isLoading={isLoading}
-                  />
-                ) : (
-                  <Typography variant="body1" color="textSecondary">
-                    Nenhum dado encontrado.
-                  </Typography>
-                )}
-              </Grid>
-            </Grid>
-            <Grid container spacing={2} mb={6}>
-              <Grid item xs={12}>
-                <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
-                  Equipamentos do Setor
-                </Typography>
-                {sectorEquipments.length > 0 ? (
-                  <BaseTable
-                    rows={sectorEquipments}
-                    columns={columnsEquipments}
-                    getRowId={(row) => row.equipment_id}
-                    checkBox={false}
-                    paginationMode="client"
-                    initialState={{
-                      pagination: {
-                        paginationModel: {
-                          pageSize: 10,
-                        },
-                      },
-                    }}
-                    isLoading={isLoading}
-                  />
-                ) : (
-                  <Typography variant="body1" color="textSecondary">
-                    Nenhum dado encontrado.
-                  </Typography>
-                )}
-              </Grid>
-            </Grid>
-          </>
-        ) : (
+        {firstLoading ? (
           <Grid item container justifyContent="center">
             <CircularProgress />
           </Grid>
+        ) : (
+          <>
+          <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
+            {sectorInfo.name}
+          </Typography>
+          <Grid container spacing={2} mb={6}>
+            <Grid item xs={12}>
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                Usuários do Setor
+              </Typography>
+              <BaseTable
+                rows={sectorUsers}
+                columns={columnsUsers}
+                getRowId={(row) => row.user_id}
+                checkBox={false}
+                paginationMode="client"
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
+                  },
+                }}
+                isLoading={isLoading}
+                maxHeight={620}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} mb={6}>
+            <Grid item xs={12}>
+              <Typography variant="h5" sx={{ mb: 2, mt: 2 }}>
+                Equipamentos do Setor
+              </Typography>
+              <BaseTable
+                rows={sectorEquipments}
+                columns={columnsEquipments}
+                getRowId={(row) => row.equipment_id}
+                checkBox={false}
+                paginationMode="client"
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
+                  },
+                }}
+                isLoading={isLoading}
+                maxHeight={620}
+              />
+            </Grid>
+          </Grid>
+          </>
         )}
       </Container>
     </>

@@ -21,7 +21,10 @@ class UserEquipmentObserver
 
         $acceptStatus = RequestStatus::where('status', 'Não Aprovado')->first();
         $deniedId = $acceptStatus->request_status_id;
-        EquipmentRequest::where('equipment_id', $userEquipment->equipment_id)->where('created_at', '!=', $userEquipment->created_at)->update(['request_status_id' => $deniedId]);
+        EquipmentRequest::where('equipment_id', $userEquipment->equipment_id)
+            ->where('created_at', '!=', $userEquipment->created_at)
+            ->whereNull('deleted_at')
+            ->update(['request_status_id' => $deniedId]);
     }
 
     /**
