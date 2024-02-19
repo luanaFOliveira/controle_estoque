@@ -177,7 +177,7 @@ const ManageUser = () => {
             <TextField
               margin="normal"
               fullWidth
-              label="Senha (opcional)"
+              label={userId ? 'Senha (opcional)' : 'Senha'}
               name="password"
               type="password"
               onChange={handleChange}
@@ -185,7 +185,7 @@ const ManageUser = () => {
             <TextField
               margin="normal"
               fullWidth
-              label="Confirmar Senha (opcional)"
+              label={userId ? 'Confirmar senha (opcional)' : 'Confirmar senha'}
               name="password_confirmation"
               type="password"
               onChange={handleChange}
