@@ -10,6 +10,7 @@ import { indexEquipmentsAvailable } from "../../services/equipmentService";
 import { createEquipmentRequests, getRequestMotives,indexEquipmentRequests} from "../../services/equipmentRequestService";
 import { errorToast } from "../../services/api";
 import { toast } from "react-toastify";
+import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
 
 export default function EquipmentRequestPage() {
 
@@ -141,6 +142,9 @@ export default function EquipmentRequestPage() {
     const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
 
+    const [value, setValue] = React.useState('0');
+
+
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
@@ -149,34 +153,36 @@ export default function EquipmentRequestPage() {
                 </Grid>
                 ) : (
                 <>
-                    <Typography component="h1" variant="h4">
-                        Equipamentos disponiveis
-                    </Typography>
-                    <BaseTable
-                        rows={equipments}
-                        columns={columnsEquip}
-                        checkBox={false}
-                        rowCount={rowCountEquip}
-                        paginationModel={paginationModelEquip}
-                        getRowId={(row) => row.equipment_id}
-                        setPaginationModel={setPaginationModelEquip}
-                        isLoading={isLoadingEquip}
-                        maxHeight={620}
-                    />
-                    <Typography component="h1" variant="h4">
-                        Historico de solicitações
-                    </Typography>
-                    <BaseTable
-                        rows={history}
-                        columns={columnsHist}
-                        checkBox={false}
-                        rowCount={rowCountHist}
-                        paginationModel={paginationModelHist}
-                        getRowId={(row) => row.equipment_request_id}
-                        setPaginationModel={setPaginationModelHist}
-                        isLoading={isLoadingHist}
-                        maxHeight={620}
-                        />
+                    <Box sx={{ width: '100%' }}>
+                        <TableTab value={value} setValue={setValue} nameTab1="Equipamentos Disponiveis" nameTab2="Historico de solicitações" />
+                        <CustomTabPanel value={value} index={0}>
+                            <BaseTable
+                                rows={equipments}
+                                columns={columnsEquip}
+                                checkBox={false}
+                                rowCount={rowCountEquip}
+                                paginationModel={paginationModelEquip}
+                                getRowId={(row) => row.equipment_id}
+                                setPaginationModel={setPaginationModelEquip}
+                                isLoading={isLoadingEquip}
+                                maxHeight={620}
+                            />
+                        </CustomTabPanel>
+                        <CustomTabPanel value={value} index={1}>
+                            <BaseTable
+                                rows={history}
+                                columns={columnsHist}
+                                checkBox={false}
+                                rowCount={rowCountHist}
+                                paginationModel={paginationModelHist}
+                                getRowId={(row) => row.equipment_request_id}
+                                setPaginationModel={setPaginationModelHist}
+                                isLoading={isLoadingHist}
+                                maxHeight={620}
+                            />
+                        </CustomTabPanel>
+                    </Box>
+                    
                 </>
             )}
         </Container>

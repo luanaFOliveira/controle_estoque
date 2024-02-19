@@ -1,17 +1,17 @@
 import React ,{ useState,useEffect }from 'react';
 import BaseTable from '../../components/shared/BaseTable';
-import Grid from '@mui/material/Grid';
-import {CircularProgress, Container} from "@mui/material";
-import Typography from '@mui/material/Typography';
+import {CircularProgress, Container,Typography,Grid,Box} from "@mui/material";
 import { useAuth } from "../../context/AuthProvider";
 import { MyEquipmentTableColumns } from '../../components/columns/MyEquipmentTablesColumns';
 import { getUserHistory } from "../../services/historyService";
 import { errorToast } from "../../services/api";
+import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
 
 export default function MyEquipmentsPage() {
     const { user} = useAuth();
 
     const [firstLoading, setFirstLoading] = useState(true);
+
 
     const [equipAvailable, setEquipAvailable] = useState([]);
     const [equipUnavailable, setEquipUnavailable] = useState([]);
@@ -85,8 +85,10 @@ export default function MyEquipmentsPage() {
         setReload:setReload,
         availability: false,
     });
+
+    const [value, setValue] = React.useState('0');
+
     
- 
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
@@ -95,36 +97,38 @@ export default function MyEquipmentsPage() {
             </Grid>
             ) : (
             <>
-                <Typography component="h1" variant="h4">
-                    Equipamentos ativos
-                </Typography>
-                <BaseTable
-                    rows={equipAvailable}
-                    columns={columnsEquipAvailable}
-                    checkBox={false}
-                    getRowId={(row) => row.user_equipment_id}
-                    rowCount={rowCountEquipAva}
-                    paginationModel={paginationModelEquipAva}
-                    setPaginationModel={setPaginationModelEquipAva}
-                    isLoading={isLoadingEquipAva}
-                    minHeight={200}
-                    maxHeight={620}
-                />
-                <Typography component="h1" variant="h4">
-                    Historico de equipamentos
-                </Typography>
-                <BaseTable
-                    rows={equipUnavailable}
-                    columns={columnsEquipUnavailable}
-                    checkBox={false}
-                    getRowId={(row) => row.user_equipment_id}
-                    rowCount={rowCountEquipUna}
-                    paginationModel={paginationModelEquipUna}
-                    setPaginationModel={setPaginationModelEquipUna}
-                    isLoading={isLoadingEquipUna}
-                    minHeight={200}
-                    maxHeight={620}
-                />
+                <Box sx={{ width: '100%' }}>
+                    <TableTab value={value} setValue={setValue} nameTab1="Equipamentos Ativos" nameTab2="Historico de equipamentos" />
+                    <CustomTabPanel value={value} index={0}>
+                        <BaseTable
+                            rows={equipAvailable}
+                            columns={columnsEquipAvailable}
+                            checkBox={false}
+                            getRowId={(row) => row.user_equipment_id}
+                            rowCount={rowCountEquipAva}
+                            paginationModel={paginationModelEquipAva}
+                            setPaginationModel={setPaginationModelEquipAva}
+                            isLoading={isLoadingEquipAva}
+                            minHeight={200}
+                            maxHeight={620}
+                        />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={1}>
+                        <BaseTable
+                            rows={equipUnavailable}
+                            columns={columnsEquipUnavailable}
+                            checkBox={false}
+                            getRowId={(row) => row.user_equipment_id}
+                            rowCount={rowCountEquipUna}
+                            paginationModel={paginationModelEquipUna}
+                            setPaginationModel={setPaginationModelEquipUna}
+                            isLoading={isLoadingEquipUna}
+                            minHeight={200}
+                            maxHeight={620}
+                        />
+                    </CustomTabPanel>
+                </Box>
+                
             </>
             )}
         </Container>
