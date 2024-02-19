@@ -138,7 +138,7 @@ const ManageUser = () => {
   return (
     <Container component="main" maxWidth="xs">
       {loading ? (
-        <Grid item container justifyContent="center">
+        <Grid item container justifyContent="center" sx={{mt: 3}}>
           <CircularProgress/>
         </Grid>
       ) : (
