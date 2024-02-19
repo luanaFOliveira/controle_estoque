@@ -12,12 +12,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import axiosClient from '../../../axios-client';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Grid from '@mui/material/Grid';
-import { errorToast } from '../../../services/api';
 import { createUser, updateUser } from '../../../services/userService';
+import {api} from "../../../services/api";
 
 const ManageUser = () => {
   const { userId } = useParams();
@@ -36,7 +35,7 @@ const ManageUser = () => {
   useEffect(() => {
     getAllSectors();
     if (userId) {
-      axiosClient
+      api
         .get(`/users/${userId}`)
         .then((data) => {
           const updatedFormData = {
@@ -57,9 +56,8 @@ const ManageUser = () => {
   }, [userId]);
 
   const getAllSectors = () => {
-    axiosClient.get('/sector-names')
+    api.get('/sector-names')
       .then((data) => {
-        console.log(data.data)
         setSectors(data.data);
       });
   };

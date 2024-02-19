@@ -1,7 +1,6 @@
 import React ,{ useState,useEffect }from 'react';
 import BaseTable from '../../components/shared/BaseTable';
 import Grid from '@mui/material/Grid';
-import axiosClient from "../../axios-client";
 import {CircularProgress, Container} from "@mui/material";
 import Typography from '@mui/material/Typography';
 import { useAuth } from "../../context/AuthProvider";

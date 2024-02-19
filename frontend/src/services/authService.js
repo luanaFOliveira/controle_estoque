@@ -26,3 +26,4 @@ export async function logInWithGoogle(googleResponse) {
   const response = await api.post("/login-google", { googleToken });
   return handleResponse(response, "Email não cadastrado.");
 }
+
