@@ -19,7 +19,7 @@ function UserList() {
 
   const columnsUser = UserTableColumns({ user_admin: true });
 
-  const user_name = "Otavio";
+  //const user_name = "Otavio";
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -27,7 +27,7 @@ function UserList() {
       const page = paginationModel.page + 1;
       const response = await indexUsers({
         page: page,
-        name: user_name,
+        //name: user_name,
       });
       if (response) {
         setUsers(response.data);
