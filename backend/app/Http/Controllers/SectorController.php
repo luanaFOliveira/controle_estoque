@@ -25,8 +25,8 @@ class SectorController extends Controller
     {
         $query = Sector::query();
 
-        if ($request->has('search')) {
-            $search = $request->input('search');
+        if ($request->has('name')) {
+            $search = $request->input('name');
 
             $query->where('name', 'ilike', "%$search%");
         }

@@ -1,19 +1,22 @@
 import { api } from "./api";
 
-export async function indexEquipments(page) {
+export async function indexEquipments({page, availability, equipment_code}) {
   const response = await api.get("/equipments", {
     params: {
       page: page,
+      availability: availability,
+      equipment_code: equipment_code,
     },
   });
   return response.data;
 }
 
-export async function indexEquipmentsAvailable({ page, sector }) {
-  const response = await api.get("/equipments-available", {
+export async function indexEquipmentsAvailability({ page, sector, availability }) {
+  const response = await api.get("/equipments", {
     params: {
       page: page,
       sector: sector,
+      availability: availability,
     },
   });
   return response.data;

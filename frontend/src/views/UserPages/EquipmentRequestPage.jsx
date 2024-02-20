@@ -4,7 +4,7 @@ import {Box,Popover,Button,TextField,Grid,InputLabel,Select,CircularProgress,Con
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
 import {EquipmentRequestHistoryTableColumns, EquipmentRequestEquipTableColumns} from "../../components/columns/UserEquipmentRequestTablesColumns";
-import { indexEquipmentsAvailable } from "../../services/equipmentService";
+import { indexEquipmentsAvailability } from "../../services/equipmentService";
 import { createEquipmentRequests, getRequestMotives,indexEquipmentRequests} from "../../services/equipmentRequestService";
 import { errorToast } from "../../services/api";
 import { toast } from "react-toastify";
@@ -44,7 +44,11 @@ export default function EquipmentRequestPage() {
             setIsLoadingEquip(true);
             try{
                 const page = paginationModelEquip.page + 1;
-                const response = await indexEquipmentsAvailable({ page, sector});
+                const response = await indexEquipmentsAvailability({ 
+                    page:page, 
+                    sector:sector,
+                    availability:true,
+                });
                 setEquipments(response.data);
                 setRowCountEquip((prevRowCountState) => response.meta.total ?? prevRowCountState,);
 

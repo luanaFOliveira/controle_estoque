@@ -1,9 +1,10 @@
 import {api} from "./api";
 
-export async function indexUsers(page) {
+export async function indexUsers({page, name}) {
     const response = await api.get("/users", {
         params: {
             page: page,
+            name: name,
         },
     });
     return response.data;
