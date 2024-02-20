@@ -38,6 +38,6 @@ class HistoryResource extends JsonResource
                 'equipment_type' => $equipment->type()->value('name'),
                 'is_at_office' => $equipment->is_at_office,
             ];
-        })->toArray();
+        })->first();
     }
 }

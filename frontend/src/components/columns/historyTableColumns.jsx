@@ -38,12 +38,12 @@ export default function HistoryTableColumns(type) {
             <Link
                 component="button"
                 onClick={() => {
-                    navigate(`/equipments/${params.row.equipment.map((equip) => equip.equipment_id).join(",")}`);
+                    navigate(`/equipments/${params.row.equipment.equipment_id}`);
                 }}
                 underline="hover"
                 sx={{cursor: "pointer"}}
             >
-                {params.row.equipment.map((equip) => equip.equipment_code).join(",")}
+                {params.row.equipment.equipment_code}
             </Link>
             ),
         });
