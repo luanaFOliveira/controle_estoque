@@ -8,12 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EquipmentRequestFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         $request_status_id = rand(2,3); // nao aprovado ou pendente
         $request_motive_id = rand(1,5);

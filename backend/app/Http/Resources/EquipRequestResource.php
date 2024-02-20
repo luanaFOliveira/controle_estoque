@@ -24,6 +24,4 @@ class EquipRequestResource extends JsonResource
             'sector' => Sector::find($this->equipment()->value('sector_id'))->value('name'),
         ];
     }
-
-
 }

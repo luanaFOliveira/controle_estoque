@@ -18,6 +18,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property Carbon|null $created_at
  * @property Carbon|null $returned_at
  * @property Carbon|null $deleted_at
+ * @method static where(string $column, mixed $string)
+ * @method static create(mixed $data)
  */
 class UserEquipment extends Pivot
 {
@@ -41,5 +43,4 @@ class UserEquipment extends Pivot
     {
         return $this->hasMany(Equipment::class, 'equipment_id', 'equipment_id');
     }
-
 }

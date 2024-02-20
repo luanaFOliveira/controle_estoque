@@ -8,6 +8,7 @@ use App\Models\UserEquipment;
 
 /**
  * @mixin UserEquipment
+ * @property mixed $equipment
  */
 class HistoryResource extends JsonResource
 {

@@ -38,6 +38,9 @@ class UserService
         $user->sector()->attach($sectorIds);
     }
 
+    /**
+     * @throws ValidationException
+     */
     public function updateUser(UpdateUserRequest $request, User $user): UserResource
     {
         $data = $request->validated();

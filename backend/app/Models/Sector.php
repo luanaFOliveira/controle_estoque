@@ -19,6 +19,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
+ * @method static find(mixed $value)
+ * @method static where(string $column, mixed $value)
+ * @method static firstOrCreate(array $array)
+ * @method static whereIn(string $string, mixed $value)
+ * @method static create(mixed $data)
  */
 class Sector extends Model
 {

@@ -8,12 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserEquipmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         static $equipmentIds = null;
 

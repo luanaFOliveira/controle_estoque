@@ -28,6 +28,10 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
  * @property Carbon|null $returned_at
+ * @method static auth()
+ * @method static find(mixed $value)
+ * @method static where(string $column, mixed $value)
+ * @method static create(mixed $data)
  */
 class Equipment extends Model
 {

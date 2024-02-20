@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
+ * @method static where(string $column, mixed $value)
+ * @method static withoutGlobalScope(string $scope)
+ * @method static create(mixed $data)
  */
 class User extends Authenticatable
 {
@@ -48,21 +51,11 @@ class User extends Authenticatable
         'is_admin',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];

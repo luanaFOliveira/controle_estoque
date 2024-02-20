@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
+ * @method static where(string $column, mixed $value)
+ * @method static create(mixed[] $array)
  */
 class RequestMotive extends Model
 {

@@ -9,12 +9,7 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
             'name' => $this->faker->name(),
@@ -25,13 +20,7 @@ class UserFactory extends Factory
             'is_admin' => false,
         ];
     }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function unverified()
+    public function unverified(): UserFactory
     {
         return $this->state(function (array $attributes) {
             return [
@@ -40,7 +29,7 @@ class UserFactory extends Factory
         });
     }
 
-    public function configure()
+    public function configure(): UserFactory
     {
         return $this->afterCreating(function (User $user) {
             $sectors = Sector::all()->random(2);

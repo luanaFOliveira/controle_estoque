@@ -29,7 +29,7 @@ it('can login a user', function () {
 it('will fail when someone try login with invalid credentials', function (){
     $data = [
         'email' => 'test',
-        'password' => 'test',
+        'password' => 'test1',
     ];
 
     post('/api/login', $data)->assertStatus(401);
