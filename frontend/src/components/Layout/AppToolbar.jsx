@@ -69,7 +69,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
             if (user && !user.is_admin) {
                 const getSectors = async () => {
                     try {
-                        const response = await indexSectors();
+                        const response = await indexSectors({});
                         if (response) {
                             setSectors(response.data);
                         }
