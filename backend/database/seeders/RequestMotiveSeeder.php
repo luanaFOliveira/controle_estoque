@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class RequestMotiveSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         RequestMotive::create(['name' => 'Projeto especifico']);

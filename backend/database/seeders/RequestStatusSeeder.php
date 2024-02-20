@@ -7,11 +7,6 @@ use App\Models\RequestStatus;
 
 class RequestStatusSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         RequestStatus::create(['status' => 'Aprovado']);
