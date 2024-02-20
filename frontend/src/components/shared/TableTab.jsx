@@ -1,4 +1,4 @@
-import {CircularProgress, Container,Typography,Grid, Tab,Tabs, Box} from "@mui/material";
+import {Typography, Tab,Tabs, Box} from "@mui/material";
 import PropTypes from 'prop-types';
 
 export function CustomTabPanel(props) {
@@ -43,10 +43,16 @@ export function TableTab({value,setValue,nameTab1,nameTab2}){
         setValue(newValue);
     };
 
-//forced scroll buttons
     return(
         <Box >
-            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+            <Tabs 
+              value={value} 
+              onChange={handleChange} 
+              aria-label="basic tabs example"
+              variant="scrollable"
+              scrollButtons
+              allowScrollButtonsMobile
+              >
                 <Tab label={nameTab1} {...a11yProps(0)} />
                 <Tab label={nameTab2} {...a11yProps(1)} />
             </Tabs>

@@ -29,8 +29,7 @@ export default function EquipmentRequestPage() {
     const [rowCountHist, setRowCountHist] = useState(0);
     const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
 
-    const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
-    const columnsHist = EquipmentRequestHistoryTableColumns();
+    
 
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -140,7 +139,9 @@ export default function EquipmentRequestPage() {
         handleClose();
     };
 
-    
+    const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
+    const columnsHist = EquipmentRequestHistoryTableColumns();
+
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
