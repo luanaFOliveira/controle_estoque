@@ -48,7 +48,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         flex:1,
         minWidth: 100,
         valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_code).join(","),
+            params.row.equipment.equipment_code,
     },
     {
         field: 'name',
@@ -56,7 +56,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         flex:1,
         minWidth: 150,
         valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.name).join(","),
+            params.row.equipment.name,
     },
     {
         field: 'brand',
@@ -64,7 +64,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         flex:1,
         minWidth: 120,
         valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_brand).join(","),
+            params.row.equipment.equipment_brand,
     },
     {
         field: 'type',
@@ -72,7 +72,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         flex:1,
         minWidth: 150,
         valueGetter: (params) =>
-            params.row.equipment.map((equip) => equip.equipment_type).join(","),
+            params.row.equipment.equipment_type,
     },
     {
         field: "is_at_office",
@@ -80,9 +80,9 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         flex:1,
         minWidth: 150,
         renderCell: (params) => {        
-          if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "true") {
-            return params.row.equipment.map((equip) => equip.sector).join(",");
-          } else if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "false") {
+          if (params.row.equipment.is_at_office === "true") {
+            return params.row.equipment.sector;
+          } else if (params.row.equipment.is_at_office === "false") {
             return "Fora do escritório";
           }
         },
@@ -102,7 +102,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
             minWidth: 200,
             align: 'center',
             renderCell: (params) => {        
-              if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "true") {
+              if (params.row.equipment.is_at_office === "true") {
                 return (<>
                 <Button
                     sx={{ display: "flex", color: "blue" }}
@@ -116,7 +116,7 @@ export function MyEquipmentTableColumns({setReload,availability}) {
                     <BusinessIcon />
                   </Button>
                 </>);
-              } else if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "false") {
+              } else if (params.row.equipment.is_at_office === "false") {
                 return (<>
                 <Button
                     sx={{ display: "flex", color: "blue" }}
