@@ -27,7 +27,7 @@ function SectorList() {
       const page = paginationModel.page + 1;
       const response = await indexSectors({
         page: page,
-        name: sector_name,
+        //name: sector_name,
       });
       if (response) {
         setSectors(response.data);

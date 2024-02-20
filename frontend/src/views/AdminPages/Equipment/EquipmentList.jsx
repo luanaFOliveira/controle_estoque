@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { indexEquipments } from "../../../services/equipmentService";
 import { errorToast } from "../../../services/api";
 import EquipmentTableColumns from "../../../components/columns/EquipmentTableColumns";
+import FilterBox from '../../../components/shared/FilterBox';
 
 export default function EquipmentList() {
   const navigate = useNavigate();
@@ -17,11 +18,13 @@ export default function EquipmentList() {
     page: 0,
     pageSize: 10,
   });
+  const [filter, setFilter] = useState({
+    equipment_code: "none",
+    availability: "all",
+  });
+
 
   const columnsEquip = EquipmentTableColumns({ user_admin: true });
-
-  const availability = false;
-  const equipment_code = "HK-6281";
 
   useEffect(() => {
     const fetchEquipments = async () => {
@@ -29,9 +32,9 @@ export default function EquipmentList() {
       try {
         const page = paginationModel.page + 1;
         const response = await indexEquipments({
-          page:page,
-          availability: availability,
-          equipment_code: equipment_code,
+          page,
+          availability: filter.availability,
+          equipment_code: filter.equipment_code,
         });
 
         setEquipments(response.data);
@@ -48,7 +51,15 @@ export default function EquipmentList() {
     };
 
     fetchEquipments().then((r) => {});
-  }, [paginationModel.page]);
+  }, [paginationModel.page, filter]);
+
+  const handleSearch = (equipment_code) => {
+    setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+  };
+
+  const handleAvailabilityChange = (availability) => {
+    setFilter((prevFilter) => ({ ...prevFilter, availability }));
+  };
 
   return (
     <Container sx={{ mt: 5 }}>
@@ -64,16 +75,19 @@ export default function EquipmentList() {
           <CircularProgress />
         </Grid>
       ) : (
-        <BaseTable
-          rows={equipments}
-          columns={columnsEquip}
-          checkBox={false}
-          getRowId={(row) => row.equipment_id}
-          rowCount={rowCount}
-          paginationModel={paginationModel}
-          setPaginationModel={setPaginationModel}
-          isLoading={isLoading}
-        />
+        <>
+          <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange} />
+          <BaseTable
+            rows={equipments}
+            columns={columnsEquip}
+            checkBox={false}
+            getRowId={(row) => row.equipment_id}
+            rowCount={rowCount}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            isLoading={isLoading}
+          />
+        </>
       )}
     </Container>
   );

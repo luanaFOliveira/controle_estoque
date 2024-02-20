@@ -26,17 +26,19 @@ class EquipmentController extends Controller
     {
         $query = Equipment::query();
 
-        if ($request->has('sector')) {
+        if ($request->has('sector') && $request->input('sector') !== '') {
             $sector = $request->input('sector');
             $query->where('sector_id', 'ilike', "%$sector%");
         }
-        if($request->has('availability')){
+
+        if($request->has('availability') && $request->input('availability') !== ''){
             $availability = $request->input('availability');
             if($availability !== 'all'){
                 $query->where('is_available', $availability);
-            } 
+            }
         }
-        if($request->has('equipment_code')){
+
+        if($request->has('equipment_code') && $request->input('equipment_code') !== 'none'){
             $equipment_code = $request->input('equipment_code');
             $query->where('equipment_code', $equipment_code);
         }

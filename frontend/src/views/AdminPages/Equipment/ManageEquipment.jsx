@@ -48,7 +48,7 @@ const ManageEquipment = () => {
   useEffect(() => {
     const getAllSectors = async () => {
       try {
-        const response = await indexSectors();
+        const response = await indexSectors({});
         if (response) {
           setSectors(response.data);
         }

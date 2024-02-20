@@ -27,7 +27,7 @@ function UserList() {
       const page = paginationModel.page + 1;
       const response = await indexUsers({
         page: page,
-        name: user_name,
+        //name: user_name,
       });
       if (response) {
         setUsers(response.data);
