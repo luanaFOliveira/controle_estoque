@@ -9,12 +9,13 @@ export default function EquipmentTableColumns({user_admin}) {
 
   let columns = [];
 
-  if(user_admin == true) {
+  if(user_admin === true) {
     columns.push({
       field: "equipment_code",
       headerName: "Código",
       flex: 1,
       minWidth: 100,
+      sortable: false,
       renderCell: (params) => (
         <Link
           component="button"
@@ -35,6 +36,7 @@ export default function EquipmentTableColumns({user_admin}) {
       headerName: "Código",
       flex: 1,
       minWidth: 100,
+      sortable: false,
     });
   }
 
@@ -74,6 +76,7 @@ export default function EquipmentTableColumns({user_admin}) {
       headerName: "Disponível",
       flex: 1,
       minWidth: 140,
+      sortable: false,
       renderCell: (params) =>
         params.value ? (
           <Box sx={{ display: "flex", justifyContent: "center" }}>

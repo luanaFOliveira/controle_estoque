@@ -8,10 +8,10 @@ export default function UserTableColumns({user_admin}) {
   const navigate = useNavigate();
 
   let columns = [
-    { field: "user_id", headerName: "ID de usuário", flex: 1, minWidth: 80 },
+    { field: "user_id", headerName: "ID de usuário", flex: 1, minWidth: 80, sortable: false, },
   ];
 
-  if(user_admin == true) {
+  if(user_admin === true) {
     columns.push({
       field: "name",
       headerName: "Nome",
@@ -31,7 +31,7 @@ export default function UserTableColumns({user_admin}) {
         </Link>
       ),
     })
-  }else if(user_admin == false){
+  }else if(user_admin === false){
     columns.push({
       field: "name",
       headerName: "Nome",

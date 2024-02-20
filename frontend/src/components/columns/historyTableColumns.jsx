@@ -13,6 +13,7 @@ export default function HistoryTableColumns(type) {
             headerName:"Usuário",
             flex: 1,
             minWidth: 100,
+            sortable: false,
             renderCell: (params) => (
             <Link
                 component="button"
@@ -32,6 +33,7 @@ export default function HistoryTableColumns(type) {
             headerName: "Equipamento",
             flex: 1,
             minWidth: 100,
+            sortable: false,
             renderCell: (params) => (
             <Link
                 component="button"
@@ -52,7 +54,8 @@ export default function HistoryTableColumns(type) {
             field: "created_at", 
             headerName: "Criado em", 
             flex: 1, 
-            minWidth: 150, 
+            minWidth: 150,
+            sortable: false,
             valueFormatter: (params) => {
                 const date = new Date(params.value);
                 return date.toLocaleDateString("pt-BR");
@@ -62,7 +65,8 @@ export default function HistoryTableColumns(type) {
             field: "returned_at", 
             headerName: "Data de Devolução", 
             flex: 1, 
-            minWidth: 200, 
+            minWidth: 200,
+            sortable: false,
             valueFormatter: (params) => {
                 if (params.value === null) {
                     return "Em uso";
