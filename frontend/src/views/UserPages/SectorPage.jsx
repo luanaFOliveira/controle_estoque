@@ -43,7 +43,7 @@ export default function SectorPage() {
     fetchSector().then((r) => {});
   }, []);
 
-  const [value, setValue] = React.useState('0');
+  const [tabValue, setTabValue] = React.useState(0);
 
 
   return (
@@ -59,8 +59,8 @@ export default function SectorPage() {
               <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
                 {sectorInfo.name}
               </Typography>
-              <TableTab value={value} setValue={setValue} nameTab1="Usuários do Setor" nameTab2="Equipamentos do setor" />
-              <CustomTabPanel value={value} index={0}>
+              <TableTab value={tabValue} setValue={setTabValue} nameTab1="Usuários do Setor" nameTab2="Equipamentos do setor" />
+              <CustomTabPanel value={tabValue} index={0}>
                 <BaseTable
                   rows={sectorUsers}
                   columns={columnsUsers}
@@ -78,7 +78,7 @@ export default function SectorPage() {
                   maxHeight={620}
                 />
               </CustomTabPanel>
-              <CustomTabPanel value={value} index={1}>
+              <CustomTabPanel value={tabValue} index={1}>
                 <BaseTable
                   rows={sectorEquipments}
                   columns={columnsEquipments}

@@ -43,7 +43,7 @@ export function TableTab({value,setValue,nameTab1,nameTab2}){
         setValue(newValue);
     };
 
-
+//forced scroll buttons
     return(
         <Box >
             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

@@ -142,7 +142,7 @@ export default function EquipmentRequestPage() {
     const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
 
-    const [value, setValue] = React.useState('0');
+    const [tabValue, setTabValue] = React.useState(0);
 
 
     return(<>
@@ -154,8 +154,8 @@ export default function EquipmentRequestPage() {
                 ) : (
                 <>
                     <Box sx={{ width: '100%' }}>
-                        <TableTab value={value} setValue={setValue} nameTab1="Equipamentos Disponiveis" nameTab2="Historico de solicitações" />
-                        <CustomTabPanel value={value} index={0}>
+                        <TableTab value={tabValue} setValue={setTabValue} nameTab1="Equipamentos Disponiveis" nameTab2="Historico de solicitações" />
+                        <CustomTabPanel value={tabValue} index={0}>
                             <BaseTable
                                 rows={equipments}
                                 columns={columnsEquip}
@@ -168,7 +168,7 @@ export default function EquipmentRequestPage() {
                                 maxHeight={620}
                             />
                         </CustomTabPanel>
-                        <CustomTabPanel value={value} index={1}>
+                        <CustomTabPanel value={tabValue} index={1}>
                             <BaseTable
                                 rows={history}
                                 columns={columnsHist}

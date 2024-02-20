@@ -86,9 +86,8 @@ export default function MyEquipmentsPage() {
         availability: false,
     });
 
-    const [value, setValue] = React.useState('0');
+    const [tabValue, setTabValue] = React.useState(0);
 
-    
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
@@ -98,8 +97,8 @@ export default function MyEquipmentsPage() {
             ) : (
             <>
                 <Box sx={{ width: '100%' }}>
-                    <TableTab value={value} setValue={setValue} nameTab1="Equipamentos Ativos" nameTab2="Historico de equipamentos" />
-                    <CustomTabPanel value={value} index={0}>
+                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Equipamentos Ativos" nameTab2="Historico de equipamentos" />
+                    <CustomTabPanel value={tabValue} index={0}>
                         <BaseTable
                             rows={equipAvailable}
                             columns={columnsEquipAvailable}
@@ -113,7 +112,7 @@ export default function MyEquipmentsPage() {
                             maxHeight={620}
                         />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={1}>
+                    <CustomTabPanel value={tabValue} index={1}>
                         <BaseTable
                             rows={equipUnavailable}
                             columns={columnsEquipUnavailable}
