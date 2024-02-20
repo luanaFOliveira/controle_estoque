@@ -24,7 +24,19 @@ export default function MyEquipmentsPage() {
 
     const [paginationModelEquipAva, setPaginationModelEquipAva] = useState({ page: 0, pageSize: 10 });
     const [paginationModelEquipUna, setPaginationModelEquipUna] = useState({ page: 0, pageSize: 10 });
+
     const [reload, setReload] = useState(false);
+    
+    const columnsEquipAvailable = MyEquipmentTableColumns({
+        setReload:setReload,
+        availability: true,
+    });
+    const columnsEquipUnavailable = MyEquipmentTableColumns({
+        setReload:setReload,
+        availability: false,
+    });
+
+    const [tabValue, setTabValue] = React.useState(0);
 
 
     useEffect(() => {
@@ -77,16 +89,7 @@ export default function MyEquipmentsPage() {
     },[paginationModelEquipUna.page,reload]);
 
     
-    const columnsEquipAvailable = MyEquipmentTableColumns({
-        setReload:setReload,
-        availability: true,
-    });
-    const columnsEquipUnavailable = MyEquipmentTableColumns({
-        setReload:setReload,
-        availability: false,
-    });
-
-    const [tabValue, setTabValue] = React.useState(0);
+    
 
     return(<>
         <Container sx={{mt: 5}}>

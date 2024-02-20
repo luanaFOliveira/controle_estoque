@@ -21,6 +21,9 @@ export default function SectorPage() {
 
   const columnsUsers = UserTableColumns({ user_admin: false });
   const columnsEquipments = EquipmentTableColumns({ user_admin: false });
+  
+  const [tabValue, setTabValue] = React.useState(0);
+
 
   useEffect(() => {
     const fetchSector = async () => {
@@ -43,7 +46,6 @@ export default function SectorPage() {
     fetchSector().then((r) => {});
   }, []);
 
-  const [tabValue, setTabValue] = React.useState(0);
 
 
   return (
