@@ -51,7 +51,7 @@ function UserList() {
     <Container sx={{ mt: 5 }}>
       <Button
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        sx={{ mb: 2 }}
         onClick={() => navigate("/users/new")}
       >
         Registrar Usuário
