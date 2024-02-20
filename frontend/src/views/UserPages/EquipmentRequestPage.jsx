@@ -1,8 +1,6 @@
 import React ,{ useState,useEffect }from 'react';
 import BaseTable from '../../components/shared/BaseTable';
-import { StatusField,RequestEquipButtonCell } from '../../components/CustomColumns';
 import {Box,Popover,Button,TextField,Grid,InputLabel,Select,CircularProgress,Container,MenuItem} from '@mui/material';
-import Typography from '@mui/material/Typography';
 import {useStateContext} from "../../context/GlobalContext";
 import { useAuth } from "../../context/AuthProvider";
 import {EquipmentRequestHistoryTableColumns, EquipmentRequestEquipTableColumns} from "../../components/columns/UserEquipmentRequestTablesColumns";
@@ -30,6 +28,17 @@ export default function EquipmentRequestPage() {
     const [isLoadingHist, setIsLoadingHist] = useState(true);
     const [rowCountHist, setRowCountHist] = useState(0);
     const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
+
+    const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
+    const columnsHist = EquipmentRequestHistoryTableColumns();
+
+    const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    const [tabValue, setTabValue] = React.useState(0);
 
     useEffect(() => {
         const fetchEquipments = async () => {
@@ -98,12 +107,6 @@ export default function EquipmentRequestPage() {
     },[]);
 
 
-    const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
     const handleButtonClick = (event,row) => {
         setAnchorEl(event.currentTarget);
         setFormData({ observation: '',motive:'', rowData: row});
@@ -138,13 +141,6 @@ export default function EquipmentRequestPage() {
     };
 
     
-
-    const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
-    const columnsHist = EquipmentRequestHistoryTableColumns();
-
-    const [tabValue, setTabValue] = React.useState(0);
-
-
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
