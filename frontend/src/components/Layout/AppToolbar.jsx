@@ -84,13 +84,14 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
         }
     }, [loadingUser]);
 
-    const onLogout = (ev) => {
+    const onLogout = async (ev) => {
         ev.preventDefault();
-        logout();
+        await logout();
         navigate("/login");
     };
 
     const handleSectorChange = (event) => {
+        event.preventDefault();
         const newSector = event.target.value;
         setSector(newSector);
         window.location.reload();
