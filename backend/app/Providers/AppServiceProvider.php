@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Services\EquipmentService;
 use App\Services\EquipRequestService;
+use App\Services\GoogleLoginService;
 use App\Services\SectorService;
+use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(UserService::class, function ($app) {
             return new UserService();
+        });
+
+        $this->app->bind(GoogleLoginService::class, function ($app) {
+            return new GoogleLoginService();
         });
     }
 
