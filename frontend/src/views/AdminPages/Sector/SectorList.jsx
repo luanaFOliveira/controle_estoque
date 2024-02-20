@@ -19,11 +19,16 @@ function SectorList() {
 
   const columnsSector = SectorTableColumns();
 
+  const sector_name = "Financeiro";
+
   const fetchSectors = async () => {
     setLoading(true);
     try {
       const page = paginationModel.page + 1;
-      const response = await indexSectors(page);
+      const response = await indexSectors({
+        page: page,
+        name: sector_name,
+      });
       if (response) {
         setSectors(response.data);
         setRowCount(

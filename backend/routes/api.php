@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('equipments', EquipmentController::class)->only(['show', 'index']);
     Route::apiResource('equipment-requests', EquipRequestController::class)->only(['show','store', 'index']);
     Route::put('change-password', [UserController::class, 'changePassword']);
-    Route::get('equipments-available', [EquipRequestController::class, 'equipmentsAvailable']);
     Route::get('request-motives', [EquipRequestController::class, 'getRequestMotives']);
     Route::post('equipment/return/{equipment}', [EquipmentController::class, 'returnEquipment']);
     Route::post('equipment/change-location/{action}', [EquipmentController::class, 'changeEquipmentLocation']);

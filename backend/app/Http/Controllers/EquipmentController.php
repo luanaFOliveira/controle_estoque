@@ -28,8 +28,17 @@ class EquipmentController extends Controller
 
         if ($request->has('sector')) {
             $sector = $request->input('sector');
-
             $query->where('sector_id', 'ilike', "%$sector%");
+        }
+        if($request->has('availability')){
+            $availability = $request->input('availability');
+            if($availability !== 'all'){
+                $query->where('is_available', $availability);
+            } 
+        }
+        if($request->has('equipment_code')){
+            $equipment_code = $request->input('equipment_code');
+            $query->where('equipment_code', $equipment_code);
         }
 
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));

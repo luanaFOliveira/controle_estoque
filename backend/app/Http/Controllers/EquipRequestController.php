@@ -24,20 +24,7 @@ class EquipRequestController extends Controller
         $this->equipmentRequestService = $equipmentRequestService;
     }
 
-    public function equipmentsAvailable(Request $request): AnonymousResourceCollection
-    {
-        $query = Equipment::query();
-
-        $query->where('is_available', true);
-        if ($request->has('sector')) {
-            $sector = $request->input('sector');
-
-            $query->where('sector_id', 'ilike', "%$sector%");
-        }
-
-        return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
-    }
-
+    
     public function getRequestMotives(Request $request): AnonymousResourceCollection
     {
         $query = RequestMotive::all();

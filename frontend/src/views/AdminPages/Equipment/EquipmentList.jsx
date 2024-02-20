@@ -20,12 +20,19 @@ export default function EquipmentList() {
 
   const columnsEquip = EquipmentTableColumns({ user_admin: true });
 
+  const availability = false;
+  const equipment_code = "HK-6281";
+
   useEffect(() => {
     const fetchEquipments = async () => {
       setIsLoading(true);
       try {
         const page = paginationModel.page + 1;
-        const response = await indexEquipments(page);
+        const response = await indexEquipments({
+          page:page,
+          availability: availability,
+          equipment_code: equipment_code,
+        });
 
         setEquipments(response.data);
         setRowCount(
