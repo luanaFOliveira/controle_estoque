@@ -51,3 +51,10 @@ export async function getEquipmentDetails() {
   const response = await api.get("/equipment-details");
   return response.data;
 }
+
+export async function changeEquipmentLocation({equipment_id,action}){
+  const response = await api.post(`/equipment/change-location/${action}`, {
+    equipment_id,
+  });
+  return response.data;
+}

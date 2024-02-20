@@ -82,6 +82,22 @@ class EquipmentService
         return HistoryResource::make($userEquipment);
     }
 
+    public function changeEquipmentLocation($equipment_id, $action): array
+    {
+        $equipment = Equipment::find($equipment_id);
+        if ($action === 'home') {
+            $equipment->is_at_office = false;
+            $message = 'Equipment is now at home';
+        } else if ($action === 'office'){
+            $equipment->is_at_office = true;
+            $message = 'Equipment is now in the office';
+        } else{
+            return ['message' => 'Invalid action', 'status' => 400];
+        }
+        $equipment->save();
+        return ['message' => $message, 'data' => $equipment];
+    }
+
     private function updateEquipment(StoreEquipmentRequest $request, Equipment $equipment): EquipmentResource
     {
         $data = $request->validated();

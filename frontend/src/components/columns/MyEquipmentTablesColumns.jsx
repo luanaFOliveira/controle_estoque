@@ -3,12 +3,14 @@ import { Button, Link, Tooltip, Typography } from "@mui/material";
 import { toastConfirmation } from "../shared/ToastComponents";
 import { toast } from "react-toastify";
 import { returnEquipment } from "../../services/equipmentRequestService";
+import { changeEquipmentLocation } from "../../services/equipmentService";
 import { errorToast } from "../../services/api";
-
+import HomeIcon from '@mui/icons-material/Home';
+import BusinessIcon from '@mui/icons-material/Business';
 
 export function MyEquipmentTableColumns({setReload,availability}) {
 
-    const handleClick = async (row) => {
+    const handleClickDevolver = async (row) => {
         try {
             const response = await returnEquipment({
                 equipment: row.equipment.map((equip) => equip.equipment_id),
@@ -22,6 +24,22 @@ export function MyEquipmentTableColumns({setReload,availability}) {
           errorToast(error);
         }
     }
+
+    const handleClickLocalizacao = async (row,action) => {
+      try {
+        const response = await changeEquipmentLocation({
+          equipment_id: row.equipment.map((equip) => equip.equipment_id).join(","),
+          action: action,
+        });
+        if (response) {
+            toast.success(`Localização do equipamento alterada com sucesso`);
+            setReload((prev) => !prev);
+        }
+      } catch (error) {
+        console.error(error);
+        errorToast(error);
+      }
+  }
 
     let columns = [
       {
@@ -61,35 +79,85 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         headerName: "Local",
         flex:1,
         minWidth: 150,
-        renderCell: (params) =>
-            params.value ? params.row.equipment.map((equip) => equip.sector).join(",") : "Fora do escritório",
+        renderCell: (params) => {        
+          if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "true") {
+            return params.row.equipment.map((equip) => equip.sector).join(",");
+          } else if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "false") {
+            return "Fora do escritório";
+          }
+        },
     },
+    
     ]
 
+    
+    
+
     if(availability){
-      columns.push({
-        field: "return_equipment",
-        headerName: "Devolver Equipamento",
-        flex:1,
-        minWidth: 200,
-        align: 'center',
-        renderCell: (params) => (
-          <>
-            <Button
-              sx={{ display: "flex", color: "blue" }}
-              onClick={() =>
-                toastConfirmation({
-                  item: "Devolver Equipamento",
-                  handleClick: () => handleClick(params.row),
-                })
+      let newColumns = [
+        {
+          field: "change_location",
+            headerName: "Mudar Localização",
+            flex:1,
+            minWidth: 200,
+            align: 'center',
+            renderCell: (params) => {        
+              if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "true") {
+                return (<>
+                <Button
+                    sx={{ display: "flex", color: "blue" }}
+                    onClick={() =>
+                      toastConfirmation({
+                        item: "Mudar localizacao do equipamento",
+                        handleClick: () => handleClickLocalizacao(params.row,"home"),
+                      })
+                    }
+                  >
+                    <BusinessIcon />
+                  </Button>
+                </>);
+              } else if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "false") {
+                return (<>
+                <Button
+                    sx={{ display: "flex", color: "blue" }}
+                    onClick={() =>
+                      toastConfirmation({
+                        item: "Mudar localizacao do equipamento",
+                        handleClick: () => handleClickLocalizacao(params.row,"office"),
+                      })
+                    }
+                  >
+                    <HomeIcon />
+                  </Button>
+                </>);
               }
-            >
-              <UndoIcon />
-            </Button>
-          </>
-            ),
+            },
+            
         },
-      );
+        {
+          field: "return_equipment",
+          headerName: "Devolver Equipamento",
+          flex:1,
+          minWidth: 200,
+          align: 'center',
+          renderCell: (params) => (
+            <>
+              <Button
+                sx={{ display: "flex", color: "blue" }}
+                onClick={() =>
+                  toastConfirmation({
+                    item: "Devolver Equipamento",
+                    handleClick: () => handleClickDevolver(params.row),
+                  })
+                }
+              >
+                <UndoIcon />
+              </Button>
+            </>
+              ),
+        },
+      ]
+      columns.push(...newColumns);
     }else if(!availability){
       let newColumns = [
         {
