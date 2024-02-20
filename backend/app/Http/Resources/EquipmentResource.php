@@ -16,7 +16,11 @@ class EquipmentResource extends JsonResource
     public function toArray($request): array
     {
         $userId = UserEquipment::where('equipment_id', $this->equipment_id)->whereNull('returned_at')->value('user_id');
-        $userName = User::where('user_id', $userId)->select('name', 'user_id')->first()->toArray();
+        if ($userId === null) {
+            $userName = null;
+        } else {
+            $userName = User::where('user_id', $userId)->select('name', 'user_id')->first()->toArray();
+        }
 
         return [
             'equipment_id' => $this->equipment_id,
