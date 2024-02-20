@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Card, CardContent, CircularProgress, Container, Grid, Typography,} from "@mui/material";
+import {Box, Button, Card, CardContent, CircularProgress, Container, Grid, Typography,} from "@mui/material";
 import {toast} from "react-toastify";
 import {toastDelete} from "../../../components/shared/ToastComponents";
 import BaseTable from "../../../components/shared/BaseTable";
 import {destroyEquipment, getEquipment, getHistoryEquipment,} from "../../../services/equipmentService";
 import {errorToast} from "../../../services/api";
 import HistoryTableColumns from "../../../components/columns/historyTableColumns";
+import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
 
 const ViewEquipment = () => {
     const params = useParams();
+    const [tabValue, setTabValue] = useState(0);
     const [firstLoading, setFirstLoading] = useState(true);
     const navigate = useNavigate();
     const [equipment, setEquipment] = useState({});
@@ -122,54 +124,57 @@ const ViewEquipment = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid>
-                        <EquipmentCard
-                            label="Código do Equipamento"
-                            value={equipment.equipment_code}
+                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Usuários"
+                              nameTab2="Equipamentos"/>
+                    <CustomTabPanel value={tabValue} index={0}>
+                        <Grid>
+                            <EquipmentCard
+                                label="Código do Equipamento"
+                                value={equipment.equipment_code}
+                            />
+                            <EquipmentCard label="Nome do Equipamento" value={equipment.name}/>
+                            <EquipmentCard
+                                label="Marca do Equipamento"
+                                value={equipment.brand}
+                            />
+                            <EquipmentCard label="Tipo de Equipamento" value={equipment.type}/>
+                            <EquipmentCard label="Setor" value={equipment.sector}/>
+                            <EquipmentCard
+                                label="Status"
+                                value={
+                                    equipment.is_available
+                                        ? "Disponível para uso"
+                                        : "Atualmente em uso"
+                                }
+                            />
+                            <EquipmentCard
+                                label="Localização Atual"
+                                value={
+                                    equipment.is_at_office ? "No Escritório" : "Em Home Office"
+                                }
+                            />
+                        </Grid>
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={1}>
+                        <BaseTable
+                            rows={history}
+                            columns={columnsHistory}
+                            checkBox={false}
+                            getRowId={(row) => row.user_equipment_id}
+                            rowCount={rowCount}
+                            paginationModel={paginationModel}
+                            setPaginationModel={setPaginationModel}
+                            isLoading={isLoading}
+                            maxWidth={700}
                         />
-                        <EquipmentCard label="Nome do Equipamento" value={equipment.name}/>
-                        <EquipmentCard
-                            label="Marca do Equipamento"
-                            value={equipment.brand}
-                        />
-                        <EquipmentCard label="Tipo de Equipamento" value={equipment.type}/>
-                        <EquipmentCard label="Setor" value={equipment.sector}/>
-                        <EquipmentCard
-                            label="Status"
-                            value={
-                                equipment.is_available
-                                    ? "Disponível para uso"
-                                    : "Atualmente em uso"
-                            }
-                        />
-                        <EquipmentCard
-                            label="Localização Atual"
-                            value={
-                                equipment.is_at_office ? "No Escritório" : "Em Home Office"
-                            }
-                        />
-                    </Grid>
-                    <Typography variant="h4" fontWeight="bold" sx={{mb: 2, mt: 5}}>
-                        Histórico do equipamento:
-                    </Typography>
-                    <BaseTable
-                        rows={history}
-                        columns={columnsHistory}
-                        checkBox={false}
-                        getRowId={(row) => row.user_equipment_id}
-                        rowCount={rowCount}
-                        paginationModel={paginationModel}
-                        setPaginationModel={setPaginationModel}
-                        isLoading={isLoading}
-                        maxWidth={700}
-                    />
+                    </CustomTabPanel>
                     <Button
-                      variant="contained"
-                      sx={{
-                          mt: 3,
-                          mb: 2,
-                      }}
-                      onClick={() => navigate("/equipments")}
+                        variant="contained"
+                        sx={{
+                            mt: 3,
+                            mb: 2,
+                        }}
+                        onClick={() => navigate("/equipments")}
                     >
                         Voltar para a Lista de Equipamentos
                     </Button>

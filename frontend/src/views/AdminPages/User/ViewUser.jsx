@@ -8,11 +8,13 @@ import HistoryTableColumns from "../../../components/columns/historyTableColumns
 import {errorToast} from "../../../services/api";
 import {destroyUser, getUser} from "../../../services/userService";
 import {getUserHistory} from "../../../services/historyService";
+import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
 
 const ViewUser = () => {
     const {userId} = useParams();
     const navigate = useNavigate();
     const [firstLoading, setFirstLoading] = useState(true);
+    const [tabValue, setTabValue] = useState(0);
 
     const [userDetail, setUserDetail] = useState({});
     const [history, setHistory] = useState([]);
@@ -116,10 +118,10 @@ const ViewUser = () => {
         <>
             <Container component="main" maxWidth="sx">
                 {firstLoading ? (
-                    <Grid item container justifyContent="center">
-                        <CircularProgress />
+                    <Grid item container justifyContent="center" marginTop={3}>
+                        <CircularProgress/>
                     </Grid>
-                    ) : (
+                ) : (
                     <>
                         <Grid container justifyContent="space-between" marginTop={4}>
                             <Grid>
@@ -150,81 +152,81 @@ const ViewUser = () => {
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid>
-                            <UserCard label="Nome do Usuário" value={userDetail.name}/>
-                            <UserCard label="Email do Usuário" value={userDetail.email}/>
-                            <Card
-                                sx={{
-                                    mb: 2,
-                                    maxWidth: "700px",
-                                }}
-                            >
-                                <CardContent>
-                                    <Grid container sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "start",
-                                    }}>
-                                        <Typography variant="body2" width="250px">
-                                            Setores do Usuário:
-                                        </Typography>
-                                        {userDetail.sectors && userDetail.sectors.length > 0 ? 
-                                        (
-                                            <>
-                                            {userDetail.sectors.map((sector) => {
-                                                return (
-                                                    <Link
-                                                        key={sector.sector_id}
-                                                        component="button"
-                                                        onClick={() => {
-                                                            navigate(`/sectors/${sector.sector_id}`);
-                                                        }}
-                                                        underline="hover"
-                                                        sx={{cursor: "pointer", marginLeft: "20px", marginTop: "5px",justifyContent: 'start', display: "flex"}}
-                                                    >
-                                                        {sector.name}
-                                                    </Link>
-                                                );
-                                            })}
-                                        </>):(
-                                            <Typography variant="body2">
-                                                Nenhum setor encontrado.
+                        <TableTab value={tabValue} setValue={setTabValue} nameTab1="Informações "
+                                  nameTab2="Histórico"/>
+                        <CustomTabPanel value={tabValue} index={0}>
+                            <Grid>
+                                <UserCard label="Nome do Usuário" value={userDetail.name}/>
+                                <UserCard label="Email do Usuário" value={userDetail.email}/>
+                                <Card
+                                    sx={{
+                                        mb: 2,
+                                        maxWidth: "700px",
+                                    }}
+                                >
+                                    <CardContent>
+                                        <Grid container sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            justifyContent: "start",
+                                        }}>
+                                            <Typography variant="body2" width="250px">
+                                                Setores do Usuário:
                                             </Typography>
-                                        )}
-
-                                        
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Typography
-                            variant="h4"
-                            fontWeight="bold"
-                            sx={{
-                                mb: 2,
-                                mt: 5,
-                            }}
-                        >
-                            Histórico do usuário:
-                        </Typography>
-                        <BaseTable
-                            rows={history}
-                            columns={columnsHistory}
-                            checkBox={false}
-                            getRowId={(row) => row.user.user_id}
-                            rowCount={rowCount}
-                            paginationModel={paginationModel}
-                            setPaginationModel={setPaginationModel}
-                            isLoading={loading}
-                            maxWidth={700}
-                        />
+                                            {userDetail.sectors && userDetail.sectors.length > 0 ?
+                                                (
+                                                    <>
+                                                        {userDetail.sectors.map((sector) => {
+                                                            return (
+                                                                <Link
+                                                                    key={sector.sector_id}
+                                                                    component="button"
+                                                                    onClick={() => {
+                                                                        navigate(`/sectors/${sector.sector_id}`);
+                                                                    }}
+                                                                    underline="hover"
+                                                                    sx={{
+                                                                        cursor: "pointer",
+                                                                        marginLeft: "20px",
+                                                                        marginTop: "5px",
+                                                                        justifyContent: 'start',
+                                                                        display: "flex"
+                                                                    }}
+                                                                >
+                                                                    {sector.name}
+                                                                </Link>
+                                                            );
+                                                        })}
+                                                    </>) : (
+                                                    <Typography variant="body2">
+                                                        Nenhum setor encontrado.
+                                                    </Typography>
+                                                )}
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </CustomTabPanel>
+                        <CustomTabPanel value={tabValue} index={1}>
+                            <BaseTable
+                                rows={history}
+                                columns={columnsHistory}
+                                checkBox={false}
+                                getRowId={(row) => row.user.user_id}
+                                rowCount={rowCount}
+                                paginationModel={paginationModel}
+                                setPaginationModel={setPaginationModel}
+                                isLoading={loading}
+                                maxWidth={700}
+                            />
+                        </CustomTabPanel>
                         <Button
-                          variant="contained"
-                          sx={{
-                              mt: 3,
-                              mb: 2,
-                          }}
-                          onClick={() => navigate("/users")}
+                            variant="contained"
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                            }}
+                            onClick={() => navigate("/users")}
                         >
                             Voltar para a Lista de Usuários
                         </Button>
