@@ -14,7 +14,7 @@ class CreateUniqueUserEquipmentTable extends Migration
     public function up()
     {
         Schema::table('user_equipment', function (Blueprint $table) {
-            $table->unique(['user_id','equipment_id','returned_at']);
+            $table->unique(['equipment_id', 'returned_at']);
         });
     }
 
@@ -26,7 +26,7 @@ class CreateUniqueUserEquipmentTable extends Migration
     public function down()
     {
         Schema::table('user_equipment', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'equipment_id', 'returned_at']);
+            $table->dropUnique(['equipment_id', 'returned_at']);
         });
     }
 }
