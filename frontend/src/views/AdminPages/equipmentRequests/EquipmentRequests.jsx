@@ -92,7 +92,6 @@ const EquipmentRequests = () => {
                 <BaseTable
                     rows={pendingRequests}
                     columns={pendingRequestsColumns}
-                    checkBox={false}
                     getRowId={(row) => row.equipment_request_id}
                     rowCount={pendingRowCount}
                     paginationModel={pendingPaginationModel}
@@ -105,7 +104,6 @@ const EquipmentRequests = () => {
                 <BaseTable
                     rows={processedRequests}
                     columns={processedRequestsColumns}
-                    checkBox={false}
                     getRowId={(row) => row.equipment_request_id}
                     rowCount={processedRowCount}
                     paginationModel={processedPaginationModel}

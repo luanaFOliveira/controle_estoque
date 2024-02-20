@@ -10,7 +10,6 @@ import Grid from "@mui/material/Grid";
 export default function BaseTable({
   rows,
   columns,
-  checkBox,
   rowCount,
   paginationModel,
   setPaginationModel,
@@ -63,7 +62,6 @@ export default function BaseTable({
       paginationModel={paginationModel}
       onPaginationModelChange={setPaginationModel}
       //pageSizeOptions={[5, 10]}
-      {...(checkBox ? { checkboxSelection: true } : {})}
       sx={{ boxShadow: 2, maxWidth: maxWidth, maxHeight: maxHeight, minHeight: minHeight}}
     />
   );

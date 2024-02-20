@@ -61,7 +61,6 @@ function UserList() {
           rows={users}
           columns={columnsUser}
           getRowId={(row) => row.user_id}
-          checkBox={false}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}

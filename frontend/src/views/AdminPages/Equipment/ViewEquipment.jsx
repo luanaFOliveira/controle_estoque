@@ -174,7 +174,6 @@ const ViewEquipment = () => {
                         <BaseTable
                             rows={history}
                             columns={columnsHistory}
-                            checkBox={false}
                             getRowId={(row) => row.user_equipment_id}
                             rowCount={rowCount}
                             paginationModel={paginationModel}

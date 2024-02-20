@@ -61,7 +61,6 @@ function SectorList() {
           rows={sectors}
           columns={columnsSector}
           getRowId={(row) => row.sector_id}
-          checkBox={false}
           rowCount={rowCount}
           paginationMode="server"
           paginationModel={paginationModel}
