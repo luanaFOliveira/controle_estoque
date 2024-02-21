@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\EquipmentService;
 use App\Services\EquipRequestService;
 use App\Services\GoogleLoginService;
+use App\Services\HistoryService;
 use App\Services\SectorService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(GoogleLoginService::class, function ($app) {
             return new GoogleLoginService();
+        });
+
+        $this->app->bind(HistoryService::class, function ($app) {
+            return new HistoryService();
         });
     }
 
