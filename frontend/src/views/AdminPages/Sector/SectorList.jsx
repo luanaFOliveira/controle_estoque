@@ -19,7 +19,7 @@ function SectorList() {
 
   const columnsSector = SectorTableColumns();
 
-  const sector_name = "Financeiro";
+  //const sector_name = "Financeiro";
 
   const fetchSectors = async () => {
     setLoading(true);
@@ -51,17 +51,16 @@ function SectorList() {
     <Container sx={{ mt: 5 }}>
       <Button
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        sx={{ mb: 2 }}
         onClick={() => navigate("/sectors/new")}
       >
-        Criar Setor
+        Registrar Setor
       </Button>
       {sectors.length > 0 ? (
         <BaseTable
           rows={sectors}
           columns={columnsSector}
           getRowId={(row) => row.sector_id}
-          checkBox={false}
           rowCount={rowCount}
           paginationMode="server"
           paginationModel={paginationModel}

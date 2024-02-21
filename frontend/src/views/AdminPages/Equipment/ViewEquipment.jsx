@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Box, Button, Card, CardContent, CircularProgress, Container, Grid, Typography,} from "@mui/material";
+import {Box, Button, Card, CardContent, CircularProgress, Container, Grid, Link, Typography,} from "@mui/material";
 import {toast} from "react-toastify";
 import {toastDelete} from "../../../components/shared/ToastComponents";
-import BaseTable from "../../../components/shared/BaseTable";
 import {destroyEquipment, getEquipment, getHistoryEquipment,} from "../../../services/equipmentService";
 import {errorToast} from "../../../services/api";
 import HistoryTableColumns from "../../../components/columns/historyTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
+import BaseTable from "../../../components/shared/BaseTable";
 
 const ViewEquipment = () => {
     const params = useParams();
@@ -124,8 +124,8 @@ const ViewEquipment = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Usuários"
-                              nameTab2="Equipamentos"/>
+                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Informações"
+                              nameTab2="Histórico"/>
                     <CustomTabPanel value={tabValue} index={0}>
                         <Grid>
                             <EquipmentCard
@@ -144,7 +144,22 @@ const ViewEquipment = () => {
                                 value={
                                     equipment.is_available
                                         ? "Disponível para uso"
-                                        : "Atualmente em uso"
+                                        : <Box sx={{display:'flex', alignItems:'center'}}>
+                                            {"Atualmente em uso por:"}
+                                            <Link
+                                                key={equipment.user.user_id}
+                                                onClick={() => {
+                                                    navigate(`/users/${equipment.user.user_id}`);
+                                                }}
+                                                underline="hover"
+                                                sx={{
+                                                    cursor: "pointer",
+                                                    marginLeft: "10px",
+                                                }}
+                                            >
+                                                {equipment.user.name}
+                                            </Link>
+                                        </Box>
                                 }
                             />
                             <EquipmentCard
@@ -159,7 +174,6 @@ const ViewEquipment = () => {
                         <BaseTable
                             rows={history}
                             columns={columnsHistory}
-                            checkBox={false}
                             getRowId={(row) => row.user_equipment_id}
                             rowCount={rowCount}
                             paginationModel={paginationModel}

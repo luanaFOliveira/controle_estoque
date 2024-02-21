@@ -19,7 +19,7 @@ function UserList() {
 
   const columnsUser = UserTableColumns({ user_admin: true });
 
-  const user_name = "Otavio";
+  //const user_name = "Otavio";
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -51,7 +51,7 @@ function UserList() {
     <Container sx={{ mt: 5 }}>
       <Button
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        sx={{ mb: 2 }}
         onClick={() => navigate("/users/new")}
       >
         Registrar Usuário
@@ -61,7 +61,6 @@ function UserList() {
           rows={users}
           columns={columnsUser}
           getRowId={(row) => row.user_id}
-          checkBox={false}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}

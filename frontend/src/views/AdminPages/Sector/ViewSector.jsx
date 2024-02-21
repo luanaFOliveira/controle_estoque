@@ -94,7 +94,6 @@ function ViewSector() {
                             rows={sectorDetail.users}
                             getRowId={(row) => row.user_id}
                             columns={columnsUser}
-                            checkBox={false}
                             loading={loading}
                             paginationMode="client"
                             initialState={{
@@ -111,7 +110,6 @@ function ViewSector() {
                             rows={sectorDetail.equipments}
                             getRowId={(row) => row.equipment_id}
                             columns={columnsEquip}
-                            checkBox={false}
                             loading={loading}
                             paginationMode="client"
                             initialState={{

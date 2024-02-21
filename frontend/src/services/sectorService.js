@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-export async function indexSectors({page, name}) {
+export async function indexSectors({page,name}) {
   const response = await api.get("/sectors", {
     params: {
       page: page,

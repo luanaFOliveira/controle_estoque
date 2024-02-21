@@ -80,7 +80,6 @@ export default function EquipmentList() {
           <BaseTable
             rows={equipments}
             columns={columnsEquip}
-            checkBox={false}
             getRowId={(row) => row.equipment_id}
             rowCount={rowCount}
             paginationModel={paginationModel}

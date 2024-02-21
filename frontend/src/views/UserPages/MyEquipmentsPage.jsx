@@ -105,7 +105,6 @@ export default function MyEquipmentsPage() {
                         <BaseTable
                             rows={equipAvailable}
                             columns={columnsEquipAvailable}
-                            checkBox={false}
                             getRowId={(row) => row.user_equipment_id}
                             rowCount={rowCountEquipAva}
                             paginationModel={paginationModelEquipAva}
@@ -119,7 +118,6 @@ export default function MyEquipmentsPage() {
                         <BaseTable
                             rows={equipUnavailable}
                             columns={columnsEquipUnavailable}
-                            checkBox={false}
                             getRowId={(row) => row.user_equipment_id}
                             rowCount={rowCountEquipUna}
                             paginationModel={paginationModelEquipUna}

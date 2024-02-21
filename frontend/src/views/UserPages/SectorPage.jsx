@@ -67,7 +67,6 @@ export default function SectorPage() {
                   rows={sectorUsers}
                   columns={columnsUsers}
                   getRowId={(row) => row.user_id}
-                  checkBox={false}
                   paginationMode="client"
                   initialState={{
                     pagination: {
@@ -85,7 +84,6 @@ export default function SectorPage() {
                   rows={sectorEquipments}
                   columns={columnsEquipments}
                   getRowId={(row) => row.equipment_id}
-                  checkBox={false}
                   paginationMode="client"
                   initialState={{
                     pagination: {

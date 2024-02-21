@@ -160,7 +160,6 @@ export default function EquipmentRequestPage() {
                             <BaseTable
                                 rows={equipments}
                                 columns={columnsEquip}
-                                checkBox={false}
                                 rowCount={rowCountEquip}
                                 paginationModel={paginationModelEquip}
                                 getRowId={(row) => row.equipment_id}
@@ -173,7 +172,6 @@ export default function EquipmentRequestPage() {
                             <BaseTable
                                 rows={history}
                                 columns={columnsHist}
-                                checkBox={false}
                                 rowCount={rowCountHist}
                                 paginationModel={paginationModelHist}
                                 getRowId={(row) => row.equipment_request_id}
