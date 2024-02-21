@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEquipRequestRequest;
-use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\EquipRequestResource;
 use App\Http\Resources\RequestMotiveResource;
-use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\RequestMotive;
 use App\Services\EquipRequestService;
@@ -24,8 +22,8 @@ class EquipRequestController extends Controller
         $this->equipmentRequestService = $equipmentRequestService;
     }
 
-    
-    public function getRequestMotives(Request $request): AnonymousResourceCollection
+
+    public function getRequestMotives(): AnonymousResourceCollection
     {
         $query = RequestMotive::all();
         return RequestMotiveResource::collection($query);
