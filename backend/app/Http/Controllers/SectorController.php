@@ -16,7 +16,8 @@ class SectorController extends Controller
 {
     private $sectorService;
 
-    public function __construct(SectorService $sectorService) {
+    public function __construct(SectorService $sectorService)
+    {
         $this->sectorService = $sectorService;
     }
 
@@ -33,31 +34,31 @@ class SectorController extends Controller
         return SectorResource::collection($query->orderBy('sector_id')->paginate(10));
     }
 
-    public function sectorNames():JsonResponse
+    public function sectorNames(): JsonResponse
     {
         $sectorNames = Sector::all()->pluck('name');
 
         return response()->json($sectorNames);
     }
 
-    public function show(Sector $sector):JsonResource
+    public function show(Sector $sector): JsonResource
     {
         return new SectorDetailResource($sector);
     }
 
-    public function store(StoreSectorRequest $request):JsonResponse
+    public function store(StoreSectorRequest $request): JsonResponse
     {
         $sectorResource = $this->sectorService->upsertSector($request);
         return response()->json(['message' => 'Sector created successfully', 'data' => $sectorResource], 201);
     }
 
-    public function update(StoreSectorRequest $request, Sector $sector):JsonResponse
+    public function update(StoreSectorRequest $request, Sector $sector): JsonResponse
     {
         $updatedSectorResource = $this->sectorService->upsertSector($request, $sector);
         return response()->json(['message' => 'Sector updated successfully', 'data' => $updatedSectorResource]);
     }
 
-    public function destroy(Sector $sector):JsonResponse
+    public function destroy(Sector $sector): JsonResponse
     {
         if ($sector->equipment()->count() > 0) {
             $message = 'Cannot delete sector. Delete all equipments in the sector first.';

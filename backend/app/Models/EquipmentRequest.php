@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class EquipmentRequest extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'equipment_request';
     protected $primaryKey = 'equipment_request_id';
@@ -42,7 +42,7 @@ class EquipmentRequest extends Model
 
     public function scopeAuth(Builder $query): void
     {
-        if(!Auth::user()->is_admin){
+        if (!Auth::user()->is_admin) {
             $query->where('user_id', '=', Auth::user()->user_id);
         }
     }
@@ -66,5 +66,4 @@ class EquipmentRequest extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }

@@ -6,7 +6,6 @@ use App\Http\Requests\StoreEquipmentRequest;
 use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
 use App\Models\EquipmentBrand;
-use App\Models\EquipmentRequest;
 use App\Models\EquipmentType;
 use App\Services\EquipmentService;
 use Illuminate\Http\JsonResponse;
@@ -31,14 +30,14 @@ class EquipmentController extends Controller
             $query->where('sector_id', 'ilike', "%$sector%");
         }
 
-        if($request->has('availability') && $request->input('availability') !== ''){
+        if ($request->has('availability') && $request->input('availability') !== '') {
             $availability = $request->input('availability');
-            if($availability !== 'all'){
+            if ($availability !== 'all') {
                 $query->where('is_available', $availability);
             }
         }
 
-        if($request->has('equipment_code') && $request->input('equipment_code') !== 'none'){
+        if ($request->has('equipment_code') && $request->input('equipment_code') !== 'none') {
             $equipment_code = $request->input('equipment_code');
             $query->where('equipment_code', 'ilike', "%$equipment_code%");
         }
@@ -83,7 +82,7 @@ class EquipmentController extends Controller
     public function changeEquipmentLocation(Request $request, $action): JsonResponse
     {
         $equipment_id = $request->input('equipment_id');
-        $response = $this->equipmentService->changeEquipmentLocation($equipment_id,$action);
+        $response = $this->equipmentService->changeEquipmentLocation($equipment_id, $action);
         return response()->json(['message' => $response['message'], 'data' => $response['data']]);
     }
 

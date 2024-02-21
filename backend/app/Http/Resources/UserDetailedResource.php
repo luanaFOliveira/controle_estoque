@@ -29,6 +29,4 @@ class UserDetailedResource extends JsonResource
             ];
         })->toArray();
     }
-
-
 }
