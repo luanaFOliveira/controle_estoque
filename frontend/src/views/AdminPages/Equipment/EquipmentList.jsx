@@ -27,31 +27,31 @@ export default function EquipmentList() {
   const columnsEquip = EquipmentTableColumns({ user_admin: true });
 
   useEffect(() => {
-    const fetchEquipments = async () => {
-      setIsLoading(true);
-      try {
-        const page = paginationModel.page + 1;
-        const response = await indexEquipments({
-          page,
-          availability: filter.availability,
-          equipment_code: filter.equipment_code,
-        });
-
-        setEquipments(response.data);
-        setRowCount(
-          (prevRowCountState) => response.meta.total ?? prevRowCountState,
-        );
-      } catch (error) {
-        errorToast(error);
-        console.log("error:", error);
-      } finally {
-        setIsLoading(false);
-        setFirstLoading(false);
-      }
-    };
-
-    fetchEquipments().then((r) => {});
+    fetchEquipments();
   }, [paginationModel.page, filter]);
+
+  const fetchEquipments = async () => {
+    setIsLoading(true);
+    try {
+      const page = paginationModel.page + 1;
+      const response = await indexEquipments({
+        page,
+        availability: filter.availability,
+        equipment_code: filter.equipment_code,
+      });
+
+      setEquipments(response.data);
+      setRowCount(
+        (prevRowCountState) => response.meta.total ?? prevRowCountState,
+      );
+    } catch (error) {
+      errorToast(error);
+      console.log("error:", error);
+    } finally {
+      setIsLoading(false);
+      setFirstLoading(false);
+    }
+  };
 
   const handleSearch = (equipment_code) => {
     setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
@@ -70,13 +70,13 @@ export default function EquipmentList() {
       >
         Registrar novo equipamento
       </Button>
-      {firstLoading > 0 ? (
+      {firstLoading ? (
         <Grid item container justifyContent="center">
           <CircularProgress />
         </Grid>
       ) : (
         <>
-          <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange} />
+          <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange} disponibility={true} label='Pesquisar Código do equipamento'/>
           <BaseTable
             rows={equipments}
             columns={columnsEquip}

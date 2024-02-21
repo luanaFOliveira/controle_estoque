@@ -6,20 +6,27 @@ import { useNavigate } from "react-router-dom";
 import SectorTableColumns from "../../../components/columns/SectorTableColumns";
 import { indexSectors } from "../../../services/sectorService";
 import { errorToast } from "../../../services/api";
+import FilterBox from '../../../components/shared/FilterBox';
 
 function SectorList() {
   const navigate = useNavigate();
   const [sectors, setSectors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [firstLoading, setFirstLoading] = useState(true);
   const [rowCount, setRowCount] = useState(0);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
+  const [filter, setFilter] = useState({
+    name:"",
+  });
 
   const columnsSector = SectorTableColumns();
 
-  //const sector_name = "Financeiro";
+  useEffect(() => {
+    fetchSectors();
+  }, [paginationModel.page,filter]);
 
   const fetchSectors = async () => {
     setLoading(true);
@@ -27,7 +34,7 @@ function SectorList() {
       const page = paginationModel.page + 1;
       const response = await indexSectors({
         page: page,
-        //name: sector_name,
+        name: filter.name,
       });
       if (response) {
         setSectors(response.data);
@@ -40,12 +47,13 @@ function SectorList() {
       errorToast(error);
     } finally {
       setLoading(false);
+      setFirstLoading(false)
     }
   };
 
-  useEffect(() => {
-    fetchSectors();
-  }, [paginationModel.page]);
+  const handleSearch = (name) => {
+    setFilter((prevFilter) => ({ ...prevFilter, name}));
+  };
 
   return (
     <Container sx={{ mt: 5 }}>
@@ -56,17 +64,20 @@ function SectorList() {
       >
         Registrar Setor
       </Button>
-      {sectors.length > 0 ? (
-        <BaseTable
-          rows={sectors}
-          columns={columnsSector}
-          getRowId={(row) => row.sector_id}
-          rowCount={rowCount}
-          paginationMode="server"
-          paginationModel={paginationModel}
-          setPaginationModel={setPaginationModel}
-          loading={loading}
-        />
+      {!firstLoading  ? (
+        <>
+          <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar nome de usuário'/>
+          <BaseTable
+            rows={sectors}
+            columns={columnsSector}
+            getRowId={(row) => row.sector_id}
+            rowCount={rowCount}
+            paginationMode="server"
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            loading={loading}
+          />
+        </>
       ) : (
         <Grid item container justifyContent="center">
           <CircularProgress />

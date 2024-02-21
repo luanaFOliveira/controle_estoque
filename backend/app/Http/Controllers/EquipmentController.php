@@ -40,7 +40,7 @@ class EquipmentController extends Controller
 
         if($request->has('equipment_code') && $request->input('equipment_code') !== 'none'){
             $equipment_code = $request->input('equipment_code');
-            $query->where('equipment_code', $equipment_code);
+            $query->where('equipment_code', 'ilike', "%$equipment_code%");
         }
 
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));

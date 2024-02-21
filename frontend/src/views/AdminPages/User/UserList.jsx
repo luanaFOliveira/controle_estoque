@@ -6,20 +6,27 @@ import { useNavigate } from "react-router-dom";
 import UserTableColumns from "../../../components/columns/UserTableColumns";
 import { errorToast } from "../../../services/api";
 import { indexUsers } from "../../../services/userService";
+import FilterBox from '../../../components/shared/FilterBox';
 
 function UserList() {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [firstLoading, setFirstLoading] = useState(true);
   const [rowCount, setRowCount] = useState(0);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
+  const [filter, setFilter] = useState({
+    name: "",
+  });
 
   const columnsUser = UserTableColumns({ user_admin: true });
 
-  //const user_name = "Otavio";
+  useEffect(() => {
+    fetchUsers();
+  }, [paginationModel.page, filter]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -27,7 +34,7 @@ function UserList() {
       const page = paginationModel.page + 1;
       const response = await indexUsers({
         page: page,
-        //name: user_name,
+        name: filter.name,
       });
       if (response) {
         setUsers(response.data);
@@ -40,12 +47,13 @@ function UserList() {
       errorToast(error);
     } finally {
       setLoading(false);
+      setFirstLoading(false)
     }
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, [paginationModel.page]);
+  const handleSearch = (name) => {
+    setFilter((prevFilter) => ({ ...prevFilter, name}));
+  };
 
   return (
     <Container sx={{ mt: 5 }}>
@@ -56,16 +64,19 @@ function UserList() {
       >
         Registrar Usuário
       </Button>
-      {users.length > 0 ? (
-        <BaseTable
-          rows={users}
-          columns={columnsUser}
-          getRowId={(row) => row.user_id}
-          rowCount={rowCount}
-          paginationModel={paginationModel}
-          setPaginationModel={setPaginationModel}
-          loading={loading}
-        />
+      {!firstLoading ? (
+        <>
+          <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar nome de usuário'/>
+          <BaseTable
+            rows={users}
+            columns={columnsUser}
+            getRowId={(row) => row.user_id}
+            rowCount={rowCount}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
+            loading={loading}
+          />
+        </>
       ) : (
         <Grid item container justifyContent="center">
           <CircularProgress />
