@@ -96,8 +96,11 @@ export default function AdminEquipmentRequestTableColumns({ is_handled_table, se
     columns.push({
       field: "accept_request",
       headerName: "Aceitar / Recusar",
+      headerAlign: "center",
+      headerClassName: "centered-header",
       flex: 1,
       minWidth: 180,
+      align: "center",
       renderCell: (params) => (
         <>
           <Button

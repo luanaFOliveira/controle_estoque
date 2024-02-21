@@ -98,6 +98,8 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         {
           field: "change_location",
             headerName: "Mudar Localização",
+            headerAlign: "center",
+            headerClassName: "centered-header",
             flex:1,
             minWidth: 200,
             align: 'center',
@@ -137,6 +139,8 @@ export function MyEquipmentTableColumns({setReload,availability}) {
         {
           field: "return_equipment",
           headerName: "Devolver Equipamento",
+          headerAlign: "center",
+          headerClassName: "centered-header",
           flex:1,
           minWidth: 200,
           align: 'center',

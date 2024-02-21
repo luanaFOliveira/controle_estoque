@@ -93,6 +93,8 @@ export function EquipmentRequestEquipTableColumns({handleButtonClick}) {
     {
       field: 'requestButton',
       headerName: 'Solicitar retirada',
+      headerAlign: "center",
+      headerClassName: "centered-header",
       flex:1,
       minWidth: 100,
       renderCell: (params) => (
