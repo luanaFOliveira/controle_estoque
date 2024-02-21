@@ -6,7 +6,6 @@ use App\Http\Requests\StoreSectorRequest;
 use App\Http\Resources\SectorDetailResource;
 use App\Http\Resources\SectorResource;
 use App\Models\Sector;
-use App\Models\UserSector;
 use App\Services\SectorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
