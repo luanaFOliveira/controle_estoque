@@ -75,10 +75,9 @@ class EquipmentController extends Controller
         return response()->json(['message' => 'Equipment updated successfully', 'data' => $equipmentResource]);
     }
 
-    public function returnEquipment(Equipment $equipment, EquipmentRequest $equipment_request): JsonResponse
+    public function returnEquipment(Equipment $equipment): JsonResponse
     {
         $returnedEquipment = $this->equipmentService->returnEquipment($equipment);
-        $equipment_request->delete();
         return response()->json(['message' => 'Equipment returned successfully', 'data' => $returnedEquipment]);
     }
 
