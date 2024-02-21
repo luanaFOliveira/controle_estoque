@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use function Pest\Laravel\{actingAs, post, get};
+use function Pest\Laravel\{actingAs, post};
 
 uses()->group('auth');
 
@@ -53,4 +53,9 @@ it('can logout a user', function () {
         ]);
 });
 
+it('cannot login with google with invalid token', function () {
+    $googleToken = '';
 
+    post('/login-google', ['googleToken' => $googleToken])
+        ->assertNotFound();
+});

@@ -19,17 +19,35 @@ beforeEach(function () {
     }
 });
 
-it('should return a list of users', function () {
+it('should return a paginated list of users', function () {
     actingAs($this->admin, 'sanctum');
+    $response = get('/api/users');
+    $paginatedResponse = $response->json();
 
-    get('/api/users')
-        ->assertStatus(200);
+    $response->assertOk();
+    expect($paginatedResponse)->toBePaginated();
+    foreach ($paginatedResponse['data'] as $sector){
+        expect($sector)->toHaveKeys([
+            'user_id',
+            'name',
+            'email',
+            'is_admin',
+        ]);
+    }
 });
 
-it('should return a user', function () {
+it('should show a detailed user', function () {
+    /* @var User $user
+     */
     actingAs($this->admin, 'sanctum');
 
     $user = User::factory()->create();
+    $userSectors = $user->sector->map(function ($sector) {
+        return [
+            'sector_id' => $sector->sector_id,
+            'name' => $sector->name,
+        ];
+    })->toArray();
 
     get('/api/users/' . $user->user_id)
         ->assertStatus(200)
@@ -37,6 +55,9 @@ it('should return a user', function () {
             'data' => [
                 'user_id' => $user->user_id,
                 'name' => $user->name,
+                'email' => $user->email,
+                'is_admin' => $user->is_admin,
+                'sectors' => $userSectors,
             ],
         ]);
 });
@@ -65,7 +86,7 @@ it('can register a new user', function () {
         ]);
 });
 
-it('will fail when admin try register with invalid credentials', function () {
+it('will fail when admin try register a user with invalid credentials', function () {
     actingAs($this->admin, 'sanctum');
 
     $data = [
@@ -75,7 +96,8 @@ it('will fail when admin try register with invalid credentials', function () {
         "password_confirmation" => '',
     ];
 
-    post('/api/users', $data, ['Accept' => 'application/json'])->assertStatus(422);
+    post('/api/users', $data, ['Accept' => 'application/json'])
+        ->assertUnprocessable();
 });
 
 it('should update a user', function () {
@@ -125,7 +147,7 @@ it('should update a user', function () {
         'user_id' => $user->user_id,
         'equipment_id' => $equipment1->getKey(),
     ]);
-    
+
     $this->assertDatabaseHas('user_sector', [
         'user_id' => $user->user_id,
         'sector_id' => $sector1->getKey(),
@@ -140,6 +162,21 @@ it('should update a user', function () {
         'user_id' => $user->user_id,
         'equipment_id' => $equipment2->getKey(),
     ]);
+});
+
+it('will fail when admin try update a user with invalid credentials', function () {
+    actingAs($this->admin, 'sanctum');
+    $user = User::factory()->create();
+
+    $data = [
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        "password_confirmation" => '',
+    ];
+
+    put('/api/users/' . $user->user_id, $data)
+        ->assertRedirect();
 });
 
 it('should delete a user', function () {
@@ -158,6 +195,21 @@ it('should delete a user', function () {
     ]);
 });
 
+it('should change password', function () {
+    /* @var User $user
+     */
+    $user = User::factory()->create();
+    actingAs($user, 'sanctum');
+
+    $data = [
+        'user_id' => $user->user_id,
+        'password' => 'newPassword'
+    ];
+
+    put("api/change-password", $data)
+        ->assertOk();
+});
+
 it('should detach a specific user sector relation', function () {
     actingAs($this->admin, 'sanctum');
 
@@ -169,3 +221,12 @@ it('should detach a specific user sector relation', function () {
         'user_id' => 1,
     ]);
 });
+
+it('cannot access non-existent user', function () {
+    $this->actingAs($this->admin, 'sanctum');
+    $nonExistentId = 12345;
+
+    get("/api/users/{$nonExistentId}")
+        ->assertNotFound();
+});
+

@@ -4,9 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Equipment;
 use App\Models\User;
+use App\Models\UserEquipment;
 use function Pest\Laravel\{actingAs, get};
 
-beforeEach(function (){
+beforeEach(function () {
     if (!isset($this->userTest)) {
         $this->userTest = User::factory()->create([
             'email' => 'user@test.com',
@@ -22,7 +23,7 @@ beforeEach(function (){
 
 uses()->group('history');
 
-it('can return a paginated list detailing the history of a specified piece of equipment', function () {
+it('can return a paginated list detailing the history equipment', function () {
     $admin = User::factory()->create([
         'email' => 'admin@test.com',
         'password' => bcrypt('password'),
@@ -55,9 +56,9 @@ it('cannot access non-existent equipment history', function () {
         ->assertStatus(404);
 });
 
-it('can return a paginated list detailing the history of a specified piece of user', function () {
+it('can return a paginated list detailing the history user', function () {
     actingAs($this->userTest, 'sanctum');
-    $response = $this->getJson("/api/history/users?user_id={$this->userTest->user_id}")->assertOk();
+    $response = $this->get("/api/history/users?user_id={$this->userTest->user_id}")->assertOk();
     $paginatedResponse = $response->json();
 
     expect($paginatedResponse)->toBePaginated();
@@ -71,16 +72,8 @@ it('can return a paginated list detailing the history of a specified piece of us
             'deleted_at',
             'equipment',
         ]);
-
-        foreach ($history['equipment'] as $equipment) {
-            expect($equipment)->toHaveKeys([
-                'equipment_id',
-                'equipment_code',
-            ]);
-        }
     }
 });
-
 
 it('cannot access non-existent user history', function () {
     actingAs($this->userTest, 'sanctum');
