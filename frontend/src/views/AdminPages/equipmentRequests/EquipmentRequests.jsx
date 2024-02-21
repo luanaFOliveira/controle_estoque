@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import BaseTable from "../../../components/shared/BaseTable";
 import AdminEquipmentRequestTableColumns from "../../../components/columns/AdminEquipmentRequestTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
+import FilterBox from '../../../components/shared/FilterBox';
 
 const EquipmentRequests = () => {
     const [firstLoading, setIFirstLoading] = useState(true);
@@ -33,13 +34,19 @@ const EquipmentRequests = () => {
         is_handled_table: false,
     });
 
+    const [filter, setFilter] = useState({
+        searchPending: "none",
+        searchProcessed: "none",
+        availability: "all",
+    });
+
     useEffect(() => {
         const getPendingRequests = async () => {
             setIsLoadingPending(true);
             try {
                 const page = pendingPaginationModel.page + 1;
                 const response = await indexEquipmentRequests({
-                    filter: {status: "Pendente"}, page: page,
+                    filter: {status: "Pendente",search:filter.searchPending}, page: page,
                 });
                 if (response) {
                     setPendingRequests(response.data);
@@ -55,7 +62,7 @@ const EquipmentRequests = () => {
         };
 
         getPendingRequests();
-    }, [pendingPaginationModel.page, reload]);
+    }, [pendingPaginationModel.page, reload,filter]);
 
     useEffect(() => {
         const getProcessedRequests = async () => {
@@ -63,7 +70,7 @@ const EquipmentRequests = () => {
             try {
                 const page = processedPaginationModel.page + 1;
                 const response = await indexEquipmentRequests({
-                    filter: {status: {$ne: "pendente"}}, page: page,
+                    filter: {status:"Nao pendente",search:filter.searchProcessed, availability: filter.availability}, page: page,
                 });
                 if (response) {
                     setProcessedRequests(response.data);
@@ -79,7 +86,19 @@ const EquipmentRequests = () => {
         };
 
         getProcessedRequests();
-    }, [processedPaginationModel.page, reload]);
+    }, [processedPaginationModel.page, reload,filter]);
+
+    const handleSearchPending = (searchPending) => {
+        setFilter((prevFilter) => ({ ...prevFilter, searchPending }));
+    };
+
+    const handleSearchProcessed = (searchProcessed) => {
+        setFilter((prevFilter) => ({ ...prevFilter, searchProcessed }));
+    };
+    
+    const handleAvailabilityChange = (availability) => {
+        setFilter((prevFilter) => ({ ...prevFilter, availability }));
+    };
 
     return (<Container sx={{mt: 5}}>
         {firstLoading ? (<Grid item container justifyContent="center">
@@ -89,6 +108,7 @@ const EquipmentRequests = () => {
                       nameTab2="Solicitações processadas"/>
 
             <CustomTabPanel value={tabValue} index={0}>
+                <FilterBox onSearch={handleSearchPending} disponibility={false} label='Pesquisar Código do equipamento ou nome do usuario'/>
                 <BaseTable
                     rows={pendingRequests}
                     columns={pendingRequestsColumns}
@@ -101,6 +121,8 @@ const EquipmentRequests = () => {
                 />
             </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={1}>
+                <FilterBox onSearch={handleSearchProcessed} onAvailabilityChange={handleAvailabilityChange} disponibility={true} 
+                            label='Pesquisar Código do equipamento ou nome do usuario' disponibilityLabels={["Aprovado","Não Aprovado"]} />
                 <BaseTable
                     rows={processedRequests}
                     columns={processedRequestsColumns}

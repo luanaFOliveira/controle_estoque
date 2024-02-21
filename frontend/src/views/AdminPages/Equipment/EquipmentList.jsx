@@ -76,7 +76,8 @@ export default function EquipmentList() {
         </Grid>
       ) : (
         <>
-          <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange} disponibility={true} label='Pesquisar Código do equipamento'/>
+          <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange} disponibility={true} 
+                      label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
           <BaseTable
             rows={equipments}
             columns={columnsEquip}

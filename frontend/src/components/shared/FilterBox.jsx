@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Autocomplete, TextField, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import Grid from '@mui/material/Grid';
 
-const FilterBox = ({ onSearch, onAvailabilityChange, disponibility, label }) => {
+const FilterBox = ({ onSearch, onAvailabilityChange, disponibility, label , disponibilityLabels}) => {
   const [searchValue, setSearchValue] = useState('');
   const [availability, setAvailability] = useState('all');
 
@@ -52,8 +52,8 @@ const FilterBox = ({ onSearch, onAvailabilityChange, disponibility, label }) => 
             onChange={handleAvailabilityChange}
           >
             <MenuItem value="all">Todos</MenuItem>
-            <MenuItem value={1}>Disponível</MenuItem>
-            <MenuItem value={0}>Não Disponível</MenuItem>
+            <MenuItem value={1}>{disponibilityLabels[0]}</MenuItem>
+            <MenuItem value={0}>{disponibilityLabels[1]}</MenuItem>
           </Select>
         </FormControl>
       </Grid>}

@@ -38,6 +38,8 @@ export default function MyEquipmentsPage() {
 
     const [tabValue, setTabValue] = React.useState(0);
 
+    
+
 
     useEffect(() => {
         const fetchEquipmentsAvailable = async () => {

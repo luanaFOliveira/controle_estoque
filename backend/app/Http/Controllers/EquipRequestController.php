@@ -37,17 +37,45 @@ class EquipRequestController extends Controller
 
         $query = EquipmentRequest::auth();
 
-        if ($status) {
-            if (is_array($status) && isset($status['$ne'])) {
-                $query->whereHas('status', function ($query) {
-                    $query->where('status', '<>', 'Pendente');
-                });
-            } else {
+        if($request->has('status') && $request->input('status') !== ''){
+            $status = $request->input('status');
+            if($status === 'Pendente'){
                 $query->whereHas('status', function ($query) {
                     $query->where('status', 'Pendente');
                 });
+            }else{
+                $query->whereHas('status', function ($query) {
+                    $query->where('status', '<>', 'Pendente');
+                });
             }
         }
+
+
+        if($request->has('search') && $request->input('search') !== 'none'){
+            $search = $request->input('search');
+
+            $query->whereHas('equipment', function ($query) use ($search) {
+                $query->where('equipment_code', 'ilike', "%$search%");
+            });
+            $query->orWhereHas('user', function ($query) use ($search) {
+                $query->where('name', 'ilike', "%$search%");
+            });
+        }
+        if($request->has('availability') && $request->input('availability') !== ''){
+            $availability = $request->input('availability');
+            if($availability !== 'all'){
+                if($availability){
+                    $query->whereHas('status', function ($query) {
+                        $query->where('status', 'Aprovado');
+                    });
+                }else{
+                    $query->whereHas('status', function ($query) {
+                        $query->where('status', 'Não Aprovado');
+                    });
+                }
+            }
+        }
+
 
         return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id','asc')->paginate(10));
     }
