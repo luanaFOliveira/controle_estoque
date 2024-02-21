@@ -84,8 +84,11 @@ class EquipmentService
             ->where('user_id', $userEquipment->user_id)
             ->whereNull('deleted_at')
             ->first();
-        $equipmentRequest->delete();
-        
+
+        if($equipmentRequest) {
+            $equipmentRequest->delete();
+        }
+
         return HistoryResource::make($userEquipment);
     }
 

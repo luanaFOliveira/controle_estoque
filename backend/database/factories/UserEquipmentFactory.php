@@ -23,7 +23,10 @@ class UserEquipmentFactory extends Factory
             $equipmentId = $equipmentIds[$randomIndex];
             unset($equipmentIds[$randomIndex]);
 
-            Equipment::find($equipmentId)->update(['is_available' => false]);
+            $equipment = Equipment::find($equipmentId);
+            if ($equipment) {
+                $equipment->update(['is_available' => false]);
+            }
 
             return [
                 'user_id' => User::all()->random()->user_id,
