@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\HistoryResource;
-use App\Http\Resources\EquipmentHistoryResource;
-use App\Models\Equipment;
-use App\Models\User;
-use App\Models\UserEquipment;
 use App\Services\HistoryService;
 use Illuminate\Http\Request;
 
