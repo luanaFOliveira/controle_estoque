@@ -47,6 +47,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         headerName: 'Codigo',
         flex:1,
         minWidth: 100,
+        sortable: false,
         valueGetter: (params) =>
             params.row.equipment.equipment_code,
     },
@@ -55,6 +56,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         headerName: 'Nome',
         flex:1,
         minWidth: 150,
+        sortable: false,
         valueGetter: (params) =>
             params.row.equipment.name,
     },
@@ -63,6 +65,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         headerName: 'Marca',
         flex:1,
         minWidth: 120,
+        sortable: false,
         valueGetter: (params) =>
             params.row.equipment.equipment_brand,
     },
@@ -71,6 +74,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         headerName: 'Tipo',
         flex:1,
         minWidth: 150,
+        sortable: false,
         valueGetter: (params) =>
             params.row.equipment.equipment_type,
     },
@@ -79,6 +83,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         headerName: "Local",
         flex:1,
         minWidth: 150,
+        sortable: false,
         renderCell: (params) => {        
           if (params.row.equipment.is_at_office) {
             return params.row.equipment.sector;
@@ -103,6 +108,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
             flex:1,
             minWidth: 200,
             align: 'center',
+            sortable: false,
             renderCell: (params) => {        
               if (params.row.equipment.is_at_office) {
                 return (<>
@@ -144,6 +150,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
           flex:1,
           minWidth: 200,
           align: 'center',
+          sortable: false,
           renderCell: (params) => (
             <>
               <Button
@@ -168,6 +175,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
           field: "created_at",
           headerName: "Criado em",
           flex:1,
+          sortable: false,
           valueFormatter: (params) => {
               const date = new Date(params.value);
               return date.toLocaleString("pt-BR");
@@ -177,6 +185,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
             field: "returned_at",
             headerName: "Data de Devolução",
             flex:1,
+            sortable: false,
             valueFormatter: (params) => {
               if (params.value === null) {
                 return "Em uso";

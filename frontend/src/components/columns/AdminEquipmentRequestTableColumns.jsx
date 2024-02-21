@@ -105,6 +105,7 @@ export default function AdminEquipmentRequestTableColumns({is_handled_table, set
       flex: 1,
       minWidth: 180,
       align: "center",
+      sortable: false,
       renderCell: (params) => (
         <>
           <Button
