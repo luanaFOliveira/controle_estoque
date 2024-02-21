@@ -13,7 +13,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
     const handleClickDevolver = async (row) => {
         try {
             const response = await returnEquipment({
-                equipment: row.equipment.map((equip) => equip.equipment_id),
+                equipment: row.equipment.equipment_id,
             });
             if (response) {
                 toast.success(`Equipamento devolvido com sucesso`);
@@ -25,21 +25,21 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         }
     }
 
-    const handleClickLocalizacao = async (row, action) => {
-        try {
-            const response = await changeEquipmentLocation({
-                equipment_id: row.equipment.map((equip) => equip.equipment_id).join(","),
-                action: action,
-            });
-            if (response) {
-                toast.success(`Localização do equipamento alterada com sucesso`);
-                setReload((prev) => !prev);
-            }
-        } catch (error) {
-            console.error(error);
-            errorToast(error);
+    const handleClickLocalizacao = async (row,action) => {
+      try {
+        const response = await changeEquipmentLocation({
+          equipment_id: row.equipment.equipment_id,
+          action: action,
+        });
+        if (response) {
+            toast.success(`Localização do equipamento alterada com sucesso`);
+            setReload((prev) => !prev);
         }
-    }
+      } catch (error) {
+        console.error(error);
+        errorToast(error);
+      }
+  }
 
     let columns = [
       {
@@ -80,9 +80,9 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         flex:1,
         minWidth: 150,
         renderCell: (params) => {        
-          if (params.row.equipment.is_at_office === "true") {
+          if (params.row.equipment.is_at_office) {
             return params.row.equipment.sector;
-          } else if (params.row.equipment.is_at_office === "false") {
+          } else if (!params.row.equipment.is_at_office) {
             return "Fora do escritório";
           }
         },
@@ -102,7 +102,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
             minWidth: 200,
             align: 'center',
             renderCell: (params) => {        
-              if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "true") {
+              if (params.row.equipment.is_at_office) {
                 return (<>
                 <Button
                     sx={{ display: "flex", color: "blue" }}
@@ -116,7 +116,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
                     <BusinessIcon />
                   </Button>
                 </>);
-              } else if (params.row.equipment.map((equip) => equip.is_at_office).join(",") === "false") {
+              } else if (!params.row.equipment.is_at_office) {
                 return (<>
                 <Button
                     sx={{ display: "flex", color: "blue" }}

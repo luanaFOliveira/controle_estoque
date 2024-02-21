@@ -54,7 +54,6 @@ const ViewUser = () => {
                 const response = await getUserHistory({
                     user_id: userId,
                 });
-                console.log(userId);
                 if (response) {
                     setHistory(response.data);
                     setRowCount(
@@ -73,9 +72,6 @@ const ViewUser = () => {
         fetchUserHistory();
     }, [paginationModel.page]);
 
-    useEffect(() => {
-        console.log(userDetail);
-    }, []);
 
     const handleDestroy = async () => {
         try {

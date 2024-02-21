@@ -40,18 +40,18 @@ export default function EquipmentList() {
         equipment_code: filter.equipment_code,
       });
 
-      setEquipments(response.data);
-      setRowCount(
-        (prevRowCountState) => response.meta.total ?? prevRowCountState,
-      );
-    } catch (error) {
-      errorToast(error);
-      console.log("error:", error);
-    } finally {
-      setIsLoading(false);
-      setFirstLoading(false);
-    }
-  };
+        setEquipments(response.data);
+        setRowCount(
+          (prevRowCountState) => response.meta.total ?? prevRowCountState,
+        );
+      } catch (error) {
+        errorToast(error);
+        console.error("error:", error);
+      } finally {
+        setIsLoading(false);
+        setFirstLoading(false);
+      }
+    };
 
   const handleSearch = (equipment_code) => {
     setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
