@@ -75,7 +75,6 @@ export default function EquipmentRequestPage() {
                 const response = await indexEquipmentRequests({
                     page: page,
                 });
-                console.log(response.data);
                 setHistory(response.data);
                 setRowCountHist((prevRowCountState) => response.meta.total ?? prevRowCountState,);
 
@@ -136,7 +135,6 @@ export default function EquipmentRequestPage() {
                 toast.success(`Equipamento solicitado com sucesso`);
                 setReload((prev) => !prev);
             }
-            console.log(response);
         } catch (error) {
             console.error(error);
         }
@@ -145,6 +143,7 @@ export default function EquipmentRequestPage() {
 
     const columnsEquip = EquipmentRequestEquipTableColumns({handleButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
+
 
     return(<>
         <Container sx={{mt: 5}}>

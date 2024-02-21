@@ -55,7 +55,7 @@ export default function HistoryTableColumns(type) {
             minWidth: 150, 
             valueFormatter: (params) => {
                 const date = new Date(params.value);
-                return date.toLocaleDateString("pt-BR");
+                return date.toLocaleString("pt-BR");
             },
         }, 
         {
@@ -68,7 +68,7 @@ export default function HistoryTableColumns(type) {
                     return "Em uso";
                 }
                 const date = new Date(params.value);
-                return date.toLocaleDateString("pt-BR");
+                return date.toLocaleString("pt-BR");
             },
         },
     ];

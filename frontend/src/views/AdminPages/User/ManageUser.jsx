@@ -114,7 +114,7 @@ const ManageUser = () => {
           }
         });
       } catch (error) {
-        console.log(error)
+        console.error(error)
         toast.error('Erro ao atualizar usuário');
       }
     } else {

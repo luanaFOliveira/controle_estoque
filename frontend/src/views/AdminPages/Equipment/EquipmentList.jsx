@@ -40,7 +40,7 @@ export default function EquipmentList() {
         );
       } catch (error) {
         errorToast(error);
-        console.log("error:", error);
+        console.error("error:", error);
       } finally {
         setIsLoading(false);
         setFirstLoading(false);

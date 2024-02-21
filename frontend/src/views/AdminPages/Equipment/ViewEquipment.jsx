@@ -32,7 +32,7 @@ const ViewEquipment = () => {
                 setEquipment(response.data);
             } catch (error) {
                 errorToast(error);
-                console.log(error);
+                console.error(error);
             } finally {
                 setFirstLoading(false);
             }
@@ -52,7 +52,7 @@ const ViewEquipment = () => {
                 );
             } catch (error) {
                 errorToast(error);
-                console.log(error);
+                console.error(error);
             } finally {
                 setIsLoading(false);
             }
@@ -70,7 +70,7 @@ const ViewEquipment = () => {
             }
         } catch (error) {
             errorToast(error);
-            console.log(error);
+            console.error(error);
         }
     };
 

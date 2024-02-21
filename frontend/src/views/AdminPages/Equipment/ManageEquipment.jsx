@@ -53,7 +53,7 @@ const ManageEquipment = () => {
           setSectors(response.data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         errorToast(error);
       }
     };
@@ -66,7 +66,7 @@ const ManageEquipment = () => {
           setEquipmentTypes(response.equipment_types);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         errorToast(error);
       }
     };
@@ -90,7 +90,7 @@ const ManageEquipment = () => {
           });
         } catch (error) {
           errorToast(error);
-          console.log(error);
+          console.error(error);
         } finally {
           setEditloading(false);
         }
@@ -121,7 +121,7 @@ const ManageEquipment = () => {
           navigate(`/equipments/${response.data.equipment_id}`);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         errorToast(error);
       }
     } else {
@@ -132,7 +132,7 @@ const ManageEquipment = () => {
           navigate(`/equipments/${response.data.equipment_id}`);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         errorToast(error);
       }
     }
