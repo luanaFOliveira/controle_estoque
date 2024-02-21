@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
 use App\Models\EquipmentBrand;
+use App\Models\EquipmentRequest;
 use App\Models\EquipmentType;
 use App\Models\User;
 use App\Models\UserEquipment;
@@ -190,6 +192,12 @@ it('can return a equipment', function () {
     $equipment = Equipment::factory()->create(
         ['is_available' => false]
     );
+
+    EquipmentRequest::factory()->create([
+        'equipment_id' => $equipment->equipment_id,
+        'user_id' => $this->user->user_id,
+        'request_status_id' => 1
+    ]);
     UserEquipment::factory()->create([
         'user_id' => $this->user->user_id,
         'equipment_id' => $equipment->equipment_id,

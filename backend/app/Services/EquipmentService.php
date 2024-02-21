@@ -85,9 +85,7 @@ class EquipmentService
             ->whereNull('deleted_at')
             ->first();
 
-        if($equipmentRequest) {
-            $equipmentRequest->delete();
-        }
+        $equipmentRequest->delete();
 
         return HistoryResource::make($userEquipment);
     }
