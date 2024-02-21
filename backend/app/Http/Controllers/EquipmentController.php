@@ -34,7 +34,7 @@ class EquipmentController extends Controller
             $availability = $request->input('availability');
             if($availability !== 'all'){
                 $query->where('is_available', $availability);
-            } 
+            }
         }
         if($request->has('equipment_code')){
             $equipment_code = $request->input('equipment_code');
@@ -44,9 +44,8 @@ class EquipmentController extends Controller
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
-    public function show(Request $request): JsonResponse
+    public function show(Equipment $equipment): JsonResponse
     {
-        $equipment = Equipment::auth()->findOrFail($request->route('equipment'));
         return response()->json(['data' => new EquipmentResource($equipment)]);
     }
 
