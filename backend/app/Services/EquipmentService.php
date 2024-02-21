@@ -7,6 +7,7 @@ use App\Http\Resources\EquipmentResource;
 use App\Http\Resources\HistoryResource;
 use App\Models\Equipment;
 use App\Models\EquipmentBrand;
+use App\Models\EquipmentRequest;
 use App\Models\EquipmentType;
 use App\Models\Sector;
 use App\Models\UserEquipment;
@@ -79,6 +80,12 @@ class EquipmentService
         $userEquipment->returned_at = now();
         $userEquipment->save();
 
+        $equipmentRequest = EquipmentRequest::where('equipment_id', $userEquipment->equipment_id)
+            ->where('user_id', $userEquipment->user_id)
+            ->whereNull('deleted_at')
+            ->first();
+        $equipmentRequest->delete();
+        
         return HistoryResource::make($userEquipment);
     }
 
