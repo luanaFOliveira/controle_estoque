@@ -96,42 +96,45 @@ export default function AdminEquipmentRequestTableColumns({is_handled_table, set
         },
     ];
 
-    if (is_handled_table) {
-        columns.push({
-            field: "accept_request",
-            headerName: "Aceitar / Recusar",
-            flex: 1,
-            sortable: false,
-            minWidth: 180,
-            renderCell: (params) => (
-                <>
-                    <Button
-                        sx={{display: "flex", color: "green"}}
-                        onClick={() =>
-                            toastConfirmation({
-                                item: "Aceitar solicitação",
-                                handleClick: () => handleClick(params.row, "accept", "aceita"),
-                            })
-                        }
-                    >
-                        <ThumbUpAltIcon/>
-                    </Button>
-                    <Button
-                        sx={{display: "flex", color: "red"}}
-                        onClick={() =>
-                            toastConfirmation({
-                                item: "Recusar solicitação",
-                                handleClick: () =>
-                                    handleClick(params.row, "refuse", "recusada"),
-                            })
-                        }
-                    >
-                        <ThumbDownAltIcon/>
-                    </Button>
-                </>
-            ),
-        });
-    }
+  if (is_handled_table) {
+    columns.push({
+      field: "accept_request",
+      headerName: "Aceitar / Recusar",
+      headerAlign: "center",
+      headerClassName: "centered-header",
+      flex: 1,
+      minWidth: 180,
+      align: "center",
+      sortable: false,
+      renderCell: (params) => (
+        <>
+          <Button
+            sx={{ display: "flex", color: "green" }}
+            onClick={() =>
+              toastConfirmation({
+                item: "Aceitar solicitação",
+                handleClick: () => handleClick(params.row, "accept", "aceita"),
+              })
+            }
+          >
+            <ThumbUpAltIcon />
+          </Button>
+          <Button
+            sx={{ display: "flex", color: "red" }}
+            onClick={() =>
+              toastConfirmation({
+                item: "Recusar solicitação",
+                handleClick: () =>
+                  handleClick(params.row, "refuse", "recusada"),
+              })
+            }
+          >
+            <ThumbDownAltIcon />
+          </Button>
+        </>
+      ),
+    });
+  }
 
     if (!is_handled_table) {
         columns.push({

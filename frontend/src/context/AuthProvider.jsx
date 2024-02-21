@@ -22,7 +22,7 @@ export const AuthProvider = ({children}) => {
                 setUser(data);
             })
             .catch((error) => {
-                console.log(error)
+                console.error(error)
                 toast("Usuário não autorizado, realize o login para continuar.");
             })
             .finally(() => {

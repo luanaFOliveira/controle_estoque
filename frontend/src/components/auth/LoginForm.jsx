@@ -30,7 +30,7 @@ export const LoginForm = () => {
         navigate("/home");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -50,7 +50,7 @@ export const LoginForm = () => {
         navigate("/home");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

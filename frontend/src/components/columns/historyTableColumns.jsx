@@ -38,12 +38,12 @@ export default function HistoryTableColumns(type) {
             <Link
                 component="button"
                 onClick={() => {
-                    navigate(`/equipments/${params.row.equipment.map((equip) => equip.equipment_id).join(",")}`);
+                    navigate(`/equipments/${params.row.equipment.equipment_id}`);
                 }}
                 underline="hover"
                 sx={{cursor: "pointer"}}
             >
-                {params.row.equipment.map((equip) => equip.equipment_code).join(",")}
+                {params.row.equipment.equipment_code}
             </Link>
             ),
         });
@@ -58,7 +58,7 @@ export default function HistoryTableColumns(type) {
             sortable: false,
             valueFormatter: (params) => {
                 const date = new Date(params.value);
-                return date.toLocaleDateString("pt-BR");
+                return date.toLocaleString("pt-BR");
             },
         }, 
         {
@@ -72,7 +72,7 @@ export default function HistoryTableColumns(type) {
                     return "Em uso";
                 }
                 const date = new Date(params.value);
-                return date.toLocaleDateString("pt-BR");
+                return date.toLocaleString("pt-BR");
             },
         },
     ];
