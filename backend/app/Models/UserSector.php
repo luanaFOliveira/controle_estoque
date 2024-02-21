@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $user_sector_id

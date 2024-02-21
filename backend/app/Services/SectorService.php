@@ -7,7 +7,8 @@ use App\Http\Resources\SectorResource;
 use App\Models\Sector;
 use Illuminate\Support\Facades\DB;
 
-class SectorService {
+class SectorService
+{
     public function upsertSector(StoreSectorRequest $request, ?Sector $sector = null): SectorResource
     {
         return DB::transaction(function () use ($request, $sector) {
@@ -39,9 +40,8 @@ class SectorService {
         return SectorResource::make($sector);
     }
 
-    public function deleteSector(Sector $sector):void
+    public function deleteSector(Sector $sector): void
     {
         $sector->delete();
     }
-
 }

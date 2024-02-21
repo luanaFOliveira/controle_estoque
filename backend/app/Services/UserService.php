@@ -9,8 +9,8 @@ use App\Models\Sector;
 use App\Models\User;
 use App\Models\UserEquipment;
 use App\Models\UserSector;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserService
@@ -51,7 +51,7 @@ class UserService
             'is_admin' => $data['is_admin']
         ]);
 
-        if($data['password']){
+        if ($data['password']) {
             $user->update([
                 'password' => Hash::make($data['password']),
             ]);

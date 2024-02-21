@@ -42,7 +42,7 @@ class Sector extends Model
 
     public function user(): BelongsToMany
     {
-        return $this->belongsToMany(User::class,'user_sector', 'sector_id', 'user_id');
+        return $this->belongsToMany(User::class, 'user_sector', 'sector_id', 'user_id');
     }
 
     public function equipment(): HasMany

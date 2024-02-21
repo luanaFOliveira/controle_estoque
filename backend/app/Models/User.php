@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\SectorScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\SoftDeletes;
+
 /**
  * @property int $user_id
  * @property string $name
@@ -32,14 +32,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable,SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $table = 'user';
     protected $primaryKey = 'user_id';
 
     public function scopeAuth(Builder $query): void
     {
-        if(!Auth::user()->is_admin){
+        if (!Auth::user()->is_admin) {
             $query->where('user_id', '=', Auth::user()->user_id);
         }
     }
@@ -67,7 +67,7 @@ class User extends Authenticatable
 
     public function equipment(): BelongsToMany
     {
-        return $this->belongsToMany(Equipment::class,'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id')->using(UserEquipment::class);
+        return $this->belongsToMany(Equipment::class, 'user_equipment', 'user_id', 'equipment_id', 'user_id', 'equipment_id')->using(UserEquipment::class);
     }
 
     public function equipmentRequest(): HasMany

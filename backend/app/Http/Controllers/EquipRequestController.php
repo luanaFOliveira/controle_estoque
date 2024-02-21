@@ -22,7 +22,6 @@ class EquipRequestController extends Controller
         $this->equipmentRequestService = $equipmentRequestService;
     }
 
-
     public function getRequestMotives(): AnonymousResourceCollection
     {
         $query = RequestMotive::all();
@@ -47,7 +46,7 @@ class EquipRequestController extends Controller
             }
         }
 
-        return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id','asc')->paginate(10));
+        return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id', 'asc')->paginate(10));
     }
 
     public function show(EquipmentRequest $equipmentRequest): JsonResource

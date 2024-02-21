@@ -19,6 +19,4 @@ class SectorResource extends JsonResource
             'equipments_count' => $this->equipment->count(),
         ];
     }
-
-
 }

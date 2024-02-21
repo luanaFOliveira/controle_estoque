@@ -16,8 +16,7 @@ class SectorScope implements Scope
         /* @var User $user
          */
 
-        if(Auth::check())
-        {
+        if (Auth::check()) {
             $user = Auth::user();
 
             if (!$user->is_admin) {
