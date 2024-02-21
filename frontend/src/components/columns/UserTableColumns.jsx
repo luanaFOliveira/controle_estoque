@@ -7,30 +7,32 @@ import { useNavigate } from "react-router-dom";
 export default function UserTableColumns({user_admin}) {
   const navigate = useNavigate();
 
-  let columns = [
-    { field: "user_id", headerName: "ID de usuário", flex: 1, minWidth: 80, sortable: false, },
-  ];
+  let columns = [];
 
   if(user_admin === true) {
-    columns.push({
-      field: "name",
-      headerName: "Nome",
-      flex: 1,
-      minWidth: 200,
-      sortable: false,
-      renderCell: (params) => (
-        <Link
-          component="button"
-          onClick={() => {
-            navigate(`/users/${params.row.user_id}`);
-          }}
-          underline="hover"
-          sx={{ cursor: "pointer" }}
-        >
-          {params.row.name}
-        </Link>
-      ),
-    })
+    let newColumns = [
+      { field: "user_id", headerName: "ID de usuário", flex: 1, minWidth: 80, sortable: false, },
+      {
+        field: "name",
+        headerName: "Nome",
+        flex: 1,
+        minWidth: 200,
+        sortable: false,
+        renderCell: (params) => (
+          <Link
+            component="button"
+            onClick={() => {
+              navigate(`/users/${params.row.user_id}`);
+            }}
+            underline="hover"
+            sx={{ cursor: "pointer" }}
+          >
+            {params.row.name}
+          </Link>
+        ),
+      },
+    ];
+    columns.push(...newColumns);
   }else if(user_admin === false){
     columns.push({
       field: "name",
