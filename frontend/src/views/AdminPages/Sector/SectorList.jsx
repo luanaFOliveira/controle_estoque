@@ -66,7 +66,7 @@ function SectorList() {
       </Button>
       {!firstLoading  ? (
         <>
-          <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar nome de usuário'/>
+          <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar nome do setor'/>
           <BaseTable
             rows={sectors}
             columns={columnsSector}

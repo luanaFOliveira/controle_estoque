@@ -20,7 +20,7 @@ const FilterBox = ({ onSearch, onAvailabilityChange, disponibility, label }) => 
 
   return (
     <Grid container spacing={2} mb={2} alignItems="center" justifyContent='center'>
-      <Grid item xs={6}>
+      <Grid item xs={6} mb={0.95}>
         <Autocomplete
           freeSolo
           options={[]}
