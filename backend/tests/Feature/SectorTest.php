@@ -27,7 +27,7 @@ beforeEach(function (){
 
 uses()->group('sector');
 
-it('can retrieve a list of sectors', function () {
+it('should return a paginated list of sectors', function () {
     actingAs($this->user, 'sanctum');
     $response = get('/api/sectors');
     $paginatedResponse = $response->json();
@@ -44,7 +44,16 @@ it('can retrieve a list of sectors', function () {
     }
 });
 
-it('can retrieve a specific sector using the show method', function () {
+it('should return a list of sector names', function () {
+    actingAs($this->admin, 'sanctum');
+    $sectorNames = Sector::all()->pluck('name')->toArray();
+
+    get('/api/sector-names')
+        ->assertOk()
+        ->assertJson($sectorNames);
+});
+
+it('should show a detailed sector', function () {
     actingAs($this->user, 'sanctum');
     /* @var Sector $sector
      */
@@ -69,6 +78,16 @@ it('can create a sector', function () {
     expect(Sector::where($data)->exists())->toBeTrue();
 });
 
+it('cannot create a sector with invalid data', function () {
+    actingAs($this->admin, 'sanctum');
+    $data = [
+        'name' => '',
+    ];
+
+    post('/api/sectors', $data)
+        ->assertRedirect();
+});
+
 it('can update a sector', function () {
     actingAs($this->admin, 'sanctum');
     /* @var Sector $sector
@@ -86,6 +105,22 @@ it('can update a sector', function () {
     expect(Sector::where($data)->exists())->toBeTrue();
 });
 
+it('cannot update a sector with invalid data', function () {
+    actingAs($this->admin, 'sanctum');
+    /* @var Sector $sector
+     */
+    $sector = Sector::factory()->create([
+        'name' => 'Old Sector Name',
+    ]);
+
+    $data = [
+        'name' => '',
+    ];
+
+    put("/api/sectors/{$sector->sector_id}", $data)
+        ->assertRedirect();
+});
+
 it('can delete a sector', function () {
     actingAs($this->admin, 'sanctum');
     /* @var Sector $sector
@@ -95,4 +130,12 @@ it('can delete a sector', function () {
     $response = $this->deleteJson("/api/sectors/{$sector->sector_id}");
     $response->assertOk();
     expect(Sector::find($sector->sector_id))->toBeNull();
+});
+
+it('cannot access non-existent sector', function () {
+    $this->actingAs($this->admin, 'sanctum');
+    $nonExistentId = 12345;
+
+    get("/api/sectors/{$nonExistentId}")
+        ->assertNotFound();
 });

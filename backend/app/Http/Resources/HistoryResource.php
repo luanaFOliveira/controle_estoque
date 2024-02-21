@@ -24,20 +24,23 @@ class HistoryResource extends JsonResource
         ];
     }
 
-    protected function getEquipment(): array
+    protected function getEquipment(): ?array
     {
-        return $this->equipment->map(function ($equipment) {
-            return [
-                'equipment_id' => $equipment->equipment_id,
-                'equipment_code' => $equipment->equipment_code,
-                'name' => $equipment->name,
-                'is_available' => $equipment->is_available,
-                'sector_id' => $equipment->sector_id,
-                'sector' => $equipment->sector()->value('name'),
-                'equipment_brand' => $equipment->brand()->value('name'),
-                'equipment_type' => $equipment->type()->value('name'),
-                'is_at_office' => $equipment->is_at_office,
-            ];
-        })->first();
+        $equipment = $this->equipment->first();
+
+        if ($equipment === null) {
+            return null;
+        }
+        return [
+            'equipment_id' => $equipment->equipment_id,
+            'equipment_code' => $equipment->equipment_code,
+            'name' => $equipment->name,
+            'is_available' => $equipment->is_available,
+            'sector_id' => $equipment->sector_id,
+            'sector' => $equipment->sector()->value('name'),
+            'equipment_brand' => $equipment->brand()->value('name'),
+            'equipment_type' => $equipment->type()->value('name'),
+            'is_at_office' => $equipment->is_at_office,
+        ];
     }
 }

@@ -3,7 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Equipment;
+use App\Models\EquipmentBrand;
+use App\Models\EquipmentType;
 use App\Models\User;
+use App\Models\UserEquipment;
+use App\Models\UserSector;
 use function Pest\Laravel\{actingAs, delete, get, post, put};
 
 uses()->group('equipment');
@@ -46,7 +50,8 @@ it('should return a paginated list of equipments', function () {
 
 it('should return a paginated list of equipments that are available', function () {
     actingAs($this->user, 'sanctum');
-    $response = get('/api/equipments-available')->assertOk();
+    $sectorUser = UserSector::where('user_id', $this->user->user_id)->first()->value('sector_id');
+    $response = $this->get("/api/equipments?availability=1&sector=${sectorUser}");
     $paginatedResponse = $response->json();
 
     expect($paginatedResponse)->toBePaginated();
@@ -81,12 +86,25 @@ it('should show a detailed equipment', function () {
             'data' => [
                 'equipment_id' => $equipment->equipment_id,
                 'name' => $equipment->name,
+                'user' => $this->user->only('name', 'user_id'),
                 'type' => $equipment->type()->value('name'),
                 'brand' => $equipment->brand()->value('name'),
                 'sector' => $equipment->sector()->value('name'),
                 'is_available' => false,
                 'is_at_office' => $equipment->is_at_office
             ]
+        ]);
+});
+
+it('should return a list of types and brands', function () {
+    actingAs($this->admin, 'sanctum');
+    $equipmentTypes = EquipmentType::all()->pluck('name')->toArray();
+    $equipmentBrands = EquipmentBrand::all()->pluck('name')->toArray();
+
+    get("/api/equipment-details")
+        ->assertJson([
+            'equipment_types' => $equipmentTypes,
+            'equipment_brands' => $equipmentBrands,
         ]);
 });
 
@@ -162,6 +180,48 @@ it('cannot update a equipment with invalid data', function () {
 
     $this->putJson("/api/equipments/{$equipment->equipment_id}", $updatedEquipment)
         ->assertStatus(422);
+});
+
+it('can return a equipment', function () {
+    /* @var Equipment $equipment
+     * */
+    actingAs($this->user, 'sanctum');
+
+    $equipment = Equipment::factory()->create(
+        ['is_available' => false]
+    );
+    UserEquipment::factory()->create([
+        'user_id' => $this->user->user_id,
+        'equipment_id' => $equipment->equipment_id,
+    ]);
+
+    post("/api/equipment/return/{$equipment->equipment_id}")->assertOk();
+});
+
+it('can change a equipment location', function () {
+    /* @var Equipment $equipment
+     * */
+    actingAs($this->user, 'sanctum');
+
+    $equipment = Equipment::factory()->create(
+        ['is_available' => false]
+    );
+
+    UserEquipment::factory()->create([
+        'user_id' => $this->user->user_id,
+        'equipment_id' => $equipment->equipment_id,
+    ]);
+
+    $action = 'home';
+    $equipmentFormatted = $equipment->toArray();
+    $equipmentFormatted['is_at_office'] = false;
+
+    post("api/equipment/change-location/{$action}", ['equipment_id' => $equipment->equipment_id])
+        ->assertOk()
+        ->assertJson([
+            'message' => 'Equipment is now at home',
+            'data' => $equipmentFormatted
+        ]);
 });
 
 it('can delete a equipment', function () {

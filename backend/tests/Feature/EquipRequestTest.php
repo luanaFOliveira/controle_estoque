@@ -87,7 +87,7 @@ it('can retrieve a list of the request motives', function () {
 it('can retrieve a specific equipment request using the show method', function () {
     /* @var EquipmentRequest $equipmentRequest */
     actingAs($this->user, 'sanctum');
-    
+
     $equipmentRequest = EquipmentRequest::factory()->create();
     get("/api/equipment-requests/{$equipmentRequest->equipment_request_id}")->assertOk()->assertJson([
         'data' => [
@@ -169,17 +169,4 @@ it('can delete an equipment request', function () {
     expect(EquipmentRequest::find($equipmentRequest->equipment_request_id))->toBeNull();
 });
 
-it('can return a equipment', function () {
-    actingAs($this->user, 'sanctum');
 
-    $equipment = Equipment::factory()->create(
-        ['is_available' => false,]
-    );
-    UserEquipment::factory()->create([
-        'user_id' => $this->user->user_id,
-        'equipment_id' => $equipment->equipment_id,
-    ]);
-
-    post("/api/equipment/return/{$equipment->equipment_id}")->assertOk();
-
-});
