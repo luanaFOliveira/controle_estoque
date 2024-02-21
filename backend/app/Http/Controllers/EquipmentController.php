@@ -46,9 +46,8 @@ class EquipmentController extends Controller
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
 
-    public function show(Request $request): JsonResponse
+    public function show(Equipment $equipment): JsonResponse
     {
-        $equipment = Equipment::auth()->findOrFail($request->route('equipment'));
         return response()->json(['data' => new EquipmentResource($equipment)]);
     }
 
