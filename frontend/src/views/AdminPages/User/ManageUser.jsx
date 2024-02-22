@@ -130,7 +130,7 @@ const ManageUser = () => {
         });
       } catch (error) {
         console.error(error);
-        toast.error('Erro ao atualizar usuário');
+        toast.error('Erro ao criar usuário');
       }
     }
   };
