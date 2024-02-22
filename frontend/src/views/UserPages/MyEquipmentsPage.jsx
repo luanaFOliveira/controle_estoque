@@ -8,10 +8,9 @@ import { errorToast } from "../../services/api";
 import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
 
 export default function MyEquipmentsPage() {
-    const { user} = useAuth();
+    const {user} = useAuth();
 
     const [firstLoading, setFirstLoading] = useState(true);
-
 
     const [equipAvailable, setEquipAvailable] = useState([]);
     const [equipUnavailable, setEquipUnavailable] = useState([]);
@@ -36,62 +35,54 @@ export default function MyEquipmentsPage() {
         availability: false,
     });
 
-    const [tabValue, setTabValue] = React.useState(0);
-
-    
-
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
-        const fetchEquipmentsAvailable = async () => {
-            setIsLoadingEquipAva(true);
-            try{
-                const response = await getUserHistory({
-                    user_id: user.user_id,
-                    filter: "available",
-                });
-                setEquipAvailable(response.data);
-                setRowCountEquipAva((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            }catch(error){
-                errorToast(error);
-                console.error(error);
-            }finally{
-                setIsLoadingEquipAva(false);
-                setFirstLoading(false);
-            }
-
-        };
-        fetchEquipmentsAvailable().then(r => {
-        });
-
+        fetchEquipmentsAvailable();
     },[paginationModelEquipAva.page,reload]);
 
     useEffect(() => {
-        const fetchEquipmentsUnavailable = async () => {
-            setIsLoadingEquipUna(true);
-            try{
-                const response = await getUserHistory({
-                    user_id: user.user_id,
-                    filter: "unavailable",
-                });
-                setEquipUnavailable(response.data);
-                setRowCountEquipUna((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-            
-            }catch(error){
-                errorToast(error);
-                console.error(error);
-            }finally{
-                setIsLoadingEquipUna(false);
-                setFirstLoading(false);
-            }
-
-        };
-        fetchEquipmentsUnavailable().then(r => {
-        });
-
+        fetchEquipmentsUnavailable();
     },[paginationModelEquipUna.page,reload]);
 
-    
-    
+    const fetchEquipmentsAvailable = async () => {
+        setIsLoadingEquipAva(true);
+        try{
+            await getUserHistory({
+                user_id: user.user_id,
+                filter: "available",
+            }).then((res) => {
+                setEquipAvailable(res.data);
+                setRowCountEquipAva((prevRowCountState) => res.meta.total ?? prevRowCountState,);
+            });
+        }catch(error){
+            errorToast(error);
+            console.error(error);
+        }finally{
+            setIsLoadingEquipAva(false);
+            setFirstLoading(false);
+        }
+    };
+
+    const fetchEquipmentsUnavailable = async () => {
+        setIsLoadingEquipUna(true);
+        try{
+            await getUserHistory({
+                user_id: user.user_id,
+                filter: "unavailable",
+            })
+            .then((res)=>{
+                setEquipUnavailable(res.data);
+                setRowCountEquipUna((prevRowCountState) => res.meta.total ?? prevRowCountState,);
+            });
+        }catch(error){
+            errorToast(error);
+            console.error(error);
+        }finally{
+            setIsLoadingEquipUna(false);
+            setFirstLoading(false);
+        }
+    };
 
     return(<>
         <Container sx={{mt: 5}}>
@@ -102,7 +93,7 @@ export default function MyEquipmentsPage() {
             ) : (
             <>
                 <Box sx={{ width: '100%' }}>
-                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Equipamentos Ativos" nameTab2="Historico de equipamentos" />
+                    <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Equipamentos Ativos","Historico de equipamentos"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
                         <BaseTable
                             rows={equipAvailable}
@@ -112,8 +103,6 @@ export default function MyEquipmentsPage() {
                             paginationModel={paginationModelEquipAva}
                             setPaginationModel={setPaginationModelEquipAva}
                             isLoading={isLoadingEquipAva}
-                            minHeight={200}
-                            maxHeight={620}
                         />
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
@@ -125,12 +114,9 @@ export default function MyEquipmentsPage() {
                             paginationModel={paginationModelEquipUna}
                             setPaginationModel={setPaginationModelEquipUna}
                             isLoading={isLoadingEquipUna}
-                            minHeight={200}
-                            maxHeight={620}
                         />
                     </CustomTabPanel>
                 </Box>
-                
             </>
             )}
         </Container>

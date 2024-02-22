@@ -104,9 +104,7 @@ const EquipmentRequests = () => {
         {firstLoading ? (<Grid item container justifyContent="center">
             <CircularProgress/>
         </Grid>) : (<Box sx={{width: '100%'}}>
-            <TableTab value={tabValue} setValue={setTabValue} nameTab1="Solicitações pendentes"
-                      nameTab2="Solicitações processadas"/>
-
+            <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Solicitações pendentes","Solicitações processadas"]}/>
             <CustomTabPanel value={tabValue} index={0}>
                 <FilterBox onSearch={handleSearchPending} disponibility={false} label='Pesquisar Código do equipamento ou nome do usuario'/>
                 <BaseTable

@@ -124,8 +124,7 @@ const ViewEquipment = () => {
                             </Button>
                         </Grid>
                     </Grid>
-                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Informações"
-                              nameTab2="Histórico"/>
+                    <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Informações", "Histórico"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
                         <Grid>
                             <EquipmentCard

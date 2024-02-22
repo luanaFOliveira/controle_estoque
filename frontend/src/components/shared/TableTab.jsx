@@ -28,7 +28,7 @@ export function CustomTabPanel(props) {
 };
 
 
-export function TableTab({value,setValue,nameTab1,nameTab2}){
+export function TableTab({value,setValue,nameTabs}){
 
 
     function a11yProps(index) {
@@ -53,8 +53,9 @@ export function TableTab({value,setValue,nameTab1,nameTab2}){
               scrollButtons
               allowScrollButtonsMobile
               >
-                <Tab label={nameTab1} {...a11yProps(0)} />
-                <Tab label={nameTab2} {...a11yProps(1)} />
+                {nameTabs.map((name, index) => (
+                    <Tab label={name} {...a11yProps(index)} />
+                ))}
             </Tabs>
         </Box>
     );

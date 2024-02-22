@@ -87,8 +87,7 @@ function ViewSector() {
                             </Button>
                         </Grid>
                     </Grid>
-                    <TableTab value={tabValue} setValue={setTabValue} nameTab1="Usuários"
-                              nameTab2="Equipamentos"/>
+                    <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Usuários", "Equipamentos"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
                         <BaseTable
                             rows={sectorDetail.users}

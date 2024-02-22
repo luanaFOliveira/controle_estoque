@@ -9,7 +9,8 @@ const MyAccount = () => {
     const {user, loadingUser} = useAuth();
 
     const UserCard = ({label, value}) => {
-        return (<Card sx={{mb: 2, maxWidth: "700px", minWidth: "400px"}}>
+        return (
+        <Card sx={{mb: 2, maxWidth: "700px", minWidth: "400px"}}>
             <CardContent>
                 <Grid container>
                     <Typography variant="body2" width="140px">
@@ -20,13 +21,17 @@ const MyAccount = () => {
                     </Typography>
                 </Grid>
             </CardContent>
-        </Card>);
+        </Card>
+        );
     };
 
-    return (<Container component="main" maxWidth="xs">
-        {loadingUser ? (<Grid item container justifyContent="center">
+    return (
+    <Container component="main" maxWidth="xs">
+        {loadingUser ? (
+        <Grid item container justifyContent="center">
             <CircularProgress/>
-        </Grid>) : (<Box
+        </Grid>) : (
+        <Box
             sx={{
                 marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center',
             }}
@@ -52,7 +57,8 @@ const MyAccount = () => {
                 </Button>
             </Box>
         </Box>)}
-    </Container>);
+    </Container>
+    );
 };
 
 export default MyAccount;

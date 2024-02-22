@@ -4,7 +4,6 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export const StatusField = ({ value }) => {
   let color;
-
   switch (value) {
     case "Aprovado":
       color = "green";
@@ -18,25 +17,6 @@ export const StatusField = ({ value }) => {
     default:
       color = "black";
   }
-
-  return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
-};
-
-
-export const AvaiabilityColumn = ({ value }) => {
-  let color;
-
-  switch (value) {
-    case "Disponivel":
-      color = "green";
-      break;
-    case "Nao disponivel":
-      color = "red";
-      break;
-    default:
-      color = "black";
-  }
-
   return <span style={{ color, fontWeight: "bold" }}>{value}</span>;
 };
 

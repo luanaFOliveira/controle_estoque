@@ -139,7 +139,10 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         columns.push(...newColumns);
     } else if (!availability) {
         let newColumns = [{
-            field: "created_at", headerName: "Criado em", flex: 1, sortable: false, valueFormatter: (params) => {
+            field: "created_at", 
+            headerName: "Criado em", 
+            flex: 1, 
+            sortable: false, valueFormatter: (params) => {
                 const date = new Date(params.value);
                 return date.toLocaleString("pt-BR");
             },

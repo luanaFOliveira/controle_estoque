@@ -25,11 +25,12 @@ const UserChangePassword = () => {
         e.preventDefault();
         if (formData.password === formData.password_confirmation && formData.password.length > 4) {
             try {
-                const response = await changePassword({password: formData.password, user_id: user.user_id});
-                if (response) {
+                await changePassword({password: formData.password, user_id: user.user_id})
+                .then((res)=>{
                     toast.success('Senha alterada com sucesso!');
                     navigate('/my-account');
-                }
+                });
+                
             } catch (error) {
                 console.error(error);
                 errorToast(error);

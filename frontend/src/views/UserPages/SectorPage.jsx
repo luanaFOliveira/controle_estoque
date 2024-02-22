@@ -10,9 +10,9 @@ import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
 
 
 export default function SectorPage() {
+
   const { sector } = useStateContext();
   const [firstLoading, setFirstLoading] = useState(true);
-
 
   const [sectorInfo, setSectorInfo] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,30 +24,29 @@ export default function SectorPage() {
   
   const [tabValue, setTabValue] = useState(0);
 
-
   useEffect(() => {
-    const fetchSector = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getSector(sector);
-        if (response) {
-          setSectorInfo(response.data);
-          setSectorUsers(response.data.users);
-          setSectorEquipments(response.data.equipments);
-        }
-      } catch (error) {
-        console.error(error);
-        errorToast(error);
-      } finally {
-        setIsLoading(false);
-        setFirstLoading(false);
-      }
-    };
-    fetchSector().then((r) => {});
+    fetchSector();
   }, [sector]);
 
+  const fetchSector = async () => {
+    setIsLoading(true);
+    try {
+      await getSector(sector)
+      .then((res) =>{
+        setSectorInfo(res.data);
+        setSectorUsers(res.data.users);
+        setSectorEquipments(res.data.equipments);
+      });
+    } catch (error) {
+      console.error(error);
+      errorToast(error);
+    } finally {
+      setIsLoading(false);
+      setFirstLoading(false);
+    }
+  };
 
-
+  
   return (
     <>
       <Container sx={{ mt: 5 }}>
@@ -61,7 +60,7 @@ export default function SectorPage() {
               <Typography variant="h4" fontWeight="bold" sx={{ mb: 2 }}>
                 {sectorInfo.name}
               </Typography>
-              <TableTab value={tabValue} setValue={setTabValue} nameTab1="Usuários do Setor" nameTab2="Equipamentos do setor" />
+              <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Usuários do Setor", "Equipamentos do setor"]}/>
               <CustomTabPanel value={tabValue} index={0}>
                 <BaseTable
                   rows={sectorUsers}
@@ -76,7 +75,6 @@ export default function SectorPage() {
                     },
                   }}
                   isLoading={isLoading}
-                  maxHeight={620}
                 />
               </CustomTabPanel>
               <CustomTabPanel value={tabValue} index={1}>
@@ -93,7 +91,6 @@ export default function SectorPage() {
                     },
                   }}
                   isLoading={isLoading}
-                  maxHeight={620}
                 />
               </CustomTabPanel>
             </Box>

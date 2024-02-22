@@ -65,7 +65,7 @@ export function EquipmentRequestHistoryTableColumns() {
 }
 
 
-export function EquipmentRequestEquipTableColumns({handleButtonClick}) {
+export function EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick}) {
   return [
     {
       field: "equipment_code",
@@ -112,7 +112,7 @@ export function EquipmentRequestEquipTableColumns({handleButtonClick}) {
       minWidth: 100,
       sortable: false,
       renderCell: (params) => (
-          <RequestEquipButtonCell onClick={(event) => handleButtonClick(event, params.row)} />
+          <RequestEquipButtonCell onClick={(event) => handleRequestEquipButtonClick(event, params.row)} />
       ),
       align: 'center',
   },
