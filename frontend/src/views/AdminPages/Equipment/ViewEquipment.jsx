@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Box, Button, Card, CardContent, CircularProgress, Container, Grid, Link, Typography,} from "@mui/material";
+import {Box, Button, CircularProgress, Container, Grid, Link, Typography,} from "@mui/material";
 import {toast} from "react-toastify";
 import {toastDelete} from "../../../components/shared/ToastComponents";
 import {destroyEquipment, getEquipment, getHistoryEquipment,} from "../../../services/equipmentService";
@@ -8,12 +8,14 @@ import {errorToast} from "../../../services/api";
 import HistoryTableColumns from "../../../components/columns/historyTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
 import BaseTable from "../../../components/shared/BaseTable";
+import {EquipmentCard} from "../../../components/Equipment/EquipmentCard";
+import {ButtonReturn} from "../../../components/shared/ButtonReturn";
 
 const ViewEquipment = () => {
     const params = useParams();
+    const navigate = useNavigate();
     const [tabValue, setTabValue] = useState(0);
     const [firstLoading, setFirstLoading] = useState(true);
-    const navigate = useNavigate();
     const [equipment, setEquipment] = useState({});
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -22,73 +24,59 @@ const ViewEquipment = () => {
         page: 0,
         pageSize: 10,
     });
-
     const columnsHistory = HistoryTableColumns('equipment');
 
     useEffect(() => {
-        const equipment = async () => {
-            try {
-                const response = await getEquipment(params.equipment_id);
-                setEquipment(response.data);
-            } catch (error) {
-                errorToast(error);
-                console.error(error);
-            } finally {
-                setFirstLoading(false);
-            }
-        };
-
-        equipment();
+        getEquipmentData();
     }, []);
 
     useEffect(() => {
-        const history = async () => {
-            setIsLoading(true);
-            try {
-                const response = await getHistoryEquipment(params.equipment_id);
-                setHistory(response.data);
-                setRowCount(
-                    (prevRowCountState) => response.meta.total ?? prevRowCountState,
-                );
-            } catch (error) {
-                errorToast(error);
-                console.error(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        history();
+        getHistoryData();
     }, [paginationModel.page]);
+
+    const getEquipmentData = async () => {
+        try {
+            await getEquipment(params.equipment_id)
+                .then((res) => {
+                    setEquipment(res.data);
+                });
+        } catch (error) {
+            errorToast(error);
+            console.error(error);
+        } finally {
+            setFirstLoading(false);
+        }
+    };
+
+    const getHistoryData = async () => {
+        setIsLoading(true);
+        try {
+            await getHistoryEquipment(params.equipment_id)
+                .then((res) => {
+                    setHistory(res.data);
+                    setRowCount(
+                        (prevRowCountState) => res.meta.total ?? prevRowCountState,
+                    );
+                });
+        } catch (error) {
+            errorToast(error);
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleDestroy = async () => {
         try {
-            const response = await destroyEquipment(params.equipment_id);
-            if (response) {
-                toast.success("Equipamento deletado com sucesso!");
-                navigate("/equipments");
-            }
+            await destroyEquipment(params.equipment_id)
+                .then(() => {
+                    toast.success("Equipamento deletado com sucesso!");
+                    navigate("/equipments");
+                });
         } catch (error) {
             errorToast(error);
             console.error(error);
         }
-    };
-
-    const EquipmentCard = ({label, value}) => {
-        return (
-            <Card sx={{mb: 2, maxWidth: "700px"}}>
-                <CardContent>
-                    <Grid container>
-                        <Typography variant="body2" width="250px">
-                            {label}:
-                        </Typography>
-                        <Typography variant="body2" color="text.primary">
-                            {value}
-                        </Typography>
-                    </Grid>
-                </CardContent>
-            </Card>
-        );
     };
 
     return (
@@ -144,7 +132,7 @@ const ViewEquipment = () => {
                                 value={
                                     equipment.is_available
                                         ? "Disponível para uso"
-                                        : <Box sx={{display:'flex', alignItems:'center'}}>
+                                        : <Box sx={{display: 'flex', alignItems: 'center'}}>
                                             {"Atualmente em uso por:"}
                                             <Link
                                                 key={equipment.user.user_id}
@@ -182,16 +170,7 @@ const ViewEquipment = () => {
                             maxWidth={700}
                         />
                     </CustomTabPanel>
-                    <Button
-                        variant="contained"
-                        sx={{
-                            mt: 3,
-                            mb: 2,
-                        }}
-                        onClick={() => navigate("/equipments")}
-                    >
-                        Voltar para a Lista de Equipamentos
-                    </Button>
+                    <ButtonReturn label="Equipamentos" redirect="/equipments"/>
                 </Container>
             ) : (
                 <Grid item container justifyContent="center">
@@ -201,4 +180,5 @@ const ViewEquipment = () => {
         </>
     );
 };
+
 export default ViewEquipment;

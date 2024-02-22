@@ -35,69 +35,66 @@ const EquipmentRequests = () => {
     });
 
     const [filter, setFilter] = useState({
-        searchPending: "none",
-        searchProcessed: "none",
-        availability: "all",
+        searchPending: "none", searchProcessed: "none", availability: "all",
     });
 
     useEffect(() => {
-        const getPendingRequests = async () => {
-            setIsLoadingPending(true);
-            try {
-                const page = pendingPaginationModel.page + 1;
-                const response = await indexEquipmentRequests({
-                    filter: {status: "Pendente",search:filter.searchPending}, page: page,
-                });
-                if (response) {
-                    setPendingRequests(response.data);
-                    setPendingRowCount((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-                }
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
-            } finally {
-                setIsLoadingPending(false);
-                setIFirstLoading(false);
-            }
-        };
-
         getPendingRequests();
-    }, [pendingPaginationModel.page, reload,filter]);
+    }, [pendingPaginationModel.page, reload, filter]);
 
     useEffect(() => {
-        const getProcessedRequests = async () => {
-            setIsLoadingProcessed(true);
-            try {
-                const page = processedPaginationModel.page + 1;
-                const response = await indexEquipmentRequests({
-                    filter: {status:"Nao pendente",search:filter.searchProcessed, availability: filter.availability}, page: page,
-                });
-                if (response) {
-                    setProcessedRequests(response.data);
-                    setProcessedRowCount((prevRowCountState) => response.meta.total ?? prevRowCountState,);
-                }
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
-            } finally {
-                setIsLoadingProcessed(false);
-                setIFirstLoading(false);
-            }
-        };
-
         getProcessedRequests();
-    }, [processedPaginationModel.page, reload,filter]);
+    }, [processedPaginationModel.page, reload, filter]);
+
+    const getPendingRequests = async () => {
+        setIsLoadingPending(true);
+        try {
+            const page = pendingPaginationModel.page + 1;
+            await indexEquipmentRequests({
+                filter: {status: "Pendente", search: filter.searchPending}, page: page,
+            }).then((res) => {
+                setPendingRequests(res.data);
+                setPendingRowCount((prevRowCountState) => res.meta.total ?? prevRowCountState,);
+            });
+        } catch (error) {
+            console.error(error);
+            errorToast(error);
+        } finally {
+            setIsLoadingPending(false);
+            setIFirstLoading(false);
+        }
+    };
+
+    const getProcessedRequests = async () => {
+        setIsLoadingProcessed(true);
+        try {
+            const page = processedPaginationModel.page + 1;
+            await indexEquipmentRequests({
+                filter: {status: "Nao pendente", search: filter.searchProcessed, availability: filter.availability},
+                page: page,
+            }).then((res) => {
+                setProcessedRequests(res.data);
+                setProcessedRowCount((prevRowCountState) => res.meta.total ?? prevRowCountState,);
+            });
+        } catch (error) {
+            console.error(error);
+            errorToast(error);
+        } finally {
+            setIsLoadingProcessed(false);
+            setIFirstLoading(false);
+        }
+    };
 
     const handleSearchPending = (searchPending) => {
-        setFilter((prevFilter) => ({ ...prevFilter, searchPending }));
+        setFilter((prevFilter) => ({...prevFilter, searchPending}));
     };
 
     const handleSearchProcessed = (searchProcessed) => {
-        setFilter((prevFilter) => ({ ...prevFilter, searchProcessed }));
+        setFilter((prevFilter) => ({...prevFilter, searchProcessed}));
     };
-    
+
     const handleAvailabilityChange = (availability) => {
-        setFilter((prevFilter) => ({ ...prevFilter, availability }));
+        setFilter((prevFilter) => ({...prevFilter, availability}));
     };
 
     return (<Container sx={{mt: 5}}>
@@ -108,7 +105,8 @@ const EquipmentRequests = () => {
                       nameTab2="Solicitações processadas"/>
 
             <CustomTabPanel value={tabValue} index={0}>
-                <FilterBox onSearch={handleSearchPending} disponibility={false} label='Pesquisar Código do equipamento ou nome do usuario'/>
+                <FilterBox onSearch={handleSearchPending} disponibility={false}
+                           label='Pesquisar Código do equipamento ou nome do usuario'/>
                 <BaseTable
                     rows={pendingRequests}
                     columns={pendingRequestsColumns}
@@ -117,12 +115,13 @@ const EquipmentRequests = () => {
                     paginationModel={pendingPaginationModel}
                     setPaginationModel={setPendingPaginationModel}
                     isLoading={isLoadingPending}
-                    maxHeight={700}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={1}>
-                <FilterBox onSearch={handleSearchProcessed} onAvailabilityChange={handleAvailabilityChange} disponibility={true} 
-                            label='Pesquisar Código do equipamento ou nome do usuario' disponibilityLabels={["Aprovado","Não Aprovado"]} />
+                <FilterBox onSearch={handleSearchProcessed} onAvailabilityChange={handleAvailabilityChange}
+                           disponibility={true}
+                           label='Pesquisar Código do equipamento ou nome do usuario'
+                           disponibilityLabels={["Aprovado", "Não Aprovado"]}/>
                 <BaseTable
                     rows={processedRequests}
                     columns={processedRequestsColumns}
@@ -131,7 +130,6 @@ const EquipmentRequests = () => {
                     paginationModel={processedPaginationModel}
                     setPaginationModel={setProcessedPaginationModel}
                     isLoading={isLoadingProcessed}
-                    maxHeight={700}
                 />
             </CustomTabPanel>
         </Box>)}
