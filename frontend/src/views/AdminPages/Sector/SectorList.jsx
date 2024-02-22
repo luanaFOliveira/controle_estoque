@@ -32,16 +32,15 @@ function SectorList() {
     setLoading(true);
     try {
       const page = paginationModel.page + 1;
-      const response = await indexSectors({
+      await indexSectors({
         page: page,
         name: filter.name,
-      });
-      if (response) {
-        setSectors(response.data);
+      }).then((res) => {
+        setSectors(res.data);
         setRowCount(
-          (prevRowCountState) => response.meta.total ?? prevRowCountState,
+          (prevRowCountState) => res.meta.total ?? prevRowCountState,
         );
-      }
+      });
     } catch (error) {
       console.error(error);
       errorToast(error);

@@ -104,7 +104,7 @@ const ManageUser = () => {
 
     if (userId) {
       try {
-        const response = await updateUser(userId, {
+        await updateUser(userId, {
           ...formData,
           sectors: formData.sectors,
         }).then((res) => {
@@ -119,7 +119,7 @@ const ManageUser = () => {
       }
     } else {
       try {
-        const response = await createUser({
+        await createUser({
           ...formData,
           sectors: formData.sectors
         }).then((res) => {

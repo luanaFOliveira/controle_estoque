@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Button, CircularProgress, Container } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import BaseTable from "../../../components/shared/BaseTable";
-import { useNavigate } from "react-router-dom";
-import UserTableColumns from "../../../components/columns/UserTableColumns";
-import { errorToast } from "../../../services/api";
-import { indexUsers } from "../../../services/userService";
+import React, { useEffect, useState } from 'react';
+import { Button, CircularProgress, Container } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import BaseTable from '../../../components/shared/BaseTable';
+import { useNavigate } from 'react-router-dom';
+import UserTableColumns from '../../../components/columns/UserTableColumns';
+import { errorToast } from '../../../services/api';
+import { indexUsers } from '../../../services/userService';
 import FilterBox from '../../../components/shared/FilterBox';
 
 function UserList() {
@@ -19,7 +19,7 @@ function UserList() {
     pageSize: 10,
   });
   const [filter, setFilter] = useState({
-    name: "",
+    name: '',
   });
 
   const columnsUser = UserTableColumns({ user_admin: true });
@@ -32,27 +32,30 @@ function UserList() {
     setLoading(true);
     try {
       const page = paginationModel.page + 1;
-      const response = await indexUsers({
+      await indexUsers({
         page: page,
         name: filter.name,
-      });
-      if (response) {
-        setUsers(response.data);
-        setRowCount(
-          (prevRowCountState) => response.meta.total ?? prevRowCountState,
-        );
-      }
+      })
+        .then((res) => {
+          setUsers(res.data);
+          setRowCount(
+            (prevRowCountState) => res.meta.total ?? prevRowCountState,
+          );
+        });
     } catch (error) {
       console.error(error);
       errorToast(error);
     } finally {
       setLoading(false);
-      setFirstLoading(false)
+      setFirstLoading(false);
     }
   };
 
   const handleSearch = (name) => {
-    setFilter((prevFilter) => ({ ...prevFilter, name}));
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      name
+    }));
   };
 
   return (
@@ -60,13 +63,14 @@ function UserList() {
       <Button
         variant="contained"
         sx={{ mb: 2 }}
-        onClick={() => navigate("/users/new")}
+        onClick={() => navigate('/users/new')}
       >
         Registrar Usuário
       </Button>
       {!firstLoading ? (
         <>
-          <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar nome de usuário'/>
+          <FilterBox onSearch={handleSearch} disponibility={false}
+                     label="Pesquisar nome de usuário"/>
           <BaseTable
             rows={users}
             columns={columnsUser}
@@ -79,7 +83,7 @@ function UserList() {
         </>
       ) : (
         <Grid item container justifyContent="center">
-          <CircularProgress />
+          <CircularProgress/>
         </Grid>
       )}
     </Container>

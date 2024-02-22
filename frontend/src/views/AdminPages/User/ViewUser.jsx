@@ -28,24 +28,24 @@ const ViewUser = () => {
     const columnsHistory = HistoryTableColumns('user');
 
     useEffect(() => {
-        const fetchUserDetail = async () => {
-            setLoading(true);
-            try {
-                const response = await getUser(userId);
-                if (response) {
-                    setUserDetail(response.data);
-                }
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
-            } finally {
-                setLoading(false);
-                setFirstLoading(false);
-            }
-        };
-
         fetchUserDetail();
     }, [userId]);
+
+    const fetchUserDetail = async () => {
+        setLoading(true);
+        try {
+            await getUser(userId)
+              .then((res) => {
+                  setUserDetail(res.data);
+              });
+        } catch (error) {
+            console.error(error);
+            errorToast(error);
+        } finally {
+            setLoading(false);
+            setFirstLoading(false);
+        }
+    };
 
     useEffect(() => {
         const fetchUserHistory = async () => {

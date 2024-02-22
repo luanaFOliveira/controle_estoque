@@ -30,12 +30,12 @@ const ManageSector = () => {
       setLoading(true);
       const fetchSector = async () => {
         try {
-          const response = await getSector(sectorId);
-          if (response) {
-            setFormData({
-              name: response.data.name,
+          await getSector(sectorId)
+            .then((res) => {
+              setFormData({
+                name: res.data.name,
+              });
             });
-          }
         } catch (error) {
           console.error(error);
           errorToast(error);
@@ -81,11 +81,11 @@ const ManageSector = () => {
       }
     } else {
       try {
-        const response = await createSector(formData);
-        if (response) {
-          toast.success("Setor criado com sucesso!");
-          navigate(`/sectors/${response.data.sector_id}`);
-        }
+        await createSector(formData)
+          .then((res) => {
+            toast.success("Setor criado com sucesso!");
+            navigate(`/sectors/${res.data.sector_id}`);
+          });
       } catch (error) {
         console.error(error);
         errorToast(error);

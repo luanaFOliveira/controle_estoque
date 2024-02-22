@@ -23,10 +23,10 @@ function ViewSector() {
     const fetchSectorDetail = async () => {
         setLoading(true);
         try {
-            const response = await getSector(sectorId);
-            if (response) {
-                setSectorDetail(response.data);
-            }
+            await getSector(sectorId)
+              .then((res) => {
+                  setSectorDetail(res.data);
+              });
         } catch (error) {
             console.error(error);
             errorToast(error);
@@ -41,11 +41,11 @@ function ViewSector() {
 
     const handleDestroy = async () => {
         try {
-            const response = await destroySector(sectorId);
-            if (response) {
-                toast.success("Setor deletado com sucesso!");
-                navigate("/sectors");
-            }
+            await destroySector(sectorId)
+              .then(() => {
+                  toast.success("Setor deletado com sucesso!");
+                  navigate("/sectors")
+              })
         } catch (error) {
             console.error(error);
             toast.error("Erro ao tentar deletar setor. Por favor, tente novamente.");
