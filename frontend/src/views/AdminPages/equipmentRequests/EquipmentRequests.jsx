@@ -35,7 +35,9 @@ const EquipmentRequests = () => {
     });
 
     const [filter, setFilter] = useState({
-        searchPending: "none", searchProcessed: "none", availability: "all",
+        searchPending: "none",
+        searchProcessed: "none",
+        status: "Nao pendente",
     });
 
     useEffect(() => {
@@ -70,7 +72,7 @@ const EquipmentRequests = () => {
         try {
             const page = processedPaginationModel.page + 1;
             await indexEquipmentRequests({
-                filter: {status: "Nao pendente", search: filter.searchProcessed, availability: filter.availability},
+                filter: {status: filter.status, search: filter.searchProcessed},
                 page: page,
             }).then((res) => {
                 setProcessedRequests(res.data);
@@ -92,9 +94,15 @@ const EquipmentRequests = () => {
     const handleSearchProcessed = (searchProcessed) => {
         setFilter((prevFilter) => ({...prevFilter, searchProcessed}));
     };
-
-    const handleAvailabilityChange = (availability) => {
-        setFilter((prevFilter) => ({...prevFilter, availability}));
+    
+    const handleAvailabilityChange = (status) => {
+        let newStatus = "Nao pendente";
+        if(status === "all"){
+            newStatus = "Nao pendente";
+        }else{
+            newStatus = status ? "Aprovado" : "Não Aprovado";
+        }
+        setFilter((prevFilter) => ({ ...prevFilter, status: newStatus }));
     };
 
     return (<Container sx={{mt: 5}}>

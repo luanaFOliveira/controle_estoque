@@ -10,6 +10,7 @@ import { errorToast } from "../../services/api";
 import { toast } from "react-toastify";
 import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
 import EquipmentRequestPopOver from '../../components/EquipmentRequestPopOver';
+import FilterBox from '../../components/shared/FilterBox';
 
 export default function EquipmentRequestPage() {
     const {sector} = useStateContext();
@@ -38,9 +39,13 @@ export default function EquipmentRequestPage() {
 
     const [tabValue, setTabValue] = useState(0);
 
+    const [filter, setFilter] = useState({
+        equipment_code: "none",
+    });
+
     useEffect(() => {
         fetchEquipments();
-    },[paginationModelEquip.page,reload, sector]);
+    },[paginationModelEquip.page,reload, sector,filter]);
 
     useEffect(() => {
         fetchHistory();
@@ -58,6 +63,7 @@ export default function EquipmentRequestPage() {
                 page:page, 
                 sector:sector,
                 availability:true,
+                equipment_code: filter.equipment_code,
             })
             .then((res)=>{
                 setEquipments(res.data);
@@ -140,6 +146,10 @@ export default function EquipmentRequestPage() {
         handlePopoverClose();
     };
 
+    const handleSearch = (equipment_code) => {
+        setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+    };
+
     const columnsEquip = EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
 
@@ -155,6 +165,7 @@ export default function EquipmentRequestPage() {
                     <Box sx={{ width: '100%' }}>
                         <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Equipamentos Disponiveis","Historico de solicitações"]}/>
                         <CustomTabPanel value={tabValue} index={0}>
+                            <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
                             <BaseTable
                                 rows={equipments}
                                 columns={columnsEquip}

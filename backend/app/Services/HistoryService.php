@@ -42,6 +42,13 @@ class HistoryService
             }
 
         }
+        if($request->has('equipment_code') && $request->input('equipment_code') !== 'none'){
+            $search = $request->input('equipment_code');
+
+            $query->whereHas('equipment', function ($query) use ($search) {
+                $query->where('equipment_code', 'ilike', "%$search%");
+            });
+        }
 
         return HistoryResource::collection($query->orderBy('created_at', 'desc')->paginate(10));
     }

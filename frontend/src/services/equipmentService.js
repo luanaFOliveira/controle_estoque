@@ -11,12 +11,13 @@ export async function indexEquipments({page, availability, equipment_code}) {
   return response.data;
 }
 
-export async function indexEquipmentsAvailability({ page, sector, availability }) {
+export async function indexEquipmentsAvailability({ page, sector, availability, equipment_code}) {
   const response = await api.get("/equipments", {
     params: {
       page: page,
       sector: sector,
       availability: availability,
+      equipment_code: equipment_code,
     },
   });
   return response.data;
