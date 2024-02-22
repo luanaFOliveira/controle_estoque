@@ -6,11 +6,23 @@ use App\Models\Equipment;
 use App\Models\EquipmentRequest;
 use App\Models\RequestStatus;
 use App\Models\UserEquipment;
+use Exception;
 
 class UserEquipmentObserver
 {
+    public function creating(UserEquipment $userEquipment)
+    {
+        $exists = UserEquipment::where('equipment_id', $userEquipment->equipment_id)
+                   ->whereNull('returned_at')
+                   ->exists();
+        if ($exists) {
+            throw new Exception('Equipamento já devolvido.');
+        }
+    }
+
     public function created(UserEquipment $userEquipment)
     {
+        
         Equipment::where('equipment_id', $userEquipment->equipment_id)->update(['is_available' => false]);
 
         $acceptStatus = RequestStatus::where('status', 'Não Aprovado')->first();

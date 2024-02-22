@@ -206,7 +206,7 @@ const ViewUser = () => {
                             <BaseTable
                                 rows={history}
                                 columns={columnsHistory}
-                                getRowId={(row) => row.user.user_id}
+                                getRowId={(row) => row.user_equipment_id}
                                 rowCount={rowCount}
                                 paginationModel={paginationModel}
                                 setPaginationModel={setPaginationModel}
