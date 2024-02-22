@@ -59,16 +59,18 @@ export default function EquipmentRequestPage() {
         setIsLoadingEquip(true);
         try{
             const page = paginationModelEquip.page + 1;
-            await indexEquipmentsAvailability({ 
-                page:page, 
-                sector:sector,
-                availability:true,
-                equipment_code: filter.equipment_code,
-            })
-            .then((res)=>{
-                setEquipments(res.data);
-                setRowCountEquip((prevRowCountState) => res.meta.total ?? prevRowCountState,);
-            });
+            if(sector) {
+                await indexEquipmentsAvailability({
+                    page: page,
+                    sector: sector,
+                    availability: true,
+                    equipment_code: filter.equipment_code,
+                })
+                    .then((res) => {
+                        setEquipments(res.data);
+                        setRowCountEquip((prevRowCountState) => res.meta.total ?? prevRowCountState,);
+                    });
+            }
         }catch(error){
             errorToast(error);
             console.error(error);

@@ -48,7 +48,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
     const navigate = useNavigate();
     const {themeMode, toggleTheme} = useTheme();
     const {logout, user, loadingUser} = useAuth();
-    const {sector, setSector} = useStateContext();
+    const {sector, setSector } = useStateContext();
     const [sectors, setSectors] = useState([]);
     const location = useLocation();
     const pathNames = {
@@ -72,9 +72,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                         await indexSectors({})
                             .then((res) => {
                                 setSectors(res.data);
-                                if(sector === 0) {
-                                    setSector(res.data[0].sector_id);
-                                }
+                                localStorage.setItem('sector', JSON.stringify(res.data[0].sector_id));
                             })
                     } catch (error) {
                         console.error(error);
