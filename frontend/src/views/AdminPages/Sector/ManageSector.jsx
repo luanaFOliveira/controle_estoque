@@ -30,7 +30,7 @@ const ManageSector = () => {
       setLoading(true);
       const fetchSector = async () => {
         try {
-          const response = await getSector(sectorId);
+          const response = await getSector({sectorId:sectorId});
           if (response) {
             setFormData({
               name: response.data.name,

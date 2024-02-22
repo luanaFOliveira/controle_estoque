@@ -10,8 +10,10 @@ export async function indexSectors({page,name}) {
   return response.data;
 }
 
-export async function getSector(sector_id) {
-  const response = await api.get(`/sectors/${sector_id}`);
+export async function getSector({sector_id,filter}) {
+  const response = await api.get(`/sectors/${sector_id}`,{
+    params:filter,
+  });
   return response.data;
 }
 

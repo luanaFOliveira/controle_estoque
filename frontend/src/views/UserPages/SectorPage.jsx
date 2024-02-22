@@ -7,6 +7,7 @@ import EquipmentTableColumns from "../../components/columns/EquipmentTableColumn
 import { getSector } from "../../services/sectorService";
 import { errorToast } from "../../services/api";
 import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
+import FilterBox from '../../components/shared/FilterBox';
 
 
 export default function SectorPage() {
@@ -24,14 +25,19 @@ export default function SectorPage() {
   
   const [tabValue, setTabValue] = useState(0);
 
+  const [filter, setFilter] = useState({
+    equipment_code: "none",
+    user_name: "none",
+  });
+
   useEffect(() => {
     fetchSector();
-  }, [sector]);
+  }, [sector,filter]);
 
   const fetchSector = async () => {
     setIsLoading(true);
     try {
-      await getSector(sector)
+      await getSector({sectorId:sector,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
       .then((res) =>{
         setSectorInfo(res.data);
         setSectorUsers(res.data.users);
@@ -46,6 +52,13 @@ export default function SectorPage() {
     }
   };
 
+  const handleChangeEquip = (equipment_code) => {
+    setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+  };
+
+  const handleChangeUser = (user_name) => {
+      setFilter((prevFilter) => ({ ...prevFilter, user_name }));
+  };
   
   return (
     <>
@@ -62,6 +75,7 @@ export default function SectorPage() {
               </Typography>
               <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Usuários do Setor", "Equipamentos do setor"]}/>
               <CustomTabPanel value={tabValue} index={0}>
+                <FilterBox onSearch={handleChangeUser} disponibility={false} label='Pesquisar Nome do usuario' disponibilityLabels={["Disponivel","Não disponivel"]} />
                 <BaseTable
                   rows={sectorUsers}
                   columns={columnsUsers}
@@ -78,6 +92,7 @@ export default function SectorPage() {
                 />
               </CustomTabPanel>
               <CustomTabPanel value={tabValue} index={1}>
+                <FilterBox onSearch={handleChangeEquip} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
                 <BaseTable
                   rows={sectorEquipments}
                   columns={columnsEquipments}
