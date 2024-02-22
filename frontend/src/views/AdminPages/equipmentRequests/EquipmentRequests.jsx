@@ -38,6 +38,7 @@ const EquipmentRequests = () => {
         searchPending: "none",
         searchProcessed: "none",
         status: "Nao pendente",
+        status: "Nao pendente",
     });
 
     useEffect(() => {
@@ -95,6 +96,14 @@ const EquipmentRequests = () => {
         setFilter((prevFilter) => ({...prevFilter, searchProcessed}));
     };
     
+    const handleAvailabilityChange = (status) => {
+        let newStatus = "Nao pendente";
+        if(status === "all"){
+            newStatus = "Nao pendente";
+        }else{
+            newStatus = status ? "Aprovado" : "Não Aprovado";
+        }
+        setFilter((prevFilter) => ({ ...prevFilter, status: newStatus }));
     const handleAvailabilityChange = (status) => {
         let newStatus = "Nao pendente";
         if(status === "all"){
