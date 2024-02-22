@@ -38,7 +38,7 @@ export default function SectorPage() {
         setIsLoading(true);
         try {
             if(sector) {
-                await getSector({sectorId:sector,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
+                await getSector({sector_id:sector,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
                     .then((res) => {
                         setSectorInfo(res.data);
                         setSectorUsers(res.data.users);

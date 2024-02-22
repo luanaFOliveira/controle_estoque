@@ -9,6 +9,7 @@ import {errorToast} from "../../../services/api";
 import EquipmentTableColumns from "../../../components/columns/EquipmentTableColumns";
 import UserTableColumns from "../../../components/columns/UserTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
+import FilterBox from '../../../components/shared/FilterBox';
 
 function ViewSector() {
     const navigate = useNavigate();
@@ -20,10 +21,15 @@ function ViewSector() {
     const columnsEquip = EquipmentTableColumns({user_admin: true});
     const columnsUser = UserTableColumns({user_admin: true});
 
+    const [filter, setFilter] = useState({
+        equipment_code: "none",
+        user_name: "none",
+    });
+
     const fetchSectorDetail = async () => {
         setLoading(true);
         try {
-            await getSector({sectorId:sectorId})
+            await getSector({sector_id:sectorId,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
                 .then((res) => {
                     setSectorDetail(res.data);
                 });
@@ -37,7 +43,7 @@ function ViewSector() {
 
     useEffect(() => {
         fetchSectorDetail();
-    }, [sectorId]);
+    }, [sectorId, filter]);
 
     const handleDestroy = async () => {
         const response = await destroySector(sectorId)
@@ -45,6 +51,14 @@ function ViewSector() {
             toast.success("Setor deletado com sucesso!");
             navigate("/sectors")
         }
+    };
+
+    const handleChangeEquip = (equipment_code) => {
+        setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+    };
+    
+    const handleChangeUser = (user_name) => {
+          setFilter((prevFilter) => ({ ...prevFilter, user_name }));
     };
 
     return (
@@ -84,6 +98,7 @@ function ViewSector() {
                     </Grid>
                     <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Usuários", "Equipamentos"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
+                        <FilterBox onSearch={handleChangeUser} disponibility={false} label='Pesquisar Nome do usuario' disponibilityLabels={["Disponivel","Não disponivel"]} />
                         <BaseTable
                             rows={sectorDetail.users}
                             getRowId={(row) => row.user_id}
@@ -100,6 +115,7 @@ function ViewSector() {
                         />
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
+                        <FilterBox onSearch={handleChangeEquip} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
                         <BaseTable
                             rows={sectorDetail.equipments}
                             getRowId={(row) => row.equipment_id}
