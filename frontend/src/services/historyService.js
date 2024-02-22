@@ -1,4 +1,4 @@
-import { api } from "./api";
+import {api, handleResponse} from "./api";
 
 export async function getUserHistory({user_id,availability,equipment_code}) {
   const response = await api.get(`/history/users`,{
@@ -8,5 +8,5 @@ export async function getUserHistory({user_id,availability,equipment_code}) {
       equipment_code: equipment_code,
     }
   });
-  return response.data;
+  return handleResponse(response);
 }

@@ -1,37 +1,43 @@
-import React ,{ useState,useEffect }from 'react';
+import React, {useEffect, useState} from 'react';
 import BaseTable from '../../components/shared/BaseTable';
-import {Box,Grid,CircularProgress,Container} from '@mui/material';
+import {Box, CircularProgress, Container, Grid} from '@mui/material';
 import {useStateContext} from "../../context/GlobalContext";
-import { useAuth } from "../../context/AuthProvider";
-import {EquipmentRequestHistoryTableColumns, EquipmentRequestEquipTableColumns} from "../../components/columns/UserEquipmentRequestTablesColumns";
-import { indexEquipmentsAvailability } from "../../services/equipmentService";
-import { createEquipmentRequests, getRequestMotives,indexEquipmentRequests} from "../../services/equipmentRequestService";
-import { errorToast } from "../../services/api";
-import { toast } from "react-toastify";
-import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
+import {useAuth} from "../../context/AuthProvider";
+import {
+    EquipmentRequestEquipTableColumns,
+    EquipmentRequestHistoryTableColumns
+} from "../../components/columns/UserEquipmentRequestTablesColumns";
+import {indexEquipmentsAvailability} from "../../services/equipmentService";
+import {
+    createEquipmentRequests,
+    getRequestMotives,
+    indexEquipmentRequests
+} from "../../services/equipmentRequestService";
+import {toast} from "react-toastify";
+import {CustomTabPanel, TableTab} from '../../components/shared/TableTab';
 import EquipmentRequestPopOver from '../../components/EquipmentRequestPopOver';
 import FilterBox from '../../components/shared/FilterBox';
 
 export default function EquipmentRequestPage() {
     const {sector} = useStateContext();
-    const { user} = useAuth();
+    const {user} = useAuth();
 
     const [reload, setReload] = useState(false);
     const [firstLoading, setFirstLoading] = useState(true);
 
-    const [equipments,setEquipments] = useState([]);
+    const [equipments, setEquipments] = useState([]);
     const [isLoadingEquip, setIsLoadingEquip] = useState(true);
     const [rowCountEquip, setRowCountEquip] = useState(0);
-    const [paginationModelEquip, setPaginationModelEquip] = useState({ page: 0, pageSize: 10 });
+    const [paginationModelEquip, setPaginationModelEquip] = useState({page: 0, pageSize: 10});
 
-    const [history,setHistory] = useState([]);
+    const [history, setHistory] = useState([]);
     const [isLoadingHist, setIsLoadingHist] = useState(true);
     const [rowCountHist, setRowCountHist] = useState(0);
-    const [paginationModelHist, setPaginationModelHist] = useState({ page: 0, pageSize: 10 });
+    const [paginationModelHist, setPaginationModelHist] = useState({page: 0, pageSize: 10});
 
-    const [requestMotives,setRequestMotives] = useState([]);
+    const [requestMotives, setRequestMotives] = useState([]);
 
-    const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
+    const [formData, setFormData] = useState({observation: '', motive: '', rowData: {}});
     const [anchorEl, setAnchorEl] = useState(null);
 
     const open = Boolean(anchorEl);
@@ -45,79 +51,59 @@ export default function EquipmentRequestPage() {
 
     useEffect(() => {
         fetchEquipments();
-    },[paginationModelEquip.page,reload, sector,filter]);
+    }, [paginationModelEquip.page, reload, sector, filter]);
 
     useEffect(() => {
         fetchHistory();
-    },[paginationModelHist.page, reload]);
+    }, [paginationModelHist.page, reload]);
 
     useEffect(() => {
         fetchMotives();
-    },[]);
+    }, []);
 
     const fetchEquipments = async () => {
         setIsLoadingEquip(true);
-        try{
-            const page = paginationModelEquip.page + 1;
-            if(sector) {
-                await indexEquipmentsAvailability({
-                    page: page,
-                    sector: sector,
-                    availability: true,
-                    equipment_code: filter.equipment_code,
-                })
-                    .then((res) => {
-                        setEquipments(res.data);
-                        setRowCountEquip((prevRowCountState) => res.meta.total ?? prevRowCountState,);
-                    });
+        const page = paginationModelEquip.page + 1;
+        if (sector) {
+            const res = await indexEquipmentsAvailability({
+                page: page, sector: sector, availability: true, equipment_code: filter.equipment_code,
+            }).finally(() => {
+                setIsLoadingEquip(false);
+                setFirstLoading(false);
+            })
+            if (res) {
+                setEquipments(res.data);
+                setRowCountEquip((prevRowCountState) => res.meta.total ?? prevRowCountState);
             }
-        }catch(error){
-            errorToast(error);
-            console.error(error);
-        }finally{
-            setIsLoadingEquip(false);
-            setFirstLoading(false);
         }
     };
 
     const fetchHistory = async () => {
         setIsLoadingHist(true);
-        try{
-            const page = paginationModelHist.page + 1;
-            await indexEquipmentRequests({
-                page: page,
-            })
-            .then((res)=>{
-                setHistory(res.data);
-                setRowCountHist((prevRowCountState) => res.meta.total ?? prevRowCountState,);
-            });
-        }catch(error){
-            errorToast(error);
-            console.error(error);
-        }finally{
+        const page = paginationModelHist.page + 1;
+        const res = await indexEquipmentRequests({
+            page: page,
+        }).finally(() => {
             setIsLoadingHist(false);
             setFirstLoading(false);
+        })
+        if (res) {
+            setHistory(res.data);
+            setRowCountHist((prevRowCountState) => res.meta.total ?? prevRowCountState);
         }
     };
 
     const fetchMotives = async () => {
-        try{
-            await getRequestMotives()
-            .then((res)=>{
-                setRequestMotives(res.data);
-            });
-        }catch(error){
-            errorToast(error);
-            console.error(error);
+        const res = await getRequestMotives();
+        if (res) {
+            setRequestMotives(res.data);
         }
     };
 
     const handleRequestEquipButtonClick = (event, row) => {
         setAnchorEl(event.currentTarget);
         setFormData({
-          observation: '',
-          motive: '',
-          rowData: row,
+            observation: '', motive: '', rowData: row,
         });
     };
 
@@ -126,7 +112,7 @@ export default function EquipmentRequestPage() {
     };
 
     const handleRequestSubmit = async () => {
-        if(!formData.motive){
+        if (!formData.motive) {
             toast.error(`Selecione um motivo`);
             return;
         }
@@ -136,62 +122,57 @@ export default function EquipmentRequestPage() {
             request_motive_id: formData.motive,
             user_id: user?.user_id,
         };
-        try {
-            await createEquipmentRequests({ formData: payload })
-            .then((res)=>{
-                toast.success(`Equipamento solicitado com sucesso`);
-                setReload((prev) => !prev);
-            });
-        } catch (error) {
-            console.error(error);
+        const res = await createEquipmentRequests({formData: payload});
+        if (res) {
+            toast.success(`Equipamento solicitado com sucesso`);
+            setReload((prev) => !prev);
         }
         handlePopoverClose();
     };
 
     const handleSearch = (equipment_code) => {
-        setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+        setFilter((prevFilter) => ({...prevFilter, equipment_code}));
     };
 
     const columnsEquip = EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick});
     const columnsHist = EquipmentRequestHistoryTableColumns();
 
 
-    return(<>
+    return (<>
         <Container sx={{mt: 5}}>
-            {firstLoading ? (
-                <Grid item container justifyContent="center">
-                    <CircularProgress />
-                </Grid>
-                ) : (
-                <>
-                    <Box sx={{ width: '100%' }}>
-                        <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Equipamentos Disponiveis","Historico de solicitações"]}/>
-                        <CustomTabPanel value={tabValue} index={0}>
-                            <FilterBox onSearch={handleSearch} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
-                            <BaseTable
-                                rows={equipments}
-                                columns={columnsEquip}
-                                rowCount={rowCountEquip}
-                                paginationModel={paginationModelEquip}
-                                getRowId={(row) => row.equipment_id}
-                                setPaginationModel={setPaginationModelEquip}
-                                isLoading={isLoadingEquip}
-                            />
-                        </CustomTabPanel>
-                        <CustomTabPanel value={tabValue} index={1}>
-                            <BaseTable
-                                rows={history}
-                                columns={columnsHist}
-                                rowCount={rowCountHist}
-                                paginationModel={paginationModelHist}
-                                getRowId={(row) => row.equipment_request_id}
-                                setPaginationModel={setPaginationModelHist}
-                                isLoading={isLoadingHist}
-                            />
-                        </CustomTabPanel>
-                    </Box>
-                </>
-            )}
+            {firstLoading ? (<Grid item container justifyContent="center">
+                <CircularProgress/>
+            </Grid>) : (<>
+                <Box sx={{width: '100%'}}>
+                    <TableTab value={tabValue} setValue={setTabValue}
+                              nameTabs={["Equipamentos Disponiveis", "Historico de solicitações"]}/>
+                    <CustomTabPanel value={tabValue} index={0}>
+                        <FilterBox onSearch={handleSearch} disponibility={false}
+                                   label='Pesquisar Código do equipamento'
+                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
+                        <BaseTable
+                            rows={equipments}
+                            columns={columnsEquip}
+                            rowCount={rowCountEquip}
+                            paginationModel={paginationModelEquip}
+                            getRowId={(row) => row.equipment_id}
+                            setPaginationModel={setPaginationModelEquip}
+                            isLoading={isLoadingEquip}
+                        />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={tabValue} index={1}>
+                        <BaseTable
+                            rows={history}
+                            columns={columnsHist}
+                            rowCount={rowCountHist}
+                            paginationModel={paginationModelHist}
+                            getRowId={(row) => row.equipment_request_id}
+                            setPaginationModel={setPaginationModelHist}
+                            isLoading={isLoadingHist}
+                        />
+                    </CustomTabPanel>
+                </Box>
+            </>)}
         </Container>
         <EquipmentRequestPopOver
             anchorEl={anchorEl}
@@ -218,5 +199,4 @@ export default function EquipmentRequestPage() {
             `}
         </style>
     </>);
-
 };

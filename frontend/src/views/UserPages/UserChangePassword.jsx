@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Box, Button, Container, TextField, Typography,} from '@mui/material';
 import {useAuth} from "../../context/AuthProvider";
 import {toast} from "react-toastify";
-import {errorToast} from "../../services/api";
 import {changePassword} from "../../services/userService";
 import {useNavigate} from "react-router-dom";
 
@@ -24,16 +23,10 @@ const UserChangePassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password === formData.password_confirmation && formData.password.length > 4) {
-            try {
-                await changePassword({password: formData.password, user_id: user.user_id})
-                .then((res)=>{
-                    toast.success('Senha alterada com sucesso!');
-                    navigate('/my-account');
-                });
-                
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
+            const res = await changePassword({password: formData.password, user_id: user.user_id});
+            if (res) {
+                toast.success('Senha alterada com sucesso!');
+                navigate('/my-account');
             }
         } else {
             toast.error("A senha deve ter pelo menos 5 caracteres e ser idêntica à senha de confirmação.")
