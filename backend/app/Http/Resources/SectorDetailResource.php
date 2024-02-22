@@ -11,19 +11,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class SectorDetailResource extends JsonResource
 {
-    protected $request;
-
-    public function withRequest(Request $request)
+    
+    public function __construct(Sector $sector, Request $request)
     {
+        $this->sector = $sector;
         $this->request = $request;
-        return $this;
     }
 
     public function toArray($request): array
     {
         return [
-            'sector_id' => $this->sector_id,
-            'name' => $this->name,
+            'sector_id' => $this->sector->sector_id,
+            'name' => $this->sector->name,
             'users' => $this->getUsers(),
             'equipments' => $this->getEquipments(),
         ];
@@ -31,11 +30,14 @@ class SectorDetailResource extends JsonResource
 
     protected function getUsers(): array
     {
-        $users = $this->user;
-        if($this->request->has('user_name') && $this->request->input('user_name') !== "none"){
+        $query = $this->sector->user();
+
+        if ($this->request->has('user_name') && $this->request->input('user_name') !== "none") {
             $user_name = $this->request->input('user_name');
-            $users = $users->where('name', 'ilike', "%$user_name%");
+            $query->where('name', 'ilike', "%$user_name%");
         }
+    
+        $users = $query->get();
         return $users->map(function ($user) {
             return [
                 'user_id' => $user->user_id,
@@ -48,11 +50,13 @@ class SectorDetailResource extends JsonResource
 
     protected function getEquipments(): array
     {
-        $equipments = $this->equipment;
-        if($this->request->has('equipment_code') && $this->request->input('equipment_code') !== "none"){
+        $query = $this->sector->equipment();
+
+        if ($this->request->has('equipment_code') && $this->request->input('equipment_code') !== "none") {
             $equipment_code = $this->request->input('equipment_code');
-            $equipments = $equipments->where('equipment_code', 'ilike', "%$equipment_code%");
+            $query->where('equipment_code', 'ilike', "%$equipment_code%");
         }
+        $equipments = $query->get();
         return $equipments->map(function ($equipment) {
             return [
                 'equipment_id' => $equipment->equipment_id,
