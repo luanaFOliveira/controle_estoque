@@ -37,7 +37,7 @@ export default function SectorPage() {
   const fetchSector = async () => {
     setIsLoading(true);
     try {
-      await getSector({sectorId:sector,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
+      await getSector({sector_id:sector,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
       .then((res) =>{
         setSectorInfo(res.data);
         setSectorUsers(res.data.users);
