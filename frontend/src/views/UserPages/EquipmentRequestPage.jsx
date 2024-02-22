@@ -32,12 +32,12 @@ export default function EquipmentRequestPage() {
     
 
     const [formData, setFormData] = useState({ observation: '',motive:'',rowData: {}});
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    const [tabValue, setTabValue] = React.useState(0);
+    const [tabValue, setTabValue] = useState(0);
 
     useEffect(() => {
         const fetchEquipments = async () => {
@@ -64,7 +64,7 @@ export default function EquipmentRequestPage() {
         fetchEquipments().then(r => {
         });
 
-    },[paginationModelEquip.page,reload]);
+    },[paginationModelEquip.page,reload, sector]);
 
 
     useEffect(() => {

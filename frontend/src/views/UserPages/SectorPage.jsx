@@ -22,7 +22,7 @@ export default function SectorPage() {
   const columnsUsers = UserTableColumns({ user_admin: false });
   const columnsEquipments = EquipmentTableColumns({ user_admin: false });
   
-  const [tabValue, setTabValue] = React.useState(0);
+  const [tabValue, setTabValue] = useState(0);
 
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function SectorPage() {
       }
     };
     fetchSector().then((r) => {});
-  }, []);
+  }, [sector]);
 
 
 
