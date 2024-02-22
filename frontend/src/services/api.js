@@ -43,4 +43,18 @@ const errorToast = (error) => {
   return error;
 };
 
-export { api, errorToast };
+async function handleResponse(res, errorMessage, statusError) {
+  if (res.response) {
+    const {status} = res.response;
+
+    if (status === statusError) {
+      toast.error(errorMessage);
+    } else {
+      errorToast(res.response);
+    }
+  } else if (res.data) {
+    return res.data;
+  }
+}
+
+export { api, errorToast, handleResponse };

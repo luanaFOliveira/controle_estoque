@@ -1,19 +1,4 @@
-import {api, errorToast} from "./api";
-import {toast} from "react-toastify";
-
-async function handleResponse(res, errorMessage, statusError) {
-    if (res.response) {
-        const {status} = res.response;
-
-        if (status === statusError) {
-            toast.error(errorMessage);
-        } else {
-            errorToast(res.response);
-        }
-    } else if (res.data) {
-        return res.data;
-    }
-}
+import {api, handleResponse} from "./api";
 
 export async function indexSectors({page, name}) {
     const response = await api.get("/sectors", {
@@ -22,20 +7,12 @@ export async function indexSectors({page, name}) {
             name: name,
         },
     });
-    if (response.response) {
-        errorToast(response.response);
-    } else if (response.data) {
-        return response.data;
-    }
+    return handleResponse(response);
 }
 
 export async function getSector(sector_id) {
     const response = await api.get(`/sectors/${sector_id}`);
-    if (response.response) {
-        errorToast(response.response);
-    } else if (response.data) {
-        return response.data;
-    }
+    return handleResponse(response, 'Esse setor não existe.', 404);
 }
 
 export async function createSector(formData) {

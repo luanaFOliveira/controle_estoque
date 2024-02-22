@@ -3,7 +3,6 @@ import {Container,} from "@mui/material";
 import {toast} from "react-toastify";
 import {useNavigate, useParams} from "react-router-dom";
 import {createEquipment, getEquipment, getEquipmentDetails, updateEquipment,} from "../../../services/equipmentService";
-import {errorToast} from "../../../services/api";
 import {indexSectors} from "../../../services/sectorService";
 import {UpsertEquipment} from "../../../components/Equipment/UpsertEquipment";
 
@@ -28,49 +27,35 @@ const ManageEquipment = () => {
     }, [params.equipment_id]);
 
     const getAllSectors = async () => {
-        try {
-            await indexSectors({})
-                .then((res) => {
-                    setSectors(res.data);
-                });
-        } catch (error) {
-            console.error(error);
-            errorToast(error);
+        const res = await indexSectors({})
+        if (res) {
+            setSectors(res.data);
         }
     };
 
     const getAllEquipmentInfos = async () => {
-        try {
-            await getEquipmentDetails()
-                .then((res) => {
-                    setEquipmentBrands(res.equipment_brands);
-                    setEquipmentTypes(res.equipment_types);
-                });
-        } catch (error) {
-            console.error(error);
-            errorToast(error);
+        const res = await getEquipmentDetails()
+        if (res) {
+            setEquipmentBrands(res.equipment_brands);
+            setEquipmentTypes(res.equipment_types);
         }
     };
 
     const returnEquipment = async () => {
         if (params.equipment_id) {
             setEditLoading(true);
-            try {
-                await getEquipment(params.equipment_id)
-                    .then((res) => {
-                        const equipment = res.data;
-                        setFormData({
-                            name: equipment.name,
-                            equipment_brand: equipment.brand,
-                            equipment_type: equipment.type,
-                            sector: equipment.sector,
-                        });
-                    });
-            } catch (error) {
-                errorToast(error);
-                console.error(error);
-            } finally {
-                setEditLoading(false);
+            const res = await getEquipment(params.equipment_id)
+                .finally(() => {
+                    setEditLoading(false);
+                });
+            if (res) {
+                const equipment = res.data;
+                setFormData({
+                    name: equipment.name,
+                    equipment_brand: equipment.brand,
+                    equipment_type: equipment.type,
+                    sector: equipment.sector,
+                });
             }
         }
     };
@@ -90,27 +75,18 @@ const ManageEquipment = () => {
             return;
         }
         if (params.equipment_id) {
-            try {
-                await updateEquipment({
-                    equipment_id: params.equipment_id, formData: formData,
-                }).then((res) => {
-                    toast.success("Equipamento atualizado com sucesso!");
-                    navigate(`/equipments/${res.data.equipment_id}`);
-                });
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
+            const res = await updateEquipment({
+                equipment_id: params.equipment_id, formData: formData,
+            })
+            if (res) {
+                toast.success("Equipamento atualizado com sucesso!");
+                navigate(`/equipments/${res.data.equipment_id}`);
             }
         } else {
-            try {
-                await createEquipment(formData)
-                    .then((res) => {
-                        toast.success("Equipamento registrado com sucesso!");
-                        navigate(`/equipments/${res.data.equipment_id}`);
-                    });
-            } catch (error) {
-                console.error(error);
-                errorToast(error);
+            const res = await createEquipment(formData)
+            if (res) {
+                toast.success("Equipamento registrado com sucesso!");
+                navigate(`/equipments/${res.data.equipment_id}`);
             }
         }
     };
