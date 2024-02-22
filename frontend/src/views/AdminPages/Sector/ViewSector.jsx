@@ -5,7 +5,6 @@ import {useNavigate, useParams} from "react-router-dom";
 import {toastDelete} from "../../../components/shared/ToastComponents";
 import {toast} from "react-toastify";
 import {destroySector, getSector} from "../../../services/sectorService";
-import {errorToast} from "../../../services/api";
 import EquipmentTableColumns from "../../../components/columns/EquipmentTableColumns";
 import UserTableColumns from "../../../components/columns/UserTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
@@ -28,16 +27,12 @@ function ViewSector() {
 
     const fetchSectorDetail = async () => {
         setLoading(true);
-        try {
-            await getSector({sector_id:sectorId,filter:{user_name:filter.user_name,equipment_code:filter.equipment_code}})
-                .then((res) => {
-                    setSectorDetail(res.data);
-                });
-        } catch (error) {
-            console.error(error);
-            errorToast(error);
-        } finally {
-            setLoading(false);
+        const res = await getSector(sectorId)
+            .finally(() => {
+                setLoading(false);
+            })
+        if (res) {
+            setSectorDetail(res.data);
         }
     };
 
@@ -56,12 +51,12 @@ function ViewSector() {
     const handleChangeEquip = (equipment_code) => {
         setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
     };
-    
+
     const handleChangeUser = (user_name) => {
           setFilter((prevFilter) => ({ ...prevFilter, user_name }));
     };
 
-    
+
 
     return (
         <Container sx={{mt: 5}}>

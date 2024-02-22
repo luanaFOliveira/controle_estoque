@@ -1,4 +1,4 @@
-import {api} from "./api";
+import {api, handleResponse} from "./api";
 
 export async function indexUsers({page, name}) {
     const response = await api.get("/users", {
@@ -7,27 +7,27 @@ export async function indexUsers({page, name}) {
             name: name,
         },
     });
-    return response.data;
+    return handleResponse(response);
 }
 
 export async function getUser(user_id) {
     const response = await api.get(`/users/${user_id}`);
-    return response.data;
+    return handleResponse(response, 'Esse usuário não existe.', 404);
 }
 
 export async function createUser(formData) {
     const response = await api.post(`/users`, formData);
-    return response.data;
+    return handleResponse(response, 'Este endereço de e-mail já está associado a uma conta existente. Por favor, utilize um endereço de e-mail diferente.', 422);
 }
 
 export async function updateUser(user_id, formData) {
     const response = await api.put(`/users/${user_id}`, formData);
-    return response.data;
+    return handleResponse(response, 'Este endereço de e-mail já está associado a uma conta existente. Por favor, utilize um endereço de e-mail diferente.', 500);
 }
 
 export async function destroyUser(user_id) {
     const response = await api.delete(`/users/${user_id}`);
-    return response.data;
+    return handleResponse(response);
 }
 
 export async function changePassword({password, user_id}) {
@@ -35,5 +35,5 @@ export async function changePassword({password, user_id}) {
         user_id: user_id,
         password: password,
     });
-    return response.data;
+    return handleResponse(response);
 }
