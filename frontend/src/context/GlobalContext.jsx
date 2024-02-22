@@ -4,7 +4,7 @@ import { ThemeProvider } from './ThemeProvider';
 const StateContext = createContext({});
 
 export function GlobalContext({ children }) {
-  const [sector, _setSector] = useState(localStorage.getItem('sector'));
+  const [sector, _setSector] = useState(0);
   const setSector = (sector) => {
     _setSector(sector);
     if (sector) {

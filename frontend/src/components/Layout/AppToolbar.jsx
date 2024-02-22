@@ -72,6 +72,9 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                         await indexSectors({})
                             .then((res) => {
                                 setSectors(res.data);
+                                if(sector === 0) {
+                                    setSector(res.data[0].sector_id);
+                                }
                             })
                     } catch (error) {
                         console.error(error);
