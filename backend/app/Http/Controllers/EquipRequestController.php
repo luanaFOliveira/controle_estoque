@@ -30,47 +30,49 @@ class EquipRequestController extends Controller
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $status = $request->input('status');
 
         $query = EquipmentRequest::auth();
 
-        if($request->has('status') && $request->input('status') !== ''){
+        if ($request->has('status') && $request->input('status') !== '') {
             $status = $request->input('status');
-            if($status === 'Pendente'){
-                $query->whereHas('status', function ($query) {
-                    $query->where('status', 'Pendente');
-                });
-            }else{
-                $query->whereHas('status', function ($query) {
-                    $query->where('status', '<>', 'Pendente');
-                });
-            }
-        }
-
-
-        if($request->has('search') && $request->input('search') !== 'none'){
-            $search = $request->input('search');
-
-            $query->whereHas('equipment', function ($query) use ($search) {
-                $query->where('equipment_code', 'ilike', "%$search%");
-            });
-            $query->orWhereHas('user', function ($query) use ($search) {
-                $query->where('name', 'ilike', "%$search%");
-            });
-        }
-        if($request->has('availability') && $request->input('availability') !== ''){
-            $availability = $request->input('availability');
-            if($availability !== 'all'){
-                if($availability){
+            switch ($status) {
+                case 'Pendente':
+                    $query->whereHas('status', function ($query) {
+                        $query->where('status', 'Pendente');
+                    });
+                    break;
+                case 'Aprovado':
                     $query->whereHas('status', function ($query) {
                         $query->where('status', 'Aprovado');
                     });
-                }else{
+                    break;
+                case 'Não Aprovado':
                     $query->whereHas('status', function ($query) {
                         $query->where('status', 'Não Aprovado');
                     });
-                }
+                    break;
+                case 'all':
+                    break;
+                case 'Nao Pendente':
+                    $query->whereHas('status', function ($query) {
+                        $query->where('status', 'Aprovado')
+                            ->orWhere('status', 'Não Aprovado');
+                    });
+                    break;
             }
+        }
+        
+        if ($request->has('search') && $request->input('search') !== 'none') {
+            $search = $request->input('search');
+        
+            $query->where(function ($query) use ($search) {
+                $query->whereHas('equipment', function ($query) use ($search) {
+                    $query->where('equipment_code', 'ilike', "%$search%");
+                });
+                $query->orWhereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'ilike', "%$search%");
+                });
+            });
         }
 
         return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id', 'asc')->paginate(10));

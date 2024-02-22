@@ -51,7 +51,7 @@ export default function EquipmentList() {
         setIsLoading(false);
         setFirstLoading(false);
       }
-    };
+  };
 
   const handleSearch = (equipment_code) => {
     setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));

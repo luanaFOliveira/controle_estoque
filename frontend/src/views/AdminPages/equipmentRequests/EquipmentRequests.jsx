@@ -37,7 +37,7 @@ const EquipmentRequests = () => {
     const [filter, setFilter] = useState({
         searchPending: "none",
         searchProcessed: "none",
-        availability: "all",
+        status: "Nao pendente",
     });
 
     useEffect(() => {
@@ -70,7 +70,7 @@ const EquipmentRequests = () => {
             try {
                 const page = processedPaginationModel.page + 1;
                 const response = await indexEquipmentRequests({
-                    filter: {status:"Nao pendente",search:filter.searchProcessed, availability: filter.availability}, page: page,
+                    filter: {status:filter.status,search:filter.searchProcessed}, page: page,
                 });
                 if (response) {
                     setProcessedRequests(response.data);
@@ -96,8 +96,14 @@ const EquipmentRequests = () => {
         setFilter((prevFilter) => ({ ...prevFilter, searchProcessed }));
     };
     
-    const handleAvailabilityChange = (availability) => {
-        setFilter((prevFilter) => ({ ...prevFilter, availability }));
+    const handleAvailabilityChange = (status) => {
+        let newStatus = "Nao pendente";
+        if(status === "all"){
+            newStatus = "Nao pendente";
+        }else{
+            newStatus = status ? "Aprovado" : "Não Aprovado";
+        }
+        setFilter((prevFilter) => ({ ...prevFilter, status: newStatus }));
     };
 
     return (<Container sx={{mt: 5}}>
@@ -115,7 +121,6 @@ const EquipmentRequests = () => {
                     paginationModel={pendingPaginationModel}
                     setPaginationModel={setPendingPaginationModel}
                     isLoading={isLoadingPending}
-                    maxHeight={700}
                 />
             </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={1}>
@@ -129,7 +134,6 @@ const EquipmentRequests = () => {
                     paginationModel={processedPaginationModel}
                     setPaginationModel={setProcessedPaginationModel}
                     isLoading={isLoadingProcessed}
-                    maxHeight={700}
                 />
             </CustomTabPanel>
         </Box>)}

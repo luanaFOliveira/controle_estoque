@@ -6,6 +6,7 @@ import { MyEquipmentTableColumns } from '../../components/columns/MyEquipmentTab
 import { getUserHistory } from "../../services/historyService";
 import { errorToast } from "../../services/api";
 import { CustomTabPanel, TableTab } from '../../components/shared/TableTab';
+import FilterBox from '../../components/shared/FilterBox';
 
 export default function MyEquipmentsPage() {
     const {user} = useAuth();
@@ -37,20 +38,26 @@ export default function MyEquipmentsPage() {
 
     const [tabValue, setTabValue] = useState(0);
 
+    const [filter, setFilter] = useState({
+        searchAva: "none",
+        searchUna: "none",
+    });
+
     useEffect(() => {
         fetchEquipmentsAvailable();
-    },[paginationModelEquipAva.page,reload]);
+    },[paginationModelEquipAva.page,reload,filter]);
 
     useEffect(() => {
         fetchEquipmentsUnavailable();
-    },[paginationModelEquipUna.page,reload]);
+    },[paginationModelEquipUna.page,reload,filter]);
 
     const fetchEquipmentsAvailable = async () => {
         setIsLoadingEquipAva(true);
         try{
             await getUserHistory({
                 user_id: user.user_id,
-                filter: "available",
+                availability: "available",
+                equipment_code: filter.searchAva,
             }).then((res) => {
                 setEquipAvailable(res.data);
                 setRowCountEquipAva((prevRowCountState) => res.meta.total ?? prevRowCountState,);
@@ -69,7 +76,8 @@ export default function MyEquipmentsPage() {
         try{
             await getUserHistory({
                 user_id: user.user_id,
-                filter: "unavailable",
+                availability: "unavailable",
+                equipment_code: filter.searchUna,
             })
             .then((res)=>{
                 setEquipUnavailable(res.data);
@@ -84,6 +92,14 @@ export default function MyEquipmentsPage() {
         }
     };
 
+    const handleSearchAva = (searchAva) => {
+        setFilter((prevFilter) => ({ ...prevFilter, searchAva }));
+    };
+
+    const handleSearchUna = (searchUna) => {
+        setFilter((prevFilter) => ({ ...prevFilter, searchUna }));
+    };
+
     return(<>
         <Container sx={{mt: 5}}>
             {firstLoading ? (
@@ -95,6 +111,7 @@ export default function MyEquipmentsPage() {
                 <Box sx={{ width: '100%' }}>
                     <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Equipamentos Ativos","Historico de equipamentos"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
+                        <FilterBox onSearch={handleSearchAva} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
                         <BaseTable
                             rows={equipAvailable}
                             columns={columnsEquipAvailable}
@@ -106,6 +123,7 @@ export default function MyEquipmentsPage() {
                         />
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
+                        <FilterBox onSearch={handleSearchUna} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
                         <BaseTable
                             rows={equipUnavailable}
                             columns={columnsEquipUnavailable}
