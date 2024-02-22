@@ -61,6 +61,8 @@ function ViewSector() {
           setFilter((prevFilter) => ({ ...prevFilter, user_name }));
     };
 
+    
+
     return (
         <Container sx={{mt: 5}}>
             {sectorDetail && (
