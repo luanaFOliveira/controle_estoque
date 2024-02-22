@@ -23,7 +23,7 @@ function ViewSector() {
     const fetchSectorDetail = async () => {
         setLoading(true);
         try {
-            await getSector(sectorId)
+            await getSector({sectorId:sectorId})
                 .then((res) => {
                     setSectorDetail(res.data);
                 });

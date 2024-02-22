@@ -21,7 +21,7 @@ const ManageSector = () => {
 
     const fetchSector = async () => {
         setLoading(true);
-        const res = await getSector(sectorId)
+        const res = await getSector({sectorId:sectorId})
             .finally(() => {
                 setLoading(false);
             })

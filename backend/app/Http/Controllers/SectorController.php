@@ -41,9 +41,9 @@ class SectorController extends Controller
         return response()->json($sectorNames);
     }
 
-    public function show(Sector $sector): JsonResource
+    public function show(Sector $sector,Request $request): JsonResource
     {
-        return new SectorDetailResource($sector);
+        return new SectorDetailResource($sector)->withRequest($request);
     }
 
     public function store(StoreSectorRequest $request): JsonResponse
