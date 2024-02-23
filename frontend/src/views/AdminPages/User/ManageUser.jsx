@@ -21,7 +21,8 @@ import {api} from "../../../services/api";
 const ManageUser = () => {
     const {userId} = useParams();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [sectors, setSectors] = useState([]);
     const [formData, setFormData] = useState({
         name: '',
@@ -31,6 +32,10 @@ const ManageUser = () => {
         is_admin: false,
         sectors: [],
     });
+
+    if (userId) {
+        setEditing(true);
+    }
 
     useEffect(() => {
         getAllSectors();
@@ -165,6 +170,7 @@ const ManageUser = () => {
                         <TextField
                             margin="normal"
                             fullWidth
+                            required={!editing}
                             label={userId ? 'Senha (opcional)' : 'Senha'}
                             name="password"
                             type="password"
@@ -173,6 +179,7 @@ const ManageUser = () => {
                         <TextField
                             margin="normal"
                             fullWidth
+                            required={!editing}
                             label={userId ? 'Confirmar senha (opcional)' : 'Confirmar senha'}
                             name="password_confirmation"
                             type="password"
@@ -181,6 +188,7 @@ const ManageUser = () => {
                         <InputLabel id="sector-select-label">Setores</InputLabel>
                         <Select
                             labelId="sector-select-label"
+                            required
                             id="sector-select"
                             multiple
                             value={formData.sectors}
