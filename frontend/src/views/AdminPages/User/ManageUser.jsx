@@ -109,7 +109,7 @@ const ManageUser = () => {
             })
             if (res) {
                 toast.success('Usuário atualizado com sucesso!');
-                navigate('/users');
+                navigate(`/users/${res.data.user_id}`);
             }
         } else {
             const res = await createUser({
@@ -118,7 +118,7 @@ const ManageUser = () => {
             })
             if (res) {
                 toast.success('Usuário criado com sucesso!');
-                navigate('/users');
+                navigate(`/users/${res.user.user_id}`);
             }
         }
     };

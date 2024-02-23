@@ -27,7 +27,7 @@ function ViewSector() {
 
     const fetchSectorDetail = async () => {
         setLoading(true);
-        const res = await getSector(sectorId)
+        const res = await getSector({sector_id: sectorId})
             .finally(() => {
                 setLoading(false);
             })
@@ -49,13 +49,12 @@ function ViewSector() {
     };
 
     const handleChangeEquip = (equipment_code) => {
-        setFilter((prevFilter) => ({ ...prevFilter, equipment_code }));
+        setFilter((prevFilter) => ({...prevFilter, equipment_code}));
     };
 
     const handleChangeUser = (user_name) => {
-          setFilter((prevFilter) => ({ ...prevFilter, user_name }));
+        setFilter((prevFilter) => ({...prevFilter, user_name}));
     };
-
 
 
     return (
@@ -95,7 +94,8 @@ function ViewSector() {
                     </Grid>
                     <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Usuários", "Equipamentos"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
-                        <FilterBox onSearch={handleChangeUser} disponibility={false} label='Pesquisar Nome do usuario' disponibilityLabels={["Disponivel","Não disponivel"]} />
+                        <FilterBox onSearch={handleChangeUser} disponibility={false} label='Pesquisar Nome do usuario'
+                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
                         <BaseTable
                             rows={sectorDetail.users}
                             getRowId={(row) => row.user_id}
@@ -112,7 +112,9 @@ function ViewSector() {
                         />
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
-                        <FilterBox onSearch={handleChangeEquip} disponibility={false} label='Pesquisar Código do equipamento' disponibilityLabels={["Disponivel","Não disponivel"]} />
+                        <FilterBox onSearch={handleChangeEquip} disponibility={false}
+                                   label='Pesquisar Código do equipamento'
+                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
                         <BaseTable
                             rows={sectorDetail.equipments}
                             getRowId={(row) => row.equipment_id}

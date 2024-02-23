@@ -72,14 +72,6 @@ class UserService
 
     private function updateUserRelations(UpdateUserRequest $request, User $user): void
     {
-        $equipments = $request->input('equipments');
-
-        if (is_array($equipments) && count($equipments) > 0) {
-            $user->equipment()->sync($equipments);
-        } else {
-            UserEquipment::where('user_id', $user->user_id)->delete();
-        }
-
         $sectors = $request->input('sectors');
 
         $user->sector()->detach();
