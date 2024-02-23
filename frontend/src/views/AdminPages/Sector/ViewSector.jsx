@@ -27,7 +27,7 @@ function ViewSector() {
 
     const fetchSectorDetail = async () => {
         setLoading(true);
-        const res = await getSector({sector_id: sectorId})
+        const res = await getSector({sector_id: sectorId,filter: {user_name: filter.user_name, equipment_code: filter.equipment_code}})
             .finally(() => {
                 setLoading(false);
             })
