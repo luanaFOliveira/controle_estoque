@@ -111,7 +111,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                {isDesktop && (
+                {isDesktop && !is_admin &&(
                     <Typography
                     component="h1"
                     variant="h6"
@@ -120,6 +120,17 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                     sx={{ flexGrow: 1, userSelect: 'none' }}
                     >
                     {dashboardName}
+                    </Typography>
+                )}
+                {is_admin && (
+                    <Typography
+                        component="h1"
+                        variant="h6"
+                        color="inherit"
+                        noWrap
+                        sx={{ flexGrow: 1, userSelect: 'none' }}
+                    >
+                        {dashboardName}
                     </Typography>
                 )}
                 <FormControl sx={{mr: 2}}>
