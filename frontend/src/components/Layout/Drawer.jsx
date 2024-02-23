@@ -10,6 +10,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { adminListItems, userListItems } from "./listItems";
 import LogoJetimob from "../shared/LogoJetimob";
 import { LinearProgress } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const drawerWidth = 240;
 
@@ -40,31 +41,33 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const CustomDrawer = ({ open, toggleDrawer, is_admin }) => {
+  const matches = useMediaQuery('(max-width:600px)');
+
   return (
-    <Drawer variant="permanent" open={open}>
-      <Toolbar
-        sx={{
-          "&.MuiToolbar-root": {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingLeft: 1,
-            paddingRight: 1,
-          },
-        }}
-      >
-        <LogoJetimob logoWidth="40px" logoHeight="40px" fontSize="30px" />
-        <IconButton onClick={toggleDrawer} sx={{ ml: 1 }}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </Toolbar>
-      <Divider />
-      {is_admin === undefined ? (
-        <LinearProgress />
-      ) : (
-        <List component="nav">{is_admin ? adminListItems : userListItems}</List>
-      )}
-    </Drawer>
+      <Drawer variant="permanent" open={open}>
+        <Toolbar
+            sx={{
+              "&.MuiToolbar-root": {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingLeft: 1,
+                paddingRight: 1,
+              },
+            }}
+        >
+          <LogoJetimob logoWidth="40px" logoHeight="40px" fontSize="30px" />
+          <IconButton onClick={toggleDrawer} sx={{ ml: 1 }} disabled={matches}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        {is_admin === undefined ? (
+            <LinearProgress />
+        ) : (
+            <List component="nav">{is_admin ? adminListItems : userListItems}</List>
+        )}
+      </Drawer>
   );
 };
 
