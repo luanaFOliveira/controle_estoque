@@ -22,12 +22,13 @@ class UserEquipmentFactory extends Factory
             return [];
         } else {
             $sector = $sectors->random();
-            $user = User::whereHas('sector', function ($query) use ($sector) {
-                $query->where('user_sector.sector_id', $sector->sector_id);
-            })->get()->random();
+            $user = User::join('user_sector', 'user.user_id', '=', 'user_sector.user_id')
+                ->where('user_sector.sector_id', $sector->sector_id)
+                ->get()
+                ->random();
             $equipment = Equipment::where('sector_id', $sector->sector_id)->where('is_available', true)->first();
 
-            if ($equipment || $user) {
+            if ($equipment && $user) {
                 EquipmentRequest::factory()->create([
                     'user_id' => $user->user_id,
                     'equipment_id' => $equipment->equipment_id,

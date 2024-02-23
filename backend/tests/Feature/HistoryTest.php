@@ -16,7 +16,9 @@ beforeEach(function () {
         ]);
     }
     if (!isset($this->equipment)) {
-        $this->equipment = Equipment::factory()->create();
+        $this->equipment = Equipment::factory()->create([
+            'sector_id' => $this->userTest->sector()->first()->sector_id
+        ]);
         $this->userTest->equipment()->attach($this->equipment->equipment_id);
     }
 });

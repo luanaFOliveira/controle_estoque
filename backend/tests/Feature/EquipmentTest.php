@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Http\Resources\EquipmentResource;
 use App\Models\Equipment;
 use App\Models\EquipmentBrand;
 use App\Models\EquipmentRequest;
@@ -10,6 +9,7 @@ use App\Models\EquipmentType;
 use App\Models\User;
 use App\Models\UserEquipment;
 use App\Models\UserSector;
+use Illuminate\Support\Facades\DB;
 use function Pest\Laravel\{actingAs, delete, get, post, put};
 
 uses()->group('equipment');
@@ -210,10 +210,14 @@ it('can change a equipment location', function () {
     /* @var Equipment $equipment
      * */
     actingAs($this->user, 'sanctum');
+    $sector_id = DB::table('user_sector')
+        ->where('user_id', $this->user->user_id)
+        ->value('sector_id');
 
-    $equipment = Equipment::factory()->create(
-        ['is_available' => false]
-    );
+    $equipment = Equipment::factory()->create([
+            'is_available' => false,
+            'sector_id' => $sector_id
+        ]);
 
     UserEquipment::factory()->create([
         'user_id' => $this->user->user_id,

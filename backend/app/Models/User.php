@@ -30,6 +30,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static withoutGlobalScope(string $scope)
  * @method static create(mixed $data)
  * @method static whereHas(string $string, \Closure $param)
+ * @method static join(string $table, string $column, string $operator, string $column)
  */
 class User extends Authenticatable
 {

@@ -10,6 +10,24 @@ use App\Models\UserEquipment;
 
 class EquipmentObserver
 {
+    public function updating(Equipment $equipment)
+    {
+        if ($equipment->isDirty('sector_id')) {
+            $originalSectorId = $equipment->getOriginal('sector_id');
+            $newSectorId = $equipment->sector_id;
+
+            if ($originalSectorId !== $newSectorId) {
+                Equipment::find($equipment->equipment_id)->update(['is_available' => true]);
+                $userEquipment = UserEquipment::where('equipment_id', $equipment->equipment_id)
+                    ->whereNull('returned_at')
+                    ->first();
+                if ($userEquipment) {
+                    $userEquipment->update(['returned_at' => now()]);
+                }
+            }
+        }
+    }
+
     public function updated(Equipment $equipment)
     {
         $brands = EquipmentBrand::all();
