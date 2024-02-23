@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Equipment;
+use App\Models\EquipmentRequest;
+use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,28 +12,36 @@ class UserEquipmentFactory extends Factory
 {
     public function definition(): array
     {
-        static $equipmentIds = null;
+        static $sectors = null;
 
-        if ($equipmentIds === null) {
-            $equipmentIds = Equipment::all()->pluck('equipment_id')->toArray();
+        if ($sectors === null) {
+            $sectors = Sector::all();
         }
 
-        if (empty($equipmentIds)) {
+        if ($sectors->isEmpty()) {
             return [];
         } else {
-            $randomIndex = array_rand($equipmentIds);
-            $equipmentId = $equipmentIds[$randomIndex];
-            unset($equipmentIds[$randomIndex]);
+            $sector = $sectors->random();
+            $user = User::whereHas('sector', function ($query) use ($sector) {
+                $query->where('user_sector.sector_id', $sector->sector_id);
+            })->get()->random();
+            $equipment = Equipment::where('sector_id', $sector->sector_id)->where('is_available', true)->first();
 
-            $equipment = Equipment::find($equipmentId);
-            if ($equipment) {
+            if ($equipment || $user) {
+                EquipmentRequest::factory()->create([
+                    'user_id' => $user->user_id,
+                    'equipment_id' => $equipment->equipment_id,
+                    'request_status_id'=> 1
+                ]);
                 $equipment->update(['is_available' => false]);
+                return [
+                    'user_id' => $user->user_id,
+                    'equipment_id' => $equipment->equipment_id,
+                ];
+            } else {
+                return [];
             }
-
-            return [
-                'user_id' => User::all()->random()->user_id,
-                'equipment_id' => $equipmentId,
-            ];
         }
     }
+
 }

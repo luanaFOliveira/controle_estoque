@@ -2,13 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Equipment;
+use App\Models\Scopes\SectorScope;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\UserEquipment;
 
 /**
  * @mixin UserEquipment
- * @property mixed $equipment
  */
 class HistoryResource extends JsonResource
 {
@@ -28,9 +29,6 @@ class HistoryResource extends JsonResource
     {
         $equipment = $this->equipment->first();
 
-        if ($equipment === null) {
-            return null;
-        }
         return [
             'equipment_id' => $equipment->equipment_id,
             'equipment_code' => $equipment->equipment_code,
