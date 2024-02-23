@@ -59,8 +59,11 @@ it('should show a detailed sector', function () {
      */
     $sector = $this->sector;
 
-    $response = $this->get("/api/sectors/{$sector->sector_id}");
-    $expectedJson = (new SectorDetailResource($sector))->response()->getData(true);
+    $request = new \Illuminate\Http\Request();
+    $request->merge(['user_name' => 'none']);
+
+    $response = $this->get("/api/sectors/{$sector->sector_id}",$request->all());
+    $expectedJson = (new SectorDetailResource($sector,$request))->response()->getData(true);
 
     $response->assertOk();
     $response->assertJson($expectedJson);

@@ -7,6 +7,7 @@ import {changeEquipmentLocation} from "../../services/equipmentService";
 import {errorToast} from "../../services/api";
 import HomeIcon from '@mui/icons-material/Home';
 import BusinessIcon from '@mui/icons-material/Business';
+import AssignmentReturnedIcon from '@mui/icons-material/AssignmentReturned';
 
 export function MyEquipmentTableColumns({setReload, availability}) {
 
@@ -132,7 +133,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
                         item: "Devolver Equipamento", handleClick: () => handleClickReturn(params.row),
                     })}
                 >
-                    <UndoIcon/>
+                    <AssignmentReturnedIcon/>
                 </Button>
             </>),
         },]
