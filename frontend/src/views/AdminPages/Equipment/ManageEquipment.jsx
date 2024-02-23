@@ -75,13 +75,11 @@ const ManageEquipment = () => {
         });
     };
 
-    
-
     const handleUpdateEquipmentConfirmation = async (e) => {
         e.preventDefault();
-        if(formData.sector !== initialEquipment.sector && initialEquipment.user != null){
+        if(params.equipment_id && formData.sector !== initialEquipment.sector && initialEquipment.user != null){
             toastConfirmation({
-                item: "O equipamento esta ativo, ao continuar ele sera desvinculado do usuario",
+                item: "O equipamento esta ativo, ao continuar ele sera desvinculado do usuário",
                 handleClick: handleSubmit,
             })
         }else{
