@@ -33,9 +33,11 @@ const ManageUser = () => {
         sectors: [],
     });
 
-    if (userId) {
-        setEditing(true);
-    }
+    useEffect(() => {
+        if (userId) {
+            setEditing(true);
+        }
+    }, [userId]);
 
     useEffect(() => {
         getAllSectors();
