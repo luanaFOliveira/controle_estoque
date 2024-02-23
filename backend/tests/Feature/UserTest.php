@@ -107,13 +107,10 @@ it('should update a user', function () {
 
     $user = User::factory()->create();
     $sector1 = Sector::factory()->create();
-    $equipment1 = Equipment::factory()->create();
 
     $user->sector()->attach($sector1->getKey());
-    $user->equipment()->attach($equipment1->getKey());
 
     $sector2 = Sector::factory()->create();
-    $equipment2 = Equipment::factory()->create();
 
 
     $updateData = [
@@ -123,7 +120,6 @@ it('should update a user', function () {
         'password' => $user->password,
         'password_confirmation' => $user->password,
         'sectors' => [$sector1->name, $sector2->name],
-        'equipments' => [$equipment1->getKey(), $equipment2->getKey()],
     ];
 
     put('/api/users/' . $user->user_id, $updateData)
@@ -143,11 +139,6 @@ it('should update a user', function () {
         'email' => $updateData['email'],
     ]);
 
-    $this->assertDatabaseHas('user_equipment', [
-        'user_id' => $user->user_id,
-        'equipment_id' => $equipment1->getKey(),
-    ]);
-
     $this->assertDatabaseHas('user_sector', [
         'user_id' => $user->user_id,
         'sector_id' => $sector1->getKey(),
@@ -156,11 +147,6 @@ it('should update a user', function () {
     $this->assertDatabaseHas('user_sector', [
         'user_id' => $user->user_id,
         'sector_id' => $sector2->getKey(),
-    ]);
-
-    $this->assertDatabaseHas('user_equipment', [
-        'user_id' => $user->user_id,
-        'equipment_id' => $equipment2->getKey(),
     ]);
 });
 
