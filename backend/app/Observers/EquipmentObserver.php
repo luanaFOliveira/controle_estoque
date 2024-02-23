@@ -17,7 +17,10 @@ class EquipmentObserver
             $newSectorId = $equipment->sector_id;
 
             if ($originalSectorId !== $newSectorId) {
-                Equipment::find($equipment->equipment_id)->update(['is_available' => true]);
+                Equipment::find($equipment->equipment_id)->update([
+                    'is_available' => true,
+                    'is_at_office' => true,
+                ]);
                 $userEquipment = UserEquipment::where('equipment_id', $equipment->equipment_id)
                     ->whereNull('returned_at')
                     ->first();
