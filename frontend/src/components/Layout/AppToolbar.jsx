@@ -68,6 +68,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                         await indexSectors({})
                             .then((res) => {
                                 setSectors(res.data);
+                                setSector(res.data[0].sector_id);
                                 localStorage.setItem('sector', JSON.stringify(res.data[0].sector_id));
                             })
                     } catch (error) {
@@ -117,22 +118,12 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                     {dashboardName}
                 </Typography>
                 <FormControl sx={{mr: 2}}>
-                    <InputLabel
-                        id="demo-simple-select-label"
-                        sx={{
-                            color: "white", "&.Mui-focused": {
-                                color: "white",
-                            },
-                        }}
-                    >
-                        Setor
-                    </InputLabel>
                     {is_admin === false && (<Select
                             labelId="demo-customized-select-label"
                             id="demo-customized-select"
                             value={sector}
                             onChange={handleSectorChange}
-                            input={<OutlinedInput label="Setor"/>}
+                            input={<OutlinedInput/>}
                             sx={{
                                 color: "white", minWidth: 150, "& .MuiOutlinedInput-notchedOutline": {
                                     borderColor: "white",
