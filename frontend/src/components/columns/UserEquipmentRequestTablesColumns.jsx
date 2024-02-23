@@ -54,7 +54,7 @@ export function EquipmentRequestHistoryTableColumns() {
         renderCell: (params) => <StatusField value={params.row.request_status} />,
       },
       {
-        field:'deleted_at',
+        field:'returned_at',
         headerName: 'Data de devolução',
         flex:1,
         minWidth: 200,

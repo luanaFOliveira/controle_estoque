@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $updated_at
  * @property Carbon|null $created_at
  * @property Carbon|null $deleted_at
+ * @property Carbon|null $returned_at
  * @method static auth()
  * @method static where(string $column, mixed $value)
  * @method static find(mixed $value)

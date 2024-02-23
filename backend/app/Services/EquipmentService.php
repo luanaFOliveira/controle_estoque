@@ -82,10 +82,12 @@ class EquipmentService
 
         $equipmentRequest = EquipmentRequest::where('equipment_id', $userEquipment->equipment_id)
             ->where('user_id', $userEquipment->user_id)
-            ->whereNull('deleted_at')
+            ->where('request_status_id', 1)
+            ->whereNull('returned_at')
             ->first();
 
-        $equipmentRequest->delete();
+        $equipmentRequest->returned_at = now();
+        $equipmentRequest->save();
 
         return HistoryResource::make($userEquipment);
     }
