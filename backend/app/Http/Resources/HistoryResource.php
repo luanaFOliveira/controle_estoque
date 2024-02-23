@@ -27,7 +27,11 @@ class HistoryResource extends JsonResource
 
     protected function getEquipment(): ?array
     {
-        $equipment = $this->equipment->first();
+        $equipment = $this->equipment()->withoutGlobalScope('sectorScope')->first();
+
+        if (!$equipment) {
+            return null;
+        }
 
         return [
             'equipment_id' => $equipment->equipment_id,

@@ -75,7 +75,7 @@ class EquipRequestController extends Controller
             });
         }
 
-        return EquipRequestResource::collection($query->withTrashed()->orderBy('request_status_id', 'asc')->paginate(10));
+        return EquipRequestResource::collection($query->orderBy('request_status_id', 'asc')->paginate(10));
     }
 
     public function show(EquipmentRequest $equipmentRequest): JsonResource

@@ -14,7 +14,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
     const handleClickReturn = async (row) => {
         try {
             const response = await returnEquipment({
-                equipment: row.equipment.equipment_id,
+                equipment: row.equipment?.equipment_id,
             });
             if (response) {
                 toast.success(`Equipamento devolvido com sucesso`);
@@ -29,7 +29,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
     const handleClickLocation = async (row, action) => {
         try {
             const response = await changeEquipmentLocation({
-                equipment_id: row.equipment.equipment_id, action: action,
+                equipment_id: row.equipment?.equipment_id, action: action,
             });
             if (response) {
                 toast.success(`Localização do equipamento alterada com sucesso`);
@@ -47,33 +47,33 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         flex: 1,
         minWidth: 100,
         sortable: false,
-        valueGetter: (params) => params.row.equipment.equipment_code,
+        valueGetter: (params) => params.row.equipment?.equipment_code,
     }, {
         field: 'name',
         headerName: 'Nome',
         flex: 1,
         minWidth: 150,
         sortable: false,
-        valueGetter: (params) => params.row.equipment.name,
+        valueGetter: (params) => params.row.equipment?.name,
     }, {
         field: 'brand',
         headerName: 'Marca',
         flex: 1,
         minWidth: 120,
         sortable: false,
-        valueGetter: (params) => params.row.equipment.equipment_brand,
+        valueGetter: (params) => params.row.equipment?.equipment_brand,
     }, {
         field: 'type',
         headerName: 'Tipo',
         flex: 1,
         minWidth: 150,
         sortable: false,
-        valueGetter: (params) => params.row.equipment.equipment_type,
+        valueGetter: (params) => params.row.equipment?.equipment_type,
     }, {
         field: "is_at_office", headerName: "Local", flex: 1, minWidth: 150, sortable: false, renderCell: (params) => {
-            if (params.row.equipment.is_at_office) {
-                return params.row.equipment.sector;
-            } else if (!params.row.equipment.is_at_office) {
+            if (params.row.equipment?.is_at_office) {
+                return params.row.equipment?.sector;
+            } else if (!params.row.equipment?.is_at_office) {
                 return "Fora do escritório";
             }
         },
@@ -90,7 +90,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
             align: 'center',
             sortable: false,
             renderCell: (params) => {
-                if (params.row.equipment.is_at_office) {
+                if (params.row.equipment?.is_at_office) {
                     return (<>
                         <Button
                             sx={{display: "flex", color: "blue"}}
@@ -102,7 +102,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
                             <BusinessIcon/>
                         </Button>
                     </>);
-                } else if (!params.row.equipment.is_at_office) {
+                } else if (!params.row.equipment?.is_at_office) {
                     return (<>
                         <Button
                             sx={{display: "flex", color: "blue"}}

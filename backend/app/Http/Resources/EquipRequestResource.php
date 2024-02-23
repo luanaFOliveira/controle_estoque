@@ -22,8 +22,8 @@ class EquipRequestResource extends JsonResource
             'deleted_at' => $this->deleted_at,
             'returned_at' => $this->returned_at,
             'user' => $this->user()->select('user.user_id', 'user.name')->first()->toArray(),
-            'equipment' => $this->equipment()->withTrashed()->select('equipment.equipment_id', 'equipment.name', 'equipment.equipment_code', 'equipment.deleted_at')->first()->toArray(),
-            'sector' => Sector::find($this->equipment()->withTrashed()->value('equipment.sector_id'))->value('name'),
+            'equipment' => $this->equipment()->select('equipment.equipment_id', 'equipment.name', 'equipment.equipment_code', 'equipment.deleted_at')->first()->toArray(),
+            'sector' => Sector::find($this->equipment()->value('equipment.sector_id'))->value('name'),
         ];
     }
 }

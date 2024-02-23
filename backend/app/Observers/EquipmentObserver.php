@@ -24,6 +24,9 @@ class EquipmentObserver
                 if ($userEquipment) {
                     $userEquipment->update(['returned_at' => now()]);
                 }
+                $equipmentRequest = EquipmentRequest::where('equipment_id', $equipment->equipment_id)
+                    ->whereNull('returned_at');
+                $equipmentRequest->delete();
             }
         }
     }
