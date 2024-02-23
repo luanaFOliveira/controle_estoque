@@ -21,7 +21,7 @@ const FilterBox = ({onSearch, onAvailabilityChange, disponibility, label, dispon
 
     return (
         <Grid container spacing={2} mb={2} alignItems="center" justifyContent='center'>
-            <Grid item xs={6} mb={0.95}>
+            <Grid item xs={12} mb={0.95}>
                 <Autocomplete
                     freeSolo
                     options={[]}
@@ -42,7 +42,7 @@ const FilterBox = ({onSearch, onAvailabilityChange, disponibility, label, dispon
                     )}
                 />
             </Grid>
-            {disponibility && <Grid item xs={6}>
+            {disponibility && <Grid item xs={12}>
                 <FormControl fullWidth>
                     <InputLabel id="availability-select-label">Disponibilidade</InputLabel>
                     <Select

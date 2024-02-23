@@ -23,6 +23,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthProvider";
 import {indexSectors} from "../../services/sectorService";
 import {errorToast} from "../../services/api";
+import { useMediaQuery } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -95,6 +96,8 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
         setSector(newSector);
     };
 
+    const isDesktop = useMediaQuery('(min-width: 600px)');
+
     return (<AppToolbar position="absolute" open={open}>
             <Toolbar sx={{pr: "24px"}}>
                 <IconButton
@@ -108,15 +111,17 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <Typography
+                {isDesktop && (
+                    <Typography
                     component="h1"
                     variant="h6"
                     color="inherit"
                     noWrap
-                    sx={{flexGrow: 1, userSelect: "none"}}
-                >
+                    sx={{ flexGrow: 1, userSelect: 'none' }}
+                    >
                     {dashboardName}
-                </Typography>
+                    </Typography>
+                )}
                 <FormControl sx={{mr: 2}}>
                     {is_admin === false && (<Select
                             labelId="demo-customized-select-label"
