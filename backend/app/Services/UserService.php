@@ -73,13 +73,42 @@ class UserService
     private function updateUserRelations(UpdateUserRequest $request, User $user): void
     {
         $sectors = $request->input('sectors');
+        $originalSectors = $user->sector()->pluck('name')->toArray();
 
         $user->sector()->detach();
         if (is_array($sectors) && count($sectors) > 0) {
-            $sectorIds = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
-            $user->sector()->sync($sectorIds);
+            $newSectors = Sector::whereIn('name', $sectors)->pluck('sector_id')->toArray();
+            $user->sector()->sync($newSectors);
         } else {
             UserSector::where('user_id', $user->user_id)->delete();
+            $newSectors = [];
+        }
+
+        if ($originalSectors !== $newSectors) {
+            $removedSectors = array_diff($originalSectors, $newSectors);
+            $removedSectorIds = Sector::whereIn('name', $removedSectors)->pluck('sector_id')->toArray();
+            $userEquipments = UserEquipment::where('user_id', $user->user_id)
+                ->whereNull('returned_at')
+                ->whereHas('equipment', function ($query) use ($removedSectorIds) {
+                    $query->whereIn('sector_id', $removedSectorIds);
+                })
+                ->get();
+            foreach ($userEquipments as $userEquipment) {
+                $equipment = Equipment::find($userEquipment->equipment_id);
+                $equipment->update([
+                    'is_available' => true,
+                    'is_at_office' => true,
+                ]);
+                $userEquipment->update([
+                    'returned_at' => now()
+                ]);
+                $equipmentRequest = EquipmentRequest::where('equipment_id', $userEquipment->equipment_id)
+                    ->whereNull('returned_at')
+                    ->first();
+                if ($equipmentRequest) {
+                    $equipmentRequest->delete();
+                }
+            }
         }
     }
 

@@ -5,8 +5,9 @@ namespace App\Http\Resources;
 use App\Models\Equipment;
 use App\Models\Scopes\SectorScope;
 use App\Models\User;
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\UserEquipment;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @mixin UserEquipment
@@ -28,6 +29,10 @@ class HistoryResource extends JsonResource
     protected function getEquipment(): ?array
     {
         $equipment = Equipment::withoutGlobalScope(SectorScope::class)->where('equipment_id', $this->equipment_id)->first();
+        $sectorName = DB::table('sector')
+            ->join('equipment', 'sector.sector_id', '=', 'equipment.sector_id')
+            ->where('equipment.equipment_id', $equipment->equipment_id)
+            ->value('sector.name');
 
         return [
             'equipment_id' => $equipment->equipment_id,
@@ -35,7 +40,7 @@ class HistoryResource extends JsonResource
             'name' => $equipment->name,
             'is_available' => $equipment->is_available,
             'sector_id' => $equipment->sector_id,
-            'sector' => $equipment->sector()->value('name'),
+            'sector' => $sectorName,
             'equipment_brand' => $equipment->brand()->value('name'),
             'equipment_type' => $equipment->type()->value('name'),
             'is_at_office' => $equipment->is_at_office,

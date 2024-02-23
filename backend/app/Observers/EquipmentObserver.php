@@ -29,7 +29,9 @@ class EquipmentObserver
                 }
                 $equipmentRequest = EquipmentRequest::where('equipment_id', $equipment->equipment_id)
                     ->whereNull('returned_at');
-                $equipmentRequest->delete();
+                if($equipmentRequest) {
+                    $equipmentRequest->delete();
+                }
             }
         }
     }
