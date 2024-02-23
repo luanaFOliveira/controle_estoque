@@ -9,9 +9,9 @@ class EquipmentTypeSeeder extends Seeder
 {
     public function run()
     {
-        EquipmentType::create(['name' => 'Computador']);
-        EquipmentType::create(['name' => 'Notebook']);
-        EquipmentType::create(['name' => 'Mouse']);
-        EquipmentType::create(['name' => 'Monitor']);
+        EquipmentType::create(['name' => 'COMPUTADOR']);
+        EquipmentType::create(['name' => 'NOTEBOOK']);
+        EquipmentType::create(['name' => 'MOUSE']);
+        EquipmentType::create(['name' => 'MONITOR']);
     }
 }

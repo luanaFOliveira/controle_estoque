@@ -11,8 +11,8 @@ class EquipmentBrandSeeder extends Seeder
     {
         EquipmentBrand::create(['name' => 'AOC']);
         EquipmentBrand::create(['name' => 'LG']);
-        EquipmentBrand::create(['name' => 'Razer']);
-        EquipmentBrand::create(['name' => 'Lenovo']);
-        EquipmentBrand::create(['name' => 'HyperX']);
+        EquipmentBrand::create(['name' => 'RAZER']);
+        EquipmentBrand::create(['name' => 'LENOVO']);
+        EquipmentBrand::create(['name' => 'HYPERX']);
     }
 }
