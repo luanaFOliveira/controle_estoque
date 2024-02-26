@@ -63,7 +63,7 @@ export default function EquipmentList() {
             <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange}
                        disponibility={true}
                        label='Pesquisar Código do equipamento'
-                       disponibilityLabels={["Disponivel", "Não disponivel"]}/>
+                       disponibilityLabels={["Disponível", "Não disponível"]}/>
             <BaseTable
                 rows={equipments}
                 columns={columnsEquip}

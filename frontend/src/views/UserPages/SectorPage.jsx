@@ -69,8 +69,8 @@ export default function SectorPage() {
                               nameTabs={["Usuários do Setor", "Equipamentos do setor"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
                         <FilterBox onSearch={handleChangeUser} disponibility={false}
-                                   label='Pesquisar Nome do usuario'
-                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
+                                   label='Pesquisar Nome do usuário'
+                                   />
                         <BaseTable
                             rows={sectorUsers}
                             columns={columnsUsers}
@@ -89,7 +89,7 @@ export default function SectorPage() {
                     <CustomTabPanel value={tabValue} index={1}>
                         <FilterBox onSearch={handleChangeEquip} disponibility={false}
                                    label='Pesquisar Código do equipamento'
-                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
+                                   disponibilityLabels={["Disponível", "Não disponível"]}/>
                         <BaseTable
                             rows={sectorEquipments}
                             columns={columnsEquipments}

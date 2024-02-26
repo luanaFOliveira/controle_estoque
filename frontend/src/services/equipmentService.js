@@ -26,7 +26,7 @@ export async function indexEquipmentsAvailability({ page, sector, availability, 
 
 export async function getEquipment(equipment_id) {
   const response = await api.get(`/equipments/${equipment_id}`);
-  return handleResponse(response, 'Esse equipamento não existe.', 404);
+  return handleResponse(response);
 }
 
 export async function createEquipment(formData) {
