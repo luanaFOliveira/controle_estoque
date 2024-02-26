@@ -3,7 +3,7 @@ import {Button, CircularProgress, Container} from "@mui/material";
 import BaseTable from "../../../components/shared/BaseTable";
 import Grid from "@mui/material/Grid";
 import {useNavigate} from "react-router-dom";
-import {indexEquipments} from "../../../services/equipmentService";
+import {indexEquipments,getEquipmentDetails} from "../../../services/equipmentService";
 import EquipmentTableColumns from "../../../components/columns/EquipmentTableColumns";
 import FilterBox from '../../../components/shared/FilterBox';
 
@@ -17,20 +17,27 @@ export default function EquipmentList() {
         page: 0, pageSize: 10,
     });
     const [filter, setFilter] = useState({
-        equipment_code: "none", availability: "all",
+        search: "none", availability: "all",equipmentBrand: "all",equipmentType: "all"
     });
 
     const columnsEquip = EquipmentTableColumns({user_admin: true});
+
+    const [equipmentsBrands, setEquipmentsBrands] = useState([]);
+    const [equipmentsTypes, setEquipmentsTypes] = useState([]);
 
     useEffect(() => {
         fetchEquipments();
     }, [paginationModel.page, filter]);
 
+    useEffect(() => {
+        fetchEquipmentsDetails();
+    }, []);
+
     const fetchEquipments = async () => {
         setIsLoading(true);
         const page = paginationModel.page + 1;
         const res = await indexEquipments({
-            page, availability: filter.availability, equipment_code: filter.equipment_code,
+            page, availability: filter.availability, search: filter.search, brand: filter.equipmentBrand, type: filter.equipmentType
         }).finally(() => {
             setIsLoading(false);
             setFirstLoading(false);
@@ -41,12 +48,29 @@ export default function EquipmentList() {
         }
     };
 
-    const handleSearch = (equipment_code) => {
-        setFilter((prevFilter) => ({...prevFilter, equipment_code}));
+    const fetchEquipmentsDetails = async () => {
+        const res = await getEquipmentDetails();
+        if (res) {
+            setEquipmentsBrands(res.equipment_brands);
+            setEquipmentsTypes(res.equipment_types);
+        }
+    };
+
+
+    const handleSearch = (search) => {
+        setFilter((prevFilter) => ({...prevFilter, search}));
     };
 
     const handleAvailabilityChange = (availability) => {
         setFilter((prevFilter) => ({...prevFilter, availability}));
+    };
+
+    const handleBrandChange = (equipmentBrand) => {
+        setFilter((prevFilter) => ({...prevFilter, equipmentBrand}));
+    };
+
+    const handleTypeChange = (equipmentType) => {
+        setFilter((prevFilter) => ({...prevFilter, equipmentType}));
     };
 
     return (<Container sx={{mt: 5}}>
@@ -61,9 +85,10 @@ export default function EquipmentList() {
             <CircularProgress/>
         </Grid>) : (<>
             <FilterBox onSearch={handleSearch} onAvailabilityChange={handleAvailabilityChange}
-                       disponibility={true}
-                       label='Pesquisar Código do equipamento'
-                       disponibilityLabels={["Disponível", "Não disponível"]}/>
+                       disponibility={true} equipmentBrand={true} onBrandChange={handleBrandChange} brandLabels={equipmentsBrands} equipmentType={true} onTypeChange={handleTypeChange} typeLabels={equipmentsTypes}
+                       requestMotive={false}
+                       label='Pesquisar Código do equipamento ou nome do equipamento'
+                       disponibilityLabels={[ "Não disponivel","Disponivel"]}/>
             <BaseTable
                 rows={equipments}
                 columns={columnsEquip}

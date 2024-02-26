@@ -75,6 +75,16 @@ class EquipRequestController extends Controller
             });
         }
 
+        if ($request->has('request_motive') && $request->input('request_motive') !== 'all') {
+            $motive = $request->input('request_motive');
+        
+            $query->where(function ($query) use ($motive) {
+                $query->whereHas('motive', function ($query) use ($motive) {
+                    $query->where('name', 'ilike', "%$motive%");
+                });
+            });
+        }
+
         return EquipRequestResource::collection($query->orderBy('request_status_id', 'asc')->paginate(10));
     }
 

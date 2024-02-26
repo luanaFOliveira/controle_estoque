@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {indexEquipmentRequests} from "../../../services/equipmentRequestService";
+import {indexEquipmentRequests,getRequestMotives} from "../../../services/equipmentRequestService";
 import {Box, CircularProgress, Container} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import BaseTable from "../../../components/shared/BaseTable";
@@ -34,8 +34,14 @@ const EquipmentRequests = () => {
     });
 
     const [filter, setFilter] = useState({
-        searchPending: "none", searchProcessed: "none", status: "Nao pendente",
+        searchPending: "none", searchProcessed: "none", status: "Nao pendente", motivePending: "all", motiveProcessed: "all",
     });
+
+    const [requestMotives, setRequestMotives] = useState([]);
+
+    useEffect(() => {
+        fetchMotives();
+    }, []);    
 
     useEffect(() => {
         getPendingRequests();
@@ -49,7 +55,7 @@ const EquipmentRequests = () => {
         setIsLoadingPending(true);
         const page = pendingPaginationModel.page + 1;
         const res = await indexEquipmentRequests({
-            filter: {status: "Pendente", search: filter.searchPending}, page: page,
+            filter: {status: "Pendente", search: filter.searchPending, request_motive: filter.motivePending}, page: page,
         }).finally(() => {
             setIsLoadingPending(false);
             setIFirstLoading(false);
@@ -64,7 +70,7 @@ const EquipmentRequests = () => {
         setIsLoadingProcessed(true);
         const page = processedPaginationModel.page + 1;
         const res = await indexEquipmentRequests({
-            filter: {status: filter.status, search: filter.searchProcessed}, page: page,
+            filter: {status: filter.status, search: filter.searchProcessed, request_motive: filter.motiveProcessed}, page: page,
         }).finally(() => {
             setIsLoadingProcessed(false);
             setIFirstLoading(false);
@@ -75,12 +81,28 @@ const EquipmentRequests = () => {
         }
     };
 
+    const fetchMotives = async () => {
+        const res = await getRequestMotives();
+        if (res) {
+            const motivesNames = res.data.map((motive) => motive.name);
+            setRequestMotives(motivesNames);
+        }
+    };
+
     const handleSearchPending = (searchPending) => {
         setFilter((prevFilter) => ({...prevFilter, searchPending}));
     };
 
     const handleSearchProcessed = (searchProcessed) => {
         setFilter((prevFilter) => ({...prevFilter, searchProcessed}));
+    };
+
+    const handleMotivePendingChange = (motivePending) => {
+        setFilter((prevFilter) => ({...prevFilter, motivePending}));
+    };
+
+    const handleMotiveProcessedChange = (motiveProcessed) => {
+        setFilter((prevFilter) => ({...prevFilter, motiveProcessed}));
     };
 
     const handleAvailabilityChange = (status) => {
@@ -100,7 +122,7 @@ const EquipmentRequests = () => {
             <TableTab value={tabValue} setValue={setTabValue}
                       nameTabs={["Solicitações pendentes", "Solicitações processadas"]}/>
             <CustomTabPanel value={tabValue} index={0}>
-                <FilterBox onSearch={handleSearchPending} disponibility={false}
+                <FilterBox onSearch={handleSearchPending} disponibility={false} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotivePendingChange} motiveLabels={requestMotives} 
                            label='Pesquisar Código do equipamento ou nome do usuario'/>
                 <BaseTable
                     rows={pendingRequests}
@@ -114,9 +136,9 @@ const EquipmentRequests = () => {
             </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={1}>
                 <FilterBox onSearch={handleSearchProcessed} onAvailabilityChange={handleAvailabilityChange}
-                           disponibility={true}
+                           disponibility={true} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotiveProcessedChange} motiveLabels={requestMotives} 
                            label='Pesquisar Código do equipamento ou nome do usuario'
-                           disponibilityLabels={["Aprovado", "Não Aprovado"]}/>
+                           disponibilityLabels={["Não Aprovado","Aprovado"]}/>
                 <BaseTable
                     rows={processedRequests}
                     columns={processedRequestsColumns}

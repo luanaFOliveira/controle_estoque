@@ -42,8 +42,32 @@ class EquipmentController extends Controller
             $query->where('equipment_code', 'ilike', "%$equipment_code%");
         }
 
+        if ($request->has('search') && $request->input('search') !== 'none') {
+            $search = $request->input('search');
+        
+            $query->where(function ($query) use ($search) {
+                $query->where('equipment_code', 'ilike', "%$search%");
+                $query->orWhere('name', 'ilike', "%$search%");
+            });
+        }
+        
+        if ($request->has('equipment_brand') && $request->input('equipment_brand') !== 'all') {
+            $equipment_brand = $request->input('equipment_brand');
+            $query->whereHas('brand', function ($query) use ($equipment_brand) {
+                $query->where('name', 'ilike',"%$equipment_brand%");
+            });
+        }
+
+        if ($request->has('equipment_type') && $request->input('equipment_type') !== 'all') {
+            $equipment_type = $request->input('equipment_type');
+            $query->whereHas('type', function ($query) use ($equipment_type) {
+                $query->where('name', 'ilike', "%$equipment_type%");
+            });
+        }
+
         return EquipmentResource::collection($query->orderBy('equipment_id')->paginate(10));
     }
+
 
     public function show(Equipment $equipment): JsonResponse
     {
