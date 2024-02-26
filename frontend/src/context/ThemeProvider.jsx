@@ -7,12 +7,10 @@ export const ThemeProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(storedThemeMode || "light");
 
   const toggleTheme = () => {
-    setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+    const newThemeMode = themeMode === "light" ? "dark" : "light";
+    setThemeMode(newThemeMode);
+    localStorage.setItem("themeMode", newThemeMode);
   };
-
-  useEffect(() => {
-    localStorage.setItem("themeMode", themeMode);
-  }, [themeMode]);
 
   return (
     <ThemeContext.Provider value={{ themeMode, toggleTheme }}>
