@@ -42,6 +42,7 @@ const ManageUser = () => {
     useEffect(() => {
         getAllSectors();
         if (userId) {
+            setLoading(true);
             api
                 .get(`/users/${userId}`)
                 .then((data) => {
@@ -56,7 +57,9 @@ const ManageUser = () => {
                 .catch((error) => {
                     console.error(error);
                     setLoading(false);
-                });
+                }).finally(() => {
+                setLoading(false);
+            });
         } else {
             setLoading(false);
         }
@@ -155,6 +158,7 @@ const ManageUser = () => {
                             fullWidth
                             label="Nome"
                             name="name"
+                            sx={{maxWidth: "400px"}}
                             autoFocus
                             value={formData.name}
                             onChange={handleChange}
@@ -166,6 +170,7 @@ const ManageUser = () => {
                             label="Email"
                             name="email"
                             type="email"
+                            sx={{maxWidth: "400px"}}
                             value={formData.email}
                             onChange={handleChange}
                         />
@@ -175,6 +180,7 @@ const ManageUser = () => {
                             required={!editing}
                             label={userId ? 'Senha (opcional)' : 'Senha'}
                             name="password"
+                            sx={{maxWidth: "400px"}}
                             type="password"
                             onChange={handleChange}
                         />
@@ -185,6 +191,7 @@ const ManageUser = () => {
                             label={userId ? 'Confirmar senha (opcional)' : 'Confirmar senha'}
                             name="password_confirmation"
                             type="password"
+                            sx={{maxWidth: "400px"}}
                             onChange={handleChange}
                         />
                         <InputLabel id="sector-select-label">Setores</InputLabel>
@@ -196,6 +203,7 @@ const ManageUser = () => {
                             value={formData.sectors}
                             onChange={handleSelectChange}
                             fullWidth
+                            sx={{maxWidth: "400px", width: "calc(100vw - 100px)"}}
                         >
                             {sectors.map((sector) => (
                                 <MenuItem key={sector} value={sector}>

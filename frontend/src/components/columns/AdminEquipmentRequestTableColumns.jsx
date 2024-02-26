@@ -142,7 +142,7 @@ export default function AdminEquipmentRequestTableColumns({is_handled_table, set
             headerName: "Status",
             flex: 1,
             sortable: false,
-            minWidth: 180,
+            minWidth: 130,
             renderCell: (params) =>
                 params.row.request_status === "Não Aprovado" ? (
                     <Typography
@@ -168,7 +168,7 @@ export default function AdminEquipmentRequestTableColumns({is_handled_table, set
             headerName: "Criado em",
             flex: 1,
             sortable: false,
-            minWidth: 150,
+            minWidth: 160,
             valueFormatter: (params) => {
                 const date = new Date(params.value);
                 return date.toLocaleString("pt-BR");

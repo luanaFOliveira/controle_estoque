@@ -2,14 +2,15 @@ import React, {useEffect, useState} from "react";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import {
+    Box,
     FormControl,
     IconButton,
-    InputLabel,
     MenuItem,
     OutlinedInput,
     Select,
     Toolbar,
     Typography,
+    useMediaQuery,
 } from "@mui/material";
 import {
     Brightness4 as Brightness4Icon,
@@ -23,7 +24,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthProvider";
 import {indexSectors} from "../../services/sectorService";
 import {errorToast} from "../../services/api";
-import { useMediaQuery } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -47,6 +47,7 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
     const {logout, user, loadingUser} = useAuth();
     const {sector, setSector} = useStateContext();
     const [sectors, setSectors] = useState([]);
+    const isDesktop = useMediaQuery('(min-width: 600px)');
     const location = useLocation();
     const pathNames = {
         "/home": "Início",
@@ -96,75 +97,74 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
         setSector(newSector);
     };
 
-    const isDesktop = useMediaQuery('(min-width: 600px)');
 
     return (<AppToolbar position="absolute" open={open}>
-            <Toolbar sx={{pr: "24px"}}>
-                <IconButton
-                    edge="start"
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={toggleDrawer}
-                    sx={{
-                        marginRight: "36px", ...(open && {display: "none"}),
-                    }}
-                >
-                    <MenuIcon/>
-                </IconButton>
-                {isDesktop && !is_admin &&(
-                    <Typography
+        <Toolbar sx={{pr: "24px"}}>
+            <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer}
+                sx={{
+                    marginRight: "36px", ...(open && {display: "none"}),
+                }}
+            >
+                <MenuIcon/>
+            </IconButton>
+            {(isDesktop && !is_admin) ? (
+                <Typography
                     component="h1"
                     variant="h6"
                     color="inherit"
                     noWrap
-                    sx={{ flexGrow: 1, userSelect: 'none' }}
-                    >
+                    sx={{flexGrow: 1, userSelect: 'none'}}
+                >
                     {dashboardName}
-                    </Typography>
-                )}
-                {is_admin && (
-                    <Typography
-                        component="h1"
-                        variant="h6"
-                        color="inherit"
-                        noWrap
-                        sx={{ flexGrow: 1, userSelect: 'none' }}
-                    >
-                        {dashboardName}
-                    </Typography>
-                )}
-                <FormControl sx={{mr: 2}}>
-                    {is_admin === false && (<Select
-                            labelId="demo-customized-select-label"
-                            id="demo-customized-select"
-                            value={sector}
-                            onChange={handleSectorChange}
-                            input={<OutlinedInput/>}
-                            sx={{
-                                color: "white", minWidth: 150, "& .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "white",
-                                }, "&:hover .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "white",
-                                }, "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                                    borderColor: "white",
-                                }, "& .MuiSelect-icon": {
-                                    color: "white",
-                                },
-                            }}
-                        >
-                            {sectors.map((sector, index) => (<MenuItem key={index} value={sector.sector_id}>
-                                    {sector.name}
-                                </MenuItem>))}
-                        </Select>)}
-                </FormControl>
-                <IconButton color="inherit" onClick={toggleTheme} sx={{m: 2}}>
-                    {themeMode === "light" ? <Brightness4Icon/> : <Brightness7Icon/>}
-                </IconButton>
-                <IconButton color="inherit" onClick={onLogout}>
-                    <LogoutIcon/>
-                </IconButton>
-            </Toolbar>
-        </AppToolbar>);
+                </Typography>
+            ) : <Box sx={{flexGrow: 1}}></Box>}
+            {is_admin && (
+                <Typography
+                    component="h1"
+                    variant="h6"
+                    color="inherit"
+                    noWrap
+                    sx={{flexGrow: 1, userSelect: 'none'}}
+                >
+                    {dashboardName}
+                </Typography>
+            )}
+            <FormControl sx={{mr: 2}}>
+                {is_admin === false && (<Select
+                    labelId="demo-customized-select-label"
+                    id="demo-customized-select"
+                    value={sector}
+                    onChange={handleSectorChange}
+                    input={<OutlinedInput/>}
+                    sx={{
+                        color: "white", minWidth: 150, "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "white",
+                        }, "&:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "white",
+                        }, "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "white",
+                        }, "& .MuiSelect-icon": {
+                            color: "white",
+                        },
+                    }}
+                >
+                    {sectors.map((sector, index) => (<MenuItem key={index} value={sector.sector_id}>
+                        {sector.name}
+                    </MenuItem>))}
+                </Select>)}
+            </FormControl>
+            <IconButton color="inherit" onClick={toggleTheme} sx={{m: 2}}>
+                {themeMode === "light" ? <Brightness4Icon/> : <Brightness7Icon/>}
+            </IconButton>
+            <IconButton color="inherit" onClick={onLogout}>
+                <LogoutIcon/>
+            </IconButton>
+        </Toolbar>
+    </AppToolbar>);
 };
 
 export default CustomAppBar;

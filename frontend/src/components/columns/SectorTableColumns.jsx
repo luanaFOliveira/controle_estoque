@@ -6,13 +6,7 @@ export default function SectorTableColumns() {
     const navigate = useNavigate();
 
     return [
-        {
-            field: "sector_id",
-            headerName: "ID",
-            flex: 1,
-            minWidth: 70,
-            sortable: false,
-        },
+
         {
             field: "name",
             headerName: "Nome",
@@ -36,14 +30,14 @@ export default function SectorTableColumns() {
             field: "users",
             headerName: "Nº de pessoas",
             flex: 1,
-            minWidth: 110,
+            minWidth: 120,
             sortable: false,
         },
         {
             field: "equipments_count",
             headerName: "Nº de equipamentos",
             flex: 1,
-            minWidth: 140,
+            minWidth: 160,
             sortable: false,
         },
     ];

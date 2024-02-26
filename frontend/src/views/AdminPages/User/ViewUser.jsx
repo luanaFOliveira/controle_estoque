@@ -97,13 +97,13 @@ const ViewUser = () => {
                             Usuário:
                         </Typography>
                     </Grid>
-                    <Grid mb={2}>
+                    <Grid mb={1} sx={{display: "flex", alignItems: "center"}}>
                         <Button
                             variant="contained"
-                            sx={{marginRight: 1}}
                             onClick={() => {
                                 navigate(`/users/edit/${userId}`);
                             }}
+                            sx={{marginRight: 1}}
                         >
                             EDITAR
                         </Button>

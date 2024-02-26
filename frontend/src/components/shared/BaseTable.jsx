@@ -1,6 +1,7 @@
 import * as React from "react";
 import {DataGrid, GridToolbarColumnsButton, GridToolbarDensitySelector, GridToolbarExport,} from "@mui/x-data-grid";
 import Grid from "@mui/material/Grid";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function BaseTable({
                                       rows,
@@ -17,12 +18,16 @@ export default function BaseTable({
                                       initialState,
                                   }) {
     function CustomToolbar() {
+        const matches = useMediaQuery('(max-width:430px)');
+
         return (
-            <Grid item container justifyContent="end">
-                <GridToolbarColumnsButton/>
-                <GridToolbarDensitySelector/>
-                <GridToolbarExport/>
-            </Grid>
+            !matches ? (
+                <Grid item container justifyContent="end">
+                    <GridToolbarColumnsButton/>
+                    <GridToolbarDensitySelector/>
+                    <GridToolbarExport/>
+                </Grid>
+            ) : null
         );
     }
 

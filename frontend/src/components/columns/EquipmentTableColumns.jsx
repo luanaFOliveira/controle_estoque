@@ -30,7 +30,7 @@ export default function EquipmentTableColumns({user_admin}) {
       ),
     });
 
-  }else if(user_admin == false){
+  }else if(user_admin === false){
     columns.push({
       field: "equipment_code",
       headerName: "Código",
@@ -53,13 +53,13 @@ export default function EquipmentTableColumns({user_admin}) {
       headerName: "Marca",
       flex: 1,
       sortable: false,
-      minWidth: 200,
+      minWidth: 150,
     },
     {
       field: "type",
       headerName: "Tipo",
       flex: 1,
-      minWidth: 200,
+      minWidth: 150,
       sortable: false,
     },
     {

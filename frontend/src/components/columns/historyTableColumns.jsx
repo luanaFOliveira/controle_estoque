@@ -54,7 +54,7 @@ export default function HistoryTableColumns(type) {
             field: "created_at", 
             headerName: "Criado em", 
             flex: 1, 
-            minWidth: 150,
+            minWidth: 160,
             sortable: false,
             valueFormatter: (params) => {
                 const date = new Date(params.value);
@@ -65,7 +65,7 @@ export default function HistoryTableColumns(type) {
             field: "returned_at", 
             headerName: "Data de Devolução", 
             flex: 1, 
-            minWidth: 200,
+            minWidth: 160,
             sortable: false,
             valueFormatter: (params) => {
                 if (params.value === null) {

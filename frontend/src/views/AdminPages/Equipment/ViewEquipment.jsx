@@ -7,8 +7,8 @@ import {destroyEquipment, getEquipment, getHistoryEquipment,} from "../../../ser
 import HistoryTableColumns from "../../../components/columns/historyTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
 import BaseTable from "../../../components/shared/BaseTable";
-import {EquipmentCard} from "../../../components/Equipment/EquipmentCard";
 import {ButtonReturn} from "../../../components/shared/ButtonReturn";
+import {ViewCard} from "../../../components/shared/ViewCard";
 
 const ViewEquipment = () => {
     const params = useParams();
@@ -63,7 +63,7 @@ const ViewEquipment = () => {
     };
 
     return (<>
-        {!firstLoading ? (<Container component="main" maxWidth="sx">
+        {!firstLoading ? (<Container component="main">
             <Grid container justifyContent="space-between" marginTop={4}>
                 <Grid>
                     <Typography variant="h4" fontWeight="bold" sx={{mb: 2}}>
@@ -95,18 +95,18 @@ const ViewEquipment = () => {
             <TableTab value={tabValue} setValue={setTabValue} nameTabs={["Informações", "Histórico"]}/>
             <CustomTabPanel value={tabValue} index={0}>
                 <Grid>
-                    <EquipmentCard
+                    <ViewCard
                         label="Código do Equipamento"
                         value={equipment.equipment_code}
                     />
-                    <EquipmentCard label="Nome do Equipamento" value={equipment.name}/>
-                    <EquipmentCard
+                    <ViewCard label="Nome do Equipamento" value={equipment.name}/>
+                    <ViewCard
                         label="Marca do Equipamento"
                         value={equipment.brand}
                     />
-                    <EquipmentCard label="Tipo de Equipamento" value={equipment.type}/>
-                    <EquipmentCard label="Setor" value={equipment.sector}/>
-                    <EquipmentCard
+                    <ViewCard label="Tipo de Equipamento" value={equipment.type}/>
+                    <ViewCard label="Setor" value={equipment.sector}/>
+                    <ViewCard
                         label="Status"
                         value={equipment.is_available ? "Disponível para uso" :
                             <Box sx={{display: 'flex', alignItems: 'center'}}>
@@ -125,7 +125,7 @@ const ViewEquipment = () => {
                                 </Link>
                             </Box>}
                     />
-                    <EquipmentCard
+                    <ViewCard
                         label="Localização Atual"
                         value={equipment.is_at_office ? "No Escritório" : "Em Home Office"}
                     />

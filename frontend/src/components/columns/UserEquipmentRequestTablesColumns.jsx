@@ -17,7 +17,7 @@ export function EquipmentRequestHistoryTableColumns() {
         field: "name",
         headerName: "Nome",
         flex: 1,
-        minWidth: 100,
+        minWidth: 150,
         sortable: false,
         renderCell: (params) => (
           <span>{params.row.equipment.name}</span>
@@ -28,7 +28,14 @@ export function EquipmentRequestHistoryTableColumns() {
         field: "sector",
         headerName: "Setor",
         flex: 1,
+        minWidth: 150,
+        sortable: false,
+      },
+      {
+        field: "request_motive",
+        headerName: "Motivo",
         minWidth: 200,
+        flex: 1,
         sortable: false,
       },
       {
@@ -39,17 +46,10 @@ export function EquipmentRequestHistoryTableColumns() {
         sortable: false,
       },
       {
-        field: "request_motive",
-        headerName: "Motivo",
-        minWidth: 150,
-        flex: 1,
-        sortable: false,
-      },
-      {
         field: 'status',
         headerName: 'Status',
         flex:1,
-        minWidth: 100,
+        minWidth: 130,
         sortable: false,
         renderCell: (params) => <StatusField value={params.row.request_status} />,
       },
@@ -57,7 +57,7 @@ export function EquipmentRequestHistoryTableColumns() {
         field:'returned_at',
         headerName: 'Data de devolução',
         flex:1,
-        minWidth: 200,
+        minWidth: 160,
         sortable: false,
         renderCell: (params) => (params.value ? new Date(params.value).toLocaleString() : 'Não devolvido'),
       }
@@ -92,7 +92,7 @@ export function EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick
       field: "type",
       headerName: "Tipo",
       flex: 1,
-      minWidth: 150,
+      minWidth: 120,
       sortable: false,
     },
     {
@@ -109,7 +109,7 @@ export function EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick
       headerAlign: "center",
       headerClassName: "centered-header",
       flex:1,
-      minWidth: 100,
+      minWidth: 130,
       sortable: false,
       renderCell: (params) => (
           <RequestEquipButtonCell onClick={(event) => handleRequestEquipButtonClick(event, params.row)} />

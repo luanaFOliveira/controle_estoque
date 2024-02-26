@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import React from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export const UpsertEquipment = ({
                                     params,
@@ -25,6 +26,8 @@ export const UpsertEquipment = ({
                                     sectors,
                                     handleSubmit
                                 }) => {
+    const matches = useMediaQuery('(max-width:500px)');
+
     return (<Box
         sx={{
             marginTop: 8, display: "flex", flexDirection: "column", alignItems: "center",
@@ -81,6 +84,7 @@ export const UpsertEquipment = ({
                     value={formData.sector}
                     onChange={handleChange}
                     name="sector"
+                    sx={{width: !matches ? "calc(100vw - 50px)" : "calc(100vw - 100px)", maxWidth: "400px"}}
                 >
                     {sectors.map((sector) => (<MenuItem key={sector.name} value={sector.name}>
                         {sector.name}

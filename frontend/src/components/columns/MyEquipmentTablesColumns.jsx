@@ -1,4 +1,3 @@
-import UndoIcon from '@mui/icons-material/Undo';
 import {Button} from "@mui/material";
 import {toastConfirmation} from "../shared/ToastComponents";
 import {toast} from "react-toastify";
@@ -59,14 +58,14 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         field: 'brand',
         headerName: 'Marca',
         flex: 1,
-        minWidth: 120,
+        minWidth: 130,
         sortable: false,
         valueGetter: (params) => params.row.equipment?.equipment_brand,
     }, {
         field: 'type',
         headerName: 'Tipo',
         flex: 1,
-        minWidth: 150,
+        minWidth: 130,
         sortable: false,
         valueGetter: (params) => params.row.equipment?.equipment_type,
     }, {
@@ -140,9 +139,10 @@ export function MyEquipmentTableColumns({setReload, availability}) {
         columns.push(...newColumns);
     } else if (!availability) {
         let newColumns = [{
-            field: "created_at", 
-            headerName: "Criado em", 
-            flex: 1, 
+            field: "created_at",
+            headerName: "Criado em",
+            flex: 1,
+            minWidth: 160,
             sortable: false, valueFormatter: (params) => {
                 const date = new Date(params.value);
                 return date.toLocaleString("pt-BR");
@@ -151,6 +151,7 @@ export function MyEquipmentTableColumns({setReload, availability}) {
             field: "returned_at",
             headerName: "Data de Devolução",
             flex: 1,
+            minWidth: 160,
             sortable: false,
             valueFormatter: (params) => {
                 if (params.value === null) {

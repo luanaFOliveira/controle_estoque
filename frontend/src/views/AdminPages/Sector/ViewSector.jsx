@@ -9,6 +9,7 @@ import EquipmentTableColumns from "../../../components/columns/EquipmentTableCol
 import UserTableColumns from "../../../components/columns/UserTableColumns";
 import {CustomTabPanel, TableTab} from "../../../components/shared/TableTab";
 import FilterBox from '../../../components/shared/FilterBox';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function ViewSector() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ function ViewSector() {
     const [sectorDetail, setSectorDetail] = useState(null);
     const [loading, setLoading] = useState(true);
     const [tabValue, setTabValue] = useState(0);
-
+    const matches = useMediaQuery('(max-width:350px)');
     const columnsEquip = EquipmentTableColumns({user_admin: true});
     const columnsUser = UserTableColumns({user_admin: true});
 
@@ -63,18 +64,18 @@ function ViewSector() {
                 <>
                     <Grid container justifyContent="space-between">
                         <Grid>
-                            <Typography variant="h4" fontWeight="bold" sx={{mb: 2}}>
+                            <Typography variant={matches ? "h5" : "h4"} fontWeight="bold" sx={{mb: 2}}>
                                 {sectorDetail.name}
                             </Typography>
                         </Grid>
-                        <Grid>
+                        <Grid sx={{display: "flex", alignItems: "center"}}>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={() => {
                                     navigate(`/sectors/edit/${sectorId}`);
                                 }}
-                                sx={{marginRight: 1}}
+                                sx={{marginRight: 1, mb: 1}}
                             >
                                 EDITAR SETOR
                             </Button>
@@ -87,6 +88,7 @@ function ViewSector() {
                                         handleClick: handleDestroy,
                                     });
                                 }}
+                                sx={{ mb: 1}}
                             >
                                 REMOVER SETOR
                             </Button>
