@@ -17,6 +17,8 @@ import {toast} from "react-toastify";
 import {CustomTabPanel, TableTab} from '../../components/shared/TableTab';
 import EquipmentRequestPopOver from '../../components/EquipmentRequestPopOver';
 import FilterBox from '../../components/shared/FilterBox';
+import {getEquipmentDetails} from "../../services/equipmentService";
+
 
 export default function EquipmentRequestPage() {
     const {sector} = useStateContext();
@@ -46,8 +48,12 @@ export default function EquipmentRequestPage() {
     const [tabValue, setTabValue] = useState(0);
 
     const [filter, setFilter] = useState({
-        equipment_code: "none",
+        search: "none", equipmentBrand: "all",equipmentType: "all", status: "Nao pendente", requestMotive: "all", searchHistory: "none"
     });
+
+    const [equipmentsBrands, setEquipmentsBrands] = useState([]);
+    const [equipmentsTypes, setEquipmentsTypes] = useState([]);
+    const [motivesNames, setMotivesNames] = useState([]);
 
     useEffect(() => {
         fetchEquipments();
@@ -55,10 +61,14 @@ export default function EquipmentRequestPage() {
 
     useEffect(() => {
         fetchHistory();
-    }, [paginationModelHist.page, reload]);
+    }, [paginationModelHist.page, reload,filter]);
 
     useEffect(() => {
         fetchMotives();
+    }, []);
+
+    useEffect(() => {
+        fetchEquipmentsDetails();
     }, []);
 
     const fetchEquipments = async () => {
@@ -66,7 +76,7 @@ export default function EquipmentRequestPage() {
         const page = paginationModelEquip.page + 1;
         if (sector) {
             const res = await indexEquipmentsAvailability({
-                page: page, sector: sector, availability: true, equipment_code: filter.equipment_code,
+                page: page, sector: sector, availability: true, search: filter.search, brand: filter.equipmentBrand, type: filter.equipmentType
             }).finally(() => {
                 setIsLoadingEquip(false);
                 setFirstLoading(false);
@@ -82,7 +92,7 @@ export default function EquipmentRequestPage() {
         setIsLoadingHist(true);
         const page = paginationModelHist.page + 1;
         const res = await indexEquipmentRequests({
-            page: page,
+            filter: {status: filter.status, search: filter.searchHistory, request_motive: filter.requestMotive}, page: page,
         }).finally(() => {
             setIsLoadingHist(false);
             setFirstLoading(false);
@@ -97,6 +107,16 @@ export default function EquipmentRequestPage() {
         const res = await getRequestMotives();
         if (res) {
             setRequestMotives(res.data);
+            const names = res.data.map((motive) => motive.name);
+            setMotivesNames(names);
+        }
+    };
+
+    const fetchEquipmentsDetails = async () => {
+        const res = await getEquipmentDetails();
+        if (res) {
+            setEquipmentsBrands(res.equipment_brands);
+            setEquipmentsTypes(res.equipment_types);
         }
     };
 
@@ -130,8 +150,34 @@ export default function EquipmentRequestPage() {
         handlePopoverClose();
     };
 
-    const handleSearch = (equipment_code) => {
-        setFilter((prevFilter) => ({...prevFilter, equipment_code}));
+    const handleSearch = (search) => {
+        setFilter((prevFilter) => ({...prevFilter, search}));
+    };
+
+    const handleBrandChange = (equipmentBrand) => {
+        setFilter((prevFilter) => ({...prevFilter, equipmentBrand}));
+    };
+
+    const handleTypeChange = (equipmentType) => {
+        setFilter((prevFilter) => ({...prevFilter, equipmentType}));
+    };
+
+    const handleAvailabilityChange = (status) => {
+        let newStatus = "Nao pendente";
+        if (status === "all") {
+            newStatus = "Nao pendente";
+        } else {
+            newStatus = status ? "Aprovado" : "Não Aprovado";
+        }
+        setFilter((prevFilter) => ({...prevFilter, status: newStatus}));
+    };
+
+    const handleRequestMotiveChange = (requestMotive) => {
+        setFilter((prevFilter) => ({...prevFilter, requestMotive}));
+    };
+
+    const handleSearchHistory = (searchHistory) => {
+        setFilter((prevFilter) => ({...prevFilter, searchHistory}));
     };
 
     const columnsEquip = EquipmentRequestEquipTableColumns({handleRequestEquipButtonClick});
@@ -147,9 +193,9 @@ export default function EquipmentRequestPage() {
                     <TableTab value={tabValue} setValue={setTabValue}
                               nameTabs={["Equipamentos Disponiveis", "Historico de solicitações"]}/>
                     <CustomTabPanel value={tabValue} index={0}>
-                        <FilterBox onSearch={handleSearch} disponibility={false}
-                                   label='Pesquisar Código do equipamento'
-                                   disponibilityLabels={["Disponivel", "Não disponivel"]}/>
+                        <FilterBox onSearch={handleSearch} disponibility={false} equipmentBrand={true} onBrandChange={handleBrandChange} brandLabels={equipmentsBrands} equipmentType={true} onTypeChange={handleTypeChange} typeLabels={equipmentsTypes}
+                                   label='Pesquisar Código do equipamento ou nome do equipamento'
+                                   disponibilityLabels={["Não Aprovado","Aprovado"]}/>
                         <BaseTable
                             rows={equipments}
                             columns={columnsEquip}
@@ -161,6 +207,9 @@ export default function EquipmentRequestPage() {
                         />
                     </CustomTabPanel>
                     <CustomTabPanel value={tabValue} index={1}>
+                        <FilterBox onSearch={handleSearchHistory} disponibility={true} onAvailabilityChange={handleAvailabilityChange} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleRequestMotiveChange} motiveLabels={motivesNames}
+                                   label='Pesquisar Código do equipamento ou nome do equipamento'
+                                   disponibilityLabels={["Não Aprovado","Aprovado"]}/>
                         <BaseTable
                             rows={history}
                             columns={columnsHist}

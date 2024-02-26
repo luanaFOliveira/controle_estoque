@@ -15,7 +15,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('equipments', EquipmentController::class);
         Route::apiResource('sectors',SectorController::class);
         Route::post('handle-equipment-request/{action}', [EquipRequestController::class, 'handleRequest']);
-        Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
         Route::get('/sector-names', [SectorController::class, 'sectorNames']);
         Route::apiResource('equipment-requests', EquipRequestController::class);
         Route::group(['prefix' => 'history'], function () {
@@ -31,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('request-motives', [EquipRequestController::class, 'getRequestMotives']);
     Route::post('equipment/return/{equipment}', [EquipmentController::class, 'returnEquipment']);
     Route::post('equipment/change-location/{action}', [EquipmentController::class, 'changeEquipmentLocation']);
+    Route::get('equipment-details', [EquipmentController::class, 'equipmentsDetails']);
     Route::group(['prefix' => 'history'], function () {
         Route::get('/users', [HistoryController::class, 'indexUser']);
     });
