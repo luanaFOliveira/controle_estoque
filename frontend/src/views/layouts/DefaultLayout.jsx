@@ -47,7 +47,6 @@ export default function DefaultLayout() {
             },
         },
     });
-
     return (
         <ThemeProvider theme={themeMode === "light" ? defaultTheme : darkTheme}>
             <Box sx={{display: "flex"}}>

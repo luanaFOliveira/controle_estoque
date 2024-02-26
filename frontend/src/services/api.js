@@ -43,12 +43,14 @@ const errorToast = (error) => {
   return error;
 };
 
-async function handleResponse(res, errorMessage, statusError) {
+async function handleResponse(res) {
   if (res.response) {
-    const {status} = res.response;
+    const { status, data } = res.response;
 
-    if (status === statusError) {
-      toast.error(errorMessage);
+    if (status === 422 && data.errors) {
+      Object.values(data.errors).flat().forEach(toast.error);
+    } else if (status === 500 && data.message.includes('Unique violation')) {
+      toast.error('Este endereço de e-mail já está associado a uma conta existente. Por favor, utilize um endereço de e-mail diferente.');
     } else {
       errorToast(res.response);
     }
