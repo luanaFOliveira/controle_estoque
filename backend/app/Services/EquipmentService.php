@@ -43,15 +43,12 @@ class EquipmentService
         $data['equipment_type_id'] = $type->equipment_type_id;
     }
 
-    private function generateEquipmentCode(): string
+    private function generateEquipmentCode(int $equipment_id): string
     {
-        do {
-            $letters = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
-            $numbers = substr(str_shuffle("0123456789"), 0, 4);
-            $equipmentCode = $letters . '-' . $numbers;
-
-            $query = Equipment::where('equipment_code', $equipmentCode)->first();
-        } while ($query != null);
+        $letters = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
+        $numbers = substr(str_shuffle("0123456789"), 0, 4);
+        $equipmentIdString = (string) $equipment_id;
+        $equipmentCode = $letters . '-' . $numbers . $equipmentIdString;
 
         return $equipmentCode;
     }
@@ -62,13 +59,16 @@ class EquipmentService
         $data['is_at_office'] = true;
         $data['is_available'] = true;
 
-        $equipment_code = $this->generateEquipmentCode();
-        $data['equipment_code'] = $equipment_code;
+        $data['equipment_code'] = now();
 
         $this->updateEquipmentRelations($data);
 
         $equipment = Equipment::create($data);
 
+        $equipment_code = $this->generateEquipmentCode($equipment->equipment_id);
+
+        $equipment->update(['equipment_code' => $equipment_code]);
+        
         return EquipmentResource::make($equipment);
     }
 
