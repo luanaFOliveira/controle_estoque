@@ -54,7 +54,9 @@ class EquipmentObserver
     }
     public function deleted(Equipment $equipment)
     {
+        UserEquipment::where('equipment_id', $equipment->equipment_id)->update(['returned_at' => now()]);
         UserEquipment::where('equipment_id', $equipment->equipment_id)->delete();
+        EquipmentRequest::where('equipment_id', $equipment->equipment_id)->update(['returned_at' => now()]);
         EquipmentRequest::where('equipment_id', $equipment->equipment_id)->delete();
     }
 }
