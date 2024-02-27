@@ -18,7 +18,7 @@ class HistoryResource extends JsonResource
     {
         return [
             'user_equipment_id' => $this->user_equipment_id,
-            'user' => User::withoutGlobalScope('sectorScope')->auth()->where('user_id', $this->user_id)->select('user_id', 'name')->first(),
+            'user' => User::withoutGlobalScope('sectorScope')->auth()->withTrashed()->where('user_id', $this->user_id)->select('user_id', 'name','deleted_at')->first(),
             'created_at' => $this->created_at,
             'returned_at' => $this->returned_at,
             'deleted_at' => $this->deleted_at,
@@ -28,7 +28,7 @@ class HistoryResource extends JsonResource
 
     protected function getEquipment(): ?array
     {
-        $equipment = Equipment::withoutGlobalScope(SectorScope::class)->where('equipment_id', $this->equipment_id)->first();
+        $equipment = Equipment::withoutGlobalScope(SectorScope::class)->withTrashed()->where('equipment_id', $this->equipment_id)->first();
         $sectorName = DB::table('sector')
             ->join('equipment', 'sector.sector_id', '=', 'equipment.sector_id')
             ->where('equipment.equipment_id', $equipment->equipment_id)
@@ -44,6 +44,7 @@ class HistoryResource extends JsonResource
             'equipment_brand' => $equipment->brand()->value('name'),
             'equipment_type' => $equipment->type()->value('name'),
             'is_at_office' => $equipment->is_at_office,
+            'deleted_at' => $equipment->deleted_at,
         ];
     }
 }
