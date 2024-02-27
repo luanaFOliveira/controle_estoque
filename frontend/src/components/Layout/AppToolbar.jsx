@@ -111,28 +111,16 @@ const CustomAppBar = ({open, toggleDrawer, is_admin}) => {
             >
                 <MenuIcon/>
             </IconButton>
-            {(isDesktop && !is_admin) ? (
-                <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    sx={{flexGrow: 1, userSelect: 'none'}}
-                >
-                    {dashboardName}
-                </Typography>
-            ) : <Box sx={{flexGrow: 1}}></Box>}
-            {is_admin && (
-                <Typography
-                    component="h1"
-                    variant="h6"
-                    color="inherit"
-                    noWrap
-                    sx={{flexGrow: 1, userSelect: 'none'}}
-                >
-                    {dashboardName}
-                </Typography>
-            )}
+            {!isDesktop && !is_admin && (<Box sx={{flexGrow: 1}}/>)}
+            {(isDesktop || is_admin) && (<Typography
+                component="h1"
+                variant="h6"
+                color="inherit"
+                noWrap
+                sx={{flexGrow: 1, userSelect: 'none'}}
+            >
+                {dashboardName}
+            </Typography>)}
             <FormControl sx={{mr: 2}}>
                 {is_admin === false && (<Select
                     labelId="demo-customized-select-label"
