@@ -43,7 +43,7 @@ const PrivateRoute = ({ element, adminOnly, isHomePage }) => {
     return <Navigate to="/forbidden" />;
   }
 
-  if (isHomePage) {
+  if (user && isHomePage) {
     return user?.is_admin ? <SectorList /> : <SectorPage />;
   }
 
