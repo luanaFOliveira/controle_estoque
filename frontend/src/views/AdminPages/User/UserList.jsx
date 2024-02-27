@@ -47,7 +47,7 @@ function UserList() {
         }));
     };
 
-    return (<Container sx={{mt: 5}}>
+    return (<Container sx={{mt: 5, pr:0.5}}>
         <Button
             variant="contained"
             sx={{mb: 2}}

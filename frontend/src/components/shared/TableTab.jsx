@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
-  
+
     return (
       <div
         role="tabpanel"
@@ -13,14 +13,14 @@ export function CustomTabPanel(props) {
         {...other}
       >
         {value === index && (
-          <Box sx={{ p: 3 }}>
+          <Box>
             <Typography>{children}</Typography>
           </Box>
         )}
       </div>
     );
   }
-  
+
   CustomTabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
@@ -38,16 +38,16 @@ export function TableTab({value,setValue,nameTabs}){
         };
     }
 
-    
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     return(
         <Box >
-            <Tabs 
-              value={value} 
-              onChange={handleChange} 
+            <Tabs
+              value={value}
+              onChange={handleChange}
               aria-label="basic tabs example"
               variant="scrollable"
               scrollButtons
@@ -60,4 +60,4 @@ export function TableTab({value,setValue,nameTabs}){
         </Box>
     );
 
-};
+}

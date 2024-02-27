@@ -185,7 +185,7 @@ export default function EquipmentRequestPage() {
 
 
     return (<>
-        <Container sx={{mt: 5}}>
+        <Container sx={{mt: 5, pr:0}}>
             {firstLoading ? (<Grid item container justifyContent="center">
                 <CircularProgress/>
             </Grid>) : (<>

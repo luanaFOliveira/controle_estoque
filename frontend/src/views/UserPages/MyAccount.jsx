@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Card, CardContent, CircularProgress, Container, Typography,} from '@mui/material';
+import {Button, CircularProgress, Container, Typography,} from '@mui/material';
 import {useAuth} from "../../context/AuthProvider";
 import Grid from "@mui/material/Grid";
 import {useNavigate} from "react-router-dom";
@@ -10,7 +10,7 @@ const MyAccount = () => {
     const {user, loadingUser} = useAuth();
 
     return (
-        <Container component="main" >
+        <Container sx={{mt: 5, pr:0.5}}>
             {loadingUser ? (
                 <Grid item container justifyContent="center">
                     <CircularProgress/>

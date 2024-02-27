@@ -77,6 +77,8 @@ export default function DefaultLayout() {
                         "&::-webkit-scrollbar-thumb": {
                             backgroundColor: "transparent",
                         },
+                      mr:0,
+                      pr:0
                     }}
                 >
                     <Toolbar/>
@@ -85,6 +87,7 @@ export default function DefaultLayout() {
                         sx={{
                             mt: 4,
                             mb: 4,
+                            pr: 0,
                         }}
                     >
                         <Grid container spacing={3}>

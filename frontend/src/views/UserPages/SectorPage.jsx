@@ -57,7 +57,7 @@ export default function SectorPage() {
     };
 
     return (<>
-        <Container sx={{mt: 5}}>
+        <Container sx={{mt: 5, pr:0.5}}>
             {firstLoading ? (<Grid item container justifyContent="center">
                 <CircularProgress/>
             </Grid>) : (<>

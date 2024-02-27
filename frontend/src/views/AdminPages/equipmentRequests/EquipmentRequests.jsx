@@ -41,7 +41,7 @@ const EquipmentRequests = () => {
 
     useEffect(() => {
         fetchMotives();
-    }, []);    
+    }, []);
 
     useEffect(() => {
         getPendingRequests();
@@ -115,14 +115,14 @@ const EquipmentRequests = () => {
         setFilter((prevFilter) => ({...prevFilter, status: newStatus}));
     };
 
-    return (<Container sx={{mt: 5}}>
+    return (<Container sx={{mt: 5, pr:0.5}}>
         {firstLoading ? (<Grid item container justifyContent="center">
             <CircularProgress/>
-        </Grid>) : (<Box sx={{width: '100%'}}>
+        </Grid>) : (<Box sx={{width: '100%'}} >
             <TableTab value={tabValue} setValue={setTabValue}
                       nameTabs={["Solicitações pendentes", "Solicitações processadas"]}/>
             <CustomTabPanel value={tabValue} index={0}>
-                <FilterBox onSearch={handleSearchPending} disponibility={false} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotivePendingChange} motiveLabels={requestMotives} 
+                <FilterBox onSearch={handleSearchPending} disponibility={false} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotivePendingChange} motiveLabels={requestMotives}
                            label='Pesquisar Código do equipamento ou nome do usuario'/>
                 <BaseTable
                     rows={pendingRequests}
@@ -136,7 +136,7 @@ const EquipmentRequests = () => {
             </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={1}>
                 <FilterBox onSearch={handleSearchProcessed} onAvailabilityChange={handleAvailabilityChange}
-                           disponibility={true} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotiveProcessedChange} motiveLabels={requestMotives} 
+                           disponibility={true} equipmentBrand={false} equipmentType={false} requestMotive={true} onMotiveChange={handleMotiveProcessedChange} motiveLabels={requestMotives}
                            label='Pesquisar Código do equipamento ou nome do usuario'
                            disponibilityLabels={["Não Aprovado","Aprovado"]}/>
                 <BaseTable
