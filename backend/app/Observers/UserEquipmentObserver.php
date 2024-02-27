@@ -36,7 +36,7 @@ class UserEquipmentObserver
     public function updated(UserEquipment $userEquipment)
     {
         if($userEquipment->returned_at != null) {
-            Equipment::where('equipment_id', $userEquipment->equipment_id)->update(['is_available' => true]);
+            Equipment::where('equipment_id', $userEquipment->equipment_id)->update(['is_available' => true, 'is_at_office' => true]);
         }
     }
 }

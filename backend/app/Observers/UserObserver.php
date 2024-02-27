@@ -28,7 +28,10 @@ class UserObserver
                 $join->on('equipment.equipment_id', '=', 'user_equipment.equipment_id')
                      ->where('user_equipment.user_id', $user_id);
             })
-            ->update(['equipment.is_available' => true]);
+            ->update([
+                'equipment.is_available' => true,
+                'equipment.is_at_office' => true,
+            ]);
 
         UserEquipment::where('user_id', $user_id)->update(['returned_at' => now()]);
         UserEquipment::where('user_id', $user_id)->delete();

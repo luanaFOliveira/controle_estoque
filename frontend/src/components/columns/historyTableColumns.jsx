@@ -1,4 +1,5 @@
 import {Link} from "@mui/material";
+import { red } from "@mui/material/colors";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
@@ -14,18 +15,27 @@ export default function HistoryTableColumns(type) {
             flex: 1,
             minWidth: 100,
             sortable: false,
-            renderCell: (params) => (
-            <Link
-                component="button"
-                onClick={() => {
-                    navigate(`/users/${params.row.user.user_id}`);
-                }}
-                underline="hover"
-                sx={{cursor: "pointer"}}
-            >
-                {params.row.user.name}
-            </Link>
-            ),
+            renderCell: (params) => {
+                if (params.row.user.deleted_at !== null) {
+                    return (<>
+                        <span style={{ color:"red"}} >{params.row.user.name}</span>
+                    </>);
+                } else if (params.row.user.deleted_at === null) {
+                    return (<>
+                        <Link
+                            component="button"
+                            onClick={() => {
+                                navigate(`/users/${params.row.user.user_id}`);
+                            }}
+                            underline="hover"
+                            sx={{cursor: "pointer"}}
+                        >
+                            {params.row.user.name}
+                        </Link>
+                    </>);
+                }
+            },
+            
         });
     }else if(type === 'user'){
         columns.push({
@@ -34,18 +44,27 @@ export default function HistoryTableColumns(type) {
             flex: 1,
             minWidth: 100,
             sortable: false,
-            renderCell: (params) => (
-            <Link
-                component="button"
-                onClick={() => {
-                    navigate(`/equipments/${params.row.equipment.equipment_id}`);
-                }}
-                underline="hover"
-                sx={{cursor: "pointer"}}
-            >
-                {params.row.equipment.equipment_code}
-            </Link>
-            ),
+            renderCell: (params) => {
+                if (params.row.equipment.deleted_at !== null) {
+                    return (<>
+                        <span style={{ color:"red"}} >{params.row.equipment.equipment_code}</span>
+                    </>);
+                } else if (params.row.equipment.deleted_at === null) {
+                    return (<>
+                        <Link
+                            component="button"
+                            onClick={() => {
+                                navigate(`/equipments/${params.row.equipment.equipment_id}`);
+                            }}
+                            underline="hover"
+                            sx={{cursor: "pointer"}}
+                        >
+                            {params.row.equipment.equipment_code}
+                        </Link>
+                    </>);
+                }
+            },
+           
         });
     }
 

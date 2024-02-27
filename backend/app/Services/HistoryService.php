@@ -50,7 +50,7 @@ class HistoryService
             });
         }
 
-        return HistoryResource::collection($query->orderBy('created_at', 'desc')->paginate(10));
+        return HistoryResource::collection($query->withTrashed()->orderBy('created_at', 'desc')->paginate(10));
     }
 
     private function indexEquipment(Request $request)
@@ -65,6 +65,6 @@ class HistoryService
 
         $query = UserEquipment::where('equipment_id', $equipment_id);
 
-        return EquipmentHistoryResource::collection($query->orderBy('created_at', 'desc')->paginate(10));
+        return EquipmentHistoryResource::collection($query->withTrashed()->orderBy('created_at', 'desc')->paginate(10));
     }
 }
